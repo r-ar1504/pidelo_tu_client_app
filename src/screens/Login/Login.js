@@ -1,6 +1,6 @@
  import React, { Component } from 'react';
  import { Navigation } from 'react-native-navigation';
- 
+
  import {
   StyleSheet,
   Text,
@@ -8,8 +8,7 @@
   StatusBar ,
   TouchableOpacity,
   ScrollView,
-  BackHandler,
-  Alert  
+  BackHandler,   
 } from 'react-native';
 
 import Logo from '../../components/Logo';
@@ -24,10 +23,14 @@ import Video from 'react-native-video';
 	}
 
   signup(){
-   this.props.navigator.push({
-  screen: 'splash.Splash',
-  title: 'Splash'
-});
+    Navigation.startSingleScreenApp({
+      screen: {
+        screen: 'signup.Signup',
+        navigatorStyle: {
+          navBarHidden: true
+        }    
+      }
+    });
   }	
 
    render() {
@@ -38,7 +41,7 @@ import Video from 'react-native-video';
 					source={require('../../video/broadchurch.mp4')}
           			rate={1.0}
           			volume={1.0}
-          			muted={false}
+          			muted={true}
           			resizeMode={"cover"}
 					     repeat
           			style={styles.video}

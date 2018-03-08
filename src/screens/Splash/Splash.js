@@ -12,13 +12,14 @@ import {
 export default class Splash extends Component<{}> {
 	componentDidMount() {
     	setTimeout(() => {
-			 this.props.navigator.push({
-        screen: 'login.Login',
-        title: 'Login',
-        navigatorStyle: {
-          navBarHidden:true
-        }
-       })
+			   Navigation.startSingleScreenApp({
+          screen: {
+            screen: 'login.Login',
+            navigatorStyle: {
+            navBarHidden: true
+            }    
+          }
+        });
 		},3000)        
   }
 	
