@@ -10,9 +10,9 @@ registerScreens();
 */
 Navigation.startSingleScreenApp({
   screen: {
-    screen: 'login.Login',
-    title: 'Login',
-    NavigatorStyle: {},
-    navigatorButtons: {}
+    screen: 'splash.Splash',
+    navigatorStyle: {
+    	navBarHidden: true
+    }    
   }
 });
