@@ -16,7 +16,7 @@ import Logo from '../../components/Logo';
 import Form from './Form';
 import Video from 'react-native-video';
 
- export default class Login extends Component<Props> {  
+ export default class Login extends Component {  
   
   signup(){
     Navigation.startSingleScreenApp({
