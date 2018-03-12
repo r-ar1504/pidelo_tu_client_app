@@ -1,5 +1,5 @@
 import { Navigation } from 'react-native-navigation';
-import { registerScreens } from './screens/index'
+import { registerScreens } from './screens/index';
 
 
 registerScreens();
@@ -10,9 +10,9 @@ registerScreens();
 */
 Navigation.startSingleScreenApp({
   screen: {
-    screen: 'signup.Signup',
+    screen: 'login.Login',
     navigatorStyle: {
     	navBarHidden: true
     }    
-  }
+  },   
 });

@@ -22,21 +22,10 @@ export default class Signup extends Component<{}> {
           navigatorStyle: {
           navBarHidden: true
           }    
-        }
+        },
       });   
     });
-  }
-
-  goBack() {
-      Navigation.startSingleScreenApp({
-        screen: {
-          screen: 'login.Login',
-          navigatorStyle: {
-          navBarHidden: true
-          }    
-        }
-      });
-  }
+  }  
 
 	render() {
 		return(

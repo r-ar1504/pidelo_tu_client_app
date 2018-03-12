@@ -8,7 +8,8 @@
   StatusBar ,
   TouchableOpacity,
   ScrollView,
-  BackHandler,   
+  BackHandler,
+  Image   
 } from 'react-native';
 
 import Logo from '../../components/Logo';
@@ -16,12 +17,7 @@ import Form from './Form';
 import Video from 'react-native-video';
 
  export default class Login extends Component<Props> {  
- 	componentDidMount() {
-		BackHandler.addEventListener('hardwareBackPress', function() {  			
-    		BackHandler.exitApp()		
-		});
-	}
-
+  
   signup(){
     Navigation.startSingleScreenApp({
       screen: {
@@ -31,13 +27,25 @@ import Video from 'react-native-video';
         }    
       }
     });
+  }
+
+  register(){
+    Navigation.startSingleScreenApp({
+      screen: {
+        screen: 'register.Register',
+        navigatorStyle: {
+          navBarHidden: true
+        }
+      }
+    })
   }	
 
    render() {
 		return(          
       <ScrollView contentContainerStyle={styles.contentContainer}>			
 			<View style={styles.container}>
-				<Video
+        <Image source={require('../../images/background.png')} style={styles.image}/>
+				{/*<Video
 					source={require('../../video/broadchurch.mp4')}
           			rate={1.0}
           			volume={1.0}
@@ -45,9 +53,13 @@ import Video from 'react-native-video';
           			resizeMode={"cover"}
 					     repeat
           			style={styles.video}
-        		/>
+        		/>*/}
 				<Logo/>
 				<Form type="Login"/>
+        <View style={styles.signupTextCont}>          
+          <TouchableOpacity onPress={this.fblogin}><Text style={styles.fb}> Facebook</Text></TouchableOpacity>
+          <TouchableOpacity onPress={this.register}><Text style={styles.movil}> Movil</Text></TouchableOpacity>
+        </View> 
 				<View style={styles.signupTextCont}>					
 					<TouchableOpacity onPress={this.signup}><Text style={styles.signupButton}> Crear cuenta</Text></TouchableOpacity>
 					<TouchableOpacity onPress={this.forgotpass}><Text style={styles.forgotpassButton}> ¿Olvidaste tu contraseña?</Text></TouchableOpacity>
@@ -80,7 +92,7 @@ import Video from 'react-native-video';
   	color:'#ffffff',
   	fontSize:10,
   	fontWeight:'500',
-	marginLeft:80
+	marginLeft:120
   },
   contentContainer: {
     flexGrow: 1,        
@@ -92,4 +104,27 @@ import Video from 'react-native-video';
     bottom: 0,
     right: 0,
   },
+  fb: {
+    alignItems:'flex-end',        
+    backgroundColor:'#3b5998',
+    borderRadius:25,
+    color:'#ffffff',
+    padding:15,
+  },
+  movil: {
+    alignItems:'flex-end',    
+    backgroundColor:'#00aced',
+    borderRadius:25,
+    color:'#ffffff',
+    padding:15,
+    marginLeft:50
+  },
+  image:{
+    flex:1,
+    resizeMode:'stretch',
+    position: 'absolute',
+          width: '100%',
+          height: '100%',
+          justifyContent: 'center',
+  }
 });
