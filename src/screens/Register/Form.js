@@ -21,7 +21,6 @@ export default class Form extends Component<{}> {
             	label={'NOMBRE'}				      
               keyboardType="email-address"
               onSubmitEditing={()=> this.correo.focus()}
-              borderColor={'#00ffff'}
           	/>
             <Hoshi
               style={styles.inputBox}
@@ -29,23 +28,7 @@ export default class Form extends Component<{}> {
               keyboardType="email-address"
               ref={(input) => this.password = input}
               onSubmitEditing={()=> this.password.focus()}
-              borderColor={'#00ffff'}
-            />
-          	<Hoshi
-            	style={styles.inputBox}
-				      label={'CONTRASEÑA'}				      
-				      secureTextEntry={true}  				      
-              ref={(input) => this.password = input}
-              onSubmitEditing={()=> this.confirm.focus()}
-              borderColor={'#00ffff'}
-          	/>
-            <Hoshi
-              style={styles.inputBox}
-              label={'CONFIRMACIÓN DE CONTRASEÑA'}              
-              secureTextEntry={true}                
-              ref={(input) => this.confirm = input}
-              borderColor={'#00ffff'}
-            />
+            />          	
             <View style={styles.signupTextCont}>          
               <TouchableOpacity onPress={this.goBack}><Text style={styles.signupButton}> Conoce nuestros terminos y condiciones</Text></TouchableOpacity>      
             </View>
@@ -65,7 +48,8 @@ const styles = StyleSheet.create({
     marginTop:16,
     fontSize:20
   },
-  inputBox: {          
+  inputBox: {
+    width:300,        
     paddingHorizontal:13,        
     marginVertical: 10,    
   },

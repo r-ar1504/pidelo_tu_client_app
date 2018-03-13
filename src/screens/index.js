@@ -7,6 +7,8 @@ import Signup from './Signup/Signup';
 import Register from './Register/Register';
 import Modal from './Register/Modal';
 import VerificationCode from './Register/VerificationCode';
+import ConfirmModal from './Register/ModalConfirm';
+import RegisterForm from './Register/Form';
 
 
 /* Screen register */
@@ -18,4 +20,6 @@ export function registerScreens()
   Navigation.registerComponent('register.Register', () => Register);
   Navigation.registerComponent('register.modal', () => Modal);
   Navigation.registerComponent('register.verification', () => VerificationCode);
+  Navigation.registerComponent('register.confirm', () => ConfirmModal);
+  Navigation.registerComponent('register.form', () => RegisterForm);  
 }

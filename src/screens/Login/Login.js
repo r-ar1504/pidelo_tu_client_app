@@ -105,19 +105,19 @@ import Video from 'react-native-video';
     right: 0,
   },
   fb: {
-    alignItems:'flex-end',        
+    flexDirection:'row',
     backgroundColor:'#3b5998',
     borderRadius:25,
     color:'#ffffff',
     padding:15,
+    width:150
   },
-  movil: {
-    alignItems:'flex-end',    
+  movil: {        
     backgroundColor:'#00aced',
     borderRadius:25,
     color:'#ffffff',
-    padding:15,
-    marginLeft:50
+    padding:15,    
+    width:150
   },
   image:{
     flex:1,

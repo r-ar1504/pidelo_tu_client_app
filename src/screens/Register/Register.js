@@ -40,8 +40,7 @@ export default class Register extends Component {
           navBarHidden: true
         }        
       }
-
-    })
+    });
   }
 
   render() {
