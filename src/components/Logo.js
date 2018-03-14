@@ -3,7 +3,7 @@ import {
   StyleSheet,
   Text,
   View,
-   Image 
+   Image
 } from 'react-native';
 
 export default class Logo extends Component<{}> {
@@ -11,7 +11,7 @@ export default class Logo extends Component<{}> {
 		return(
 			<View style={styles.container}>
 				<Image  style={{width:230, height: 70}}
-          			source={require('../images/logo.png')}/>          			
+          			source={require('src/assets/images/logo.png')}/>
   			</View>
 			)
 	}
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   logoText : {
-  	marginVertical: 15,	
+  	marginVertical: 15,
   	fontSize:18,
   	color:'rgba(255, 255, 255, 0.7)',
 	marginLeft: 20

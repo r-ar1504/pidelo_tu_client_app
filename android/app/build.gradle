@@ -9,7 +9,7 @@ import com.android.build.OutputFile
  * cycle. By default, bundleDebugJsAndAssets is skipped, as in debug/dev mode we prefer to load the
  * bundle directly from the development server. Below you can see all the possible configurations
  * and their defaults. If you decide to add a configuration block, make sure to add it before the
- * `apply from: "../../node_modules/react-native/react.gradle"` line.
+ * `apply from: "srcnode_modules/react-native/react.gradle"` line.
  *
  * project.ext.react = [
  *   // the name of the generated asset file containing your JS bundle
@@ -41,7 +41,7 @@ import com.android.build.OutputFile
  *   //         'devDisabledIn${buildType}'
  *
  *   // the root of your project, i.e. where "package.json" lives
- *   root: "../../",
+ *   root: "src",
  *
  *   // where to put the JS bundle asset in debug mode
  *   jsBundleDirDebug: "$buildDir/intermediates/assets/debug",
@@ -76,13 +76,13 @@ project.ext.react = [
     entryFile: "index.js"
 ]
 
-apply from: "../../node_modules/react-native/react.gradle"
+apply from: "srcnode_modules/react-native/react.gradle"
 
 project.ext.vectoricons = [
     iconFontNames: [ 'MaterialIcons.ttf', 'EvilIcons.ttf' ] // Name of the font files you want to copy
 ]
 
-apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+apply from: "srcnode_modules/react-native-vector-icons/fonts.gradle"
 
 /**
  * Set this to true to create two separate APKs instead of one:

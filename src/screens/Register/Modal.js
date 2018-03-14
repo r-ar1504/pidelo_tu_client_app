@@ -20,7 +20,7 @@ export default class Modal extends Component {
             screen: 'register.verification',
             navigatorStyle: {
               navBarHidden: true
-            }  
+            }
           }
         })
     },3000)
@@ -29,19 +29,19 @@ export default class Modal extends Component {
 	render(){
 		return(
 		  <View style={styles.container}>
-        <Image source={require('../../images/gb-trans.png')} style={styles.image}/>
-        <Image source={require('../../images/check.png')} style={styles.check}/>
+        <Image source={require('src/assets/images/gb-trans.png')} style={styles.image}/>
+        <Image source={require('src/assets/images/check.png')} style={styles.check}/>
         <Text style={styles.info}>Se ha enviado un código de verificación vía SMS a tu móvil</Text>
   		</View>
 		)
 	}
 }
 
-const styles = StyleSheet.create({  
+const styles = StyleSheet.create({
  container: {
     flex: 1,
-    alignItems: 'center',    
-    justifyContent :'center'     
+    alignItems: 'center',
+    justifyContent :'center'
   },
   image:{
     flex:1,
@@ -57,10 +57,10 @@ const styles = StyleSheet.create({
     resizeMode:'center',
     position:'absolute',
   },
-   info: {    
+   info: {
     fontSize:16,
     color:'white',
     padding:20,
-    marginTop:220    
+    marginTop:220
   },
 });

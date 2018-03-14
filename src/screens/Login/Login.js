@@ -26,11 +26,25 @@ import Video from 'react-native-video';
     super(props);
     this.signup = this.signup.bind(this);
     this.register = this.register.bind(this);
+    this.signIn = this.signIn.bind(this);
 
     YellowBox.ignoreWarnings([
      'Warning: componentWillMount is deprecated',
      'Warning: componentWillReceiveProps is deprecated',
     ]);
+  }
+
+  /*
+  * SignIn Function.
+  * If user is valid, then initialize Home Screen.
+  */
+  signIn(){
+    this.props.navigator.push({
+      screen: 'home.Home',
+      navigatorStyle: {
+        navBarHidden: true
+      }
+    });
   }
 
   signup(){
@@ -55,9 +69,9 @@ import Video from 'react-native-video';
 		return(
       <ScrollView contentContainerStyle={styles.contentContainer}>
 			<View style={styles.container}>
-        <Image source={require('../../images/background.png')} style={styles.image}/>
+        <Image source={require('src/assets/images/background.png')} style={styles.image}/>
 				{/*<Video
-					source={require('../../video/broadchurch.mp4')}
+					source={require('src/video/broadchurch.mp4')}
           			rate={1.0}
           			volume={1.0}
           			muted={true}

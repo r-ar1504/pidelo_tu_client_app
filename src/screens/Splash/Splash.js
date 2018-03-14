@@ -27,7 +27,7 @@ export default class Splash extends Component<{}> {
 		return(
 			<View style={styles.container}>
 				  <Image  style={{width:70, height: 70}}
-                source={require('../../images/icon2.png')}/>
+                source={require('src/assets/images/icon2.png')}/>
   			</View>
 			)
 	}

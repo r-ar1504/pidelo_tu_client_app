@@ -19,7 +19,7 @@ export default class Modal extends Component {
             screen: 'register.form',
             navigatorStyle: {
               navBarHidden: true
-            }  
+            }
           }
         });
   }
@@ -27,8 +27,8 @@ export default class Modal extends Component {
 	render(){
 		return(
 		  <View style={styles.container}>
-        <Image source={require('../../images/gb-trans.png')} style={styles.image}/>
-        <Image source={require('../../images/check.png')} style={styles.check}/>
+        <Image source={require('src/assets/images/gb-trans.png')} style={styles.image}/>
+        <Image source={require('src/assets/images/check.png')} style={styles.check}/>
         <Text style={styles.info}>Tu código ha sido exitoso</Text>
         <TouchableOpacity style={styles.button} onPress={this.confirm}>
             <Text style={styles.buttonText}>CONTINUAR</Text>
@@ -38,11 +38,11 @@ export default class Modal extends Component {
 	}
 }
 
-const styles = StyleSheet.create({  
+const styles = StyleSheet.create({
  container: {
     flex: 1,
-    alignItems: 'center',    
-    justifyContent :'center'     
+    alignItems: 'center',
+    justifyContent :'center'
   },
   image:{
     flex:1,
@@ -58,24 +58,24 @@ const styles = StyleSheet.create({
     resizeMode:'center',
     position:'absolute',
   },
-   info: {    
+   info: {
     fontSize:16,
     color:'white',
     padding:20,
-    marginTop:220    
+    marginTop:220
   },
   button: {
     alignItems:'center',
-    justifyContent :'center',    
+    justifyContent :'center',
     width:300,
-    backgroundColor:'#00ffff',           
+    backgroundColor:'#00ffff',
     paddingVertical: 13,
-    marginTop: 20,    
-    borderRadius:20,          
+    marginTop: 20,
+    borderRadius:20,
   },
-  buttonText: { 
+  buttonText: {
     fontSize:16,
     fontWeight:'500',
-    color:'#ffffff',   
+    color:'#ffffff',
   },
 });

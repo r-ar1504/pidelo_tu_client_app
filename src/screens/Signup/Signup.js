@@ -10,29 +10,29 @@ import {
   BackHandler
 } from 'react-native';
 
-import Logo from '../../components/Logo';
+import Logo from 'src/components/Logo';
 import Form from './Form';
 
 export default class Signup extends Component<{}> {
   componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', function() {        
+    BackHandler.addEventListener('hardwareBackPress', function() {
         Navigation.startSingleScreenApp({
         screen: {
           screen: 'login.Login',
           navigatorStyle: {
           navBarHidden: true
-          }    
+          }
         },
-      });   
+      });
     });
-  }  
+  }
 
 	render() {
 		return(
       <ScrollView contentContainerStyle={styles.contentContainer}>
-			<View style={styles.container}>				
-				<Form/>				
-			</View>	
+			<View style={styles.container}>
+				<Form/>
+			</View>
       </ScrollView>
 			)
 	}
@@ -45,8 +45,8 @@ const styles = StyleSheet.create({
     alignItems:'center',
     justifyContent :'flex-start',
     flexDirection: 'column'
-  },  
+  },
   contentContainer: {
-    flexGrow: 1,        
-  }  
+    flexGrow: 1,
+  }
 });
