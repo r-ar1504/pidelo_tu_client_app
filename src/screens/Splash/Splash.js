@@ -4,7 +4,7 @@ import {
   StyleSheet,
   Text,
   View,
-   Image 
+   Image
 } from 'react-native';
 
 
@@ -17,17 +17,17 @@ export default class Splash extends Component<{}> {
             screen: 'login.Login',
             navigatorStyle: {
             navBarHidden: true
-            }    
+            }
           }
         });
-		},3000)        
+		},3000)
   }
-	
+
 	render(){
 		return(
 			<View style={styles.container}>
-				  <Image  style={{width:40, height: 70}}
-                source={require('../../images/icon.png')}/>  			
+				  <Image  style={{width:70, height: 70}}
+                source={require('../../images/icon2.png')}/>
   			</View>
 			)
 	}
@@ -38,6 +38,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent:'center',
     alignItems: 'center',
-	backgroundColor:'#455a64'
-  },  
+	  backgroundColor:'#455a64'
+  },
 });

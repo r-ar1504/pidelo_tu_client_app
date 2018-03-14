@@ -1,48 +1,59 @@
- import React, { Component } from 'react';
- import { Navigation } from 'react-native-navigation';
-
- import {
-  StyleSheet,
-  Text,
-  View,
-  StatusBar ,
-  TouchableOpacity,
-  ScrollView,
-  BackHandler,
-  Image   
+import React, { Component } from 'react';
+import { Navigation } from 'react-native-navigation';
+import { YellowBox } from 'react-native';
+import {
+StyleSheet,
+Text,
+View,
+StatusBar ,
+TouchableOpacity,
+ScrollView,
+BackHandler,
+Image
 } from 'react-native';
 
 import Logo from '../../components/Logo';
 import Form from './Form';
 import Video from 'react-native-video';
 
- export default class Login extends Component {  
-  
+ export default class Login extends Component {
+
+   /*
+   * Contructor , if a function other than render needs to use props it needs to be binded here.
+   * example: this.signup = this.signup.bind(this); now signup can use props.navigator.
+   */
+  constructor(props){
+    super(props);
+    this.signup = this.signup.bind(this);
+    this.register = this.register.bind(this);
+
+    YellowBox.ignoreWarnings([
+     'Warning: componentWillMount is deprecated',
+     'Warning: componentWillReceiveProps is deprecated',
+    ]);
+  }
+
   signup(){
-    Navigation.startSingleScreenApp({
-      screen: {
-        screen: 'signup.Signup',
-        navigatorStyle: {
-          navBarHidden: true
-        }    
+    this.props.navigator.push({
+      screen: 'signup.Signup',
+      navigatorStyle: {
+        navBarHidden: true
       }
     });
   }
 
   register(){
-    Navigation.startSingleScreenApp({
-      screen: {
-        screen: 'register.Register',
-        navigatorStyle: {
-          navBarHidden: true
-        }
+    this.props.navigator.push({
+      screen: 'register.Register',
+      navigatorStyle: {
+        navBarHidden: true
       }
-    })
-  }	
+    });
+  }
 
    render() {
-		return(          
-      <ScrollView contentContainerStyle={styles.contentContainer}>			
+		return(
+      <ScrollView contentContainerStyle={styles.contentContainer}>
 			<View style={styles.container}>
         <Image source={require('../../images/background.png')} style={styles.image}/>
 				{/*<Video
@@ -56,24 +67,24 @@ import Video from 'react-native-video';
         		/>*/}
 				<Logo/>
 				<Form type="Login"/>
-        <View style={styles.signupTextCont}>          
+        <View style={styles.signupTextCont}>
           <TouchableOpacity onPress={this.fblogin}><Text style={styles.fb}> Facebook</Text></TouchableOpacity>
           <TouchableOpacity onPress={this.register}><Text style={styles.movil}> Movil</Text></TouchableOpacity>
-        </View> 
-				<View style={styles.signupTextCont}>					
+        </View>
+				<View style={styles.signupTextCont}>
 					<TouchableOpacity onPress={this.signup}><Text style={styles.signupButton}> Crear cuenta</Text></TouchableOpacity>
 					<TouchableOpacity onPress={this.forgotpass}><Text style={styles.forgotpassButton}> ¿Olvidaste tu contraseña?</Text></TouchableOpacity>
-				</View> 				 
-			</View> 
-      </ScrollView>         
+				</View>
+			</View>
+      </ScrollView>
 		)
-	}		
+	}
  }
 
  const styles = StyleSheet.create({
   container : {
     flex: 1,
-    backgroundColor:'#455a64',    
+    backgroundColor:'#455a64',
     alignItems:'center',
     justifyContent :'center'
   },
@@ -82,11 +93,11 @@ import Video from 'react-native-video';
     alignItems:'flex-end',
     paddingVertical:16,
     flexDirection:'row'
-  },  
+  },
   signupButton: {
   	color:'#ffffff',
   	fontSize:10,
-  	fontWeight:'500',	
+  	fontWeight:'500',
   },
   forgotpassButton: {
   	color:'#ffffff',
@@ -95,7 +106,7 @@ import Video from 'react-native-video';
 	marginLeft:120
   },
   contentContainer: {
-    flexGrow: 1,        
+    flexGrow: 1,
   },
   video: {
     position: 'absolute',
@@ -107,16 +118,20 @@ import Video from 'react-native-video';
   fb: {
     flexDirection:'row',
     backgroundColor:'#3b5998',
-    borderRadius:25,
+    borderTopLeftRadius:25,
+    borderBottomLeftRadius:25,
+    textAlign: 'center',
     color:'#ffffff',
     padding:15,
     width:150
   },
-  movil: {        
+  movil: {
     backgroundColor:'#00aced',
-    borderRadius:25,
+    borderTopRightRadius:25,
+    borderBottomRightRadius:25,
+    textAlign: 'center',
     color:'#ffffff',
-    padding:15,    
+    padding:15,
     width:150
   },
   image:{
