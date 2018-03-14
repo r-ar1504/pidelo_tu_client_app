@@ -12,23 +12,23 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 export default class Form extends Component<{}> {
 
-	render(){
-		return(
-		    <View>
+  render(){
+    return(
+        <View>
             <Text style={styles.signupText}>REGISTRATE</Text>
             <Hoshi
-				      style={styles.inputBox}
-            	label={'NOMBRE'}				      
+              style={styles.inputBox}
+              label={'NOMBRE'}              
               keyboardType="email-address"
               onSubmitEditing={()=> this.correo.focus()}
-          	/>
+            />
             <Hoshi
               style={styles.inputBox}
               label={'CORREO ELECTRONICO'}              
               keyboardType="email-address"
               ref={(input) => this.password = input}
               onSubmitEditing={()=> this.password.focus()}
-            />          	
+            />            
             <View style={styles.signupTextCont}>          
               <TouchableOpacity onPress={this.goBack}><Text style={styles.signupButton}> Conoce nuestros terminos y condiciones</Text></TouchableOpacity>      
             </View>
@@ -36,9 +36,9 @@ export default class Form extends Component<{}> {
            <TouchableOpacity style={styles.button}>
              <Text style={styles.buttonText}>CREAR CUENTA</Text>
            </TouchableOpacity>     
-  		</View>
-			)
-	}
+      </View>
+      )
+  }
 }
 
 const styles = StyleSheet.create({  
@@ -57,8 +57,8 @@ const styles = StyleSheet.create({
     width:300,
     backgroundColor:'#00ffff',           
     paddingVertical: 13,
-    marginTop: 20,  	
-    borderRadius:20,    		  
+    marginTop: 20,    
+    borderRadius:20,          
   },
   buttonText: {
     fontSize:16,

@@ -10,18 +10,26 @@ import {
 } from 'react-native';
 
 
-export default class VerificationCode extends React.Component {				
+export default class VerificationCode extends React.Component {       
+
+  constructor(props){
+    super(props);
+
+    this.confirm = this.confirm.bind(this);
+  }
 
   confirm(){
-    Navigation.startSingleScreenApp({
-      screen: {
-        screen:'register.modal',
+    this.props.navigator.push({      
+        screen: 'register.modal',
+        passProps:{
+          text:'Tu código ha sido exitoso',
+          button:'Finalizar',
+          action: 'Form'
+        },
         navigatorStyle: {
-          navBarHidden: true
-        }        
-      }
-
-    })
+          navBarHidden: true,          
+        }, // override the navigator style for the screen, see "Styling the navigator" below (optional)   
+    });
   }
 
   render() {

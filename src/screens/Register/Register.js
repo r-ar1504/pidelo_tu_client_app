@@ -4,20 +4,19 @@ import {
   StyleSheet,
   Text,
   View,
-  StatusBar , 
-  ScrollView, 
   TouchableOpacity
 } from 'react-native';
 
 import PhoneInput from 'react-native-phone-input';
 import CountryPicker from 'react-native-country-picker-modal';
 
-export default class Register extends Component {			
-	constructor() {
+export default class Register extends Component {     
+  constructor() {
     super();
 
     this.onPressFlag = this.onPressFlag.bind(this);
     this.selectCountry = this.selectCountry.bind(this);
+    this.confirm = this.confirm.bind(this);
     this.state = {
       cca2: 'MX',
     };
@@ -33,13 +32,16 @@ export default class Register extends Component {
   }
 
   confirm(){
-    Navigation.startSingleScreenApp({
-      screen: {
-        screen:'register.modal',
+    this.props.navigator.push({      
+        screen: 'register.modal',
+        passProps:{
+          text: 'Se ha enviado un código de verificación vía SMS a tu móvil',
+          button:'Continuar',
+          action: 'Verification'
+        },
         navigatorStyle: {
-          navBarHidden: true
-        }        
-      }
+          navBarHidden: true,          
+        }, // override the navigator style for the screen, see "Styling the navigator" below (optional)   
     });
   }
 
@@ -54,10 +56,11 @@ export default class Register extends Component {
           onPressFlag={this.onPressFlag}
           initialCountry='mx'
           pickerItemStyle={{fontSize:16}}          
-          textProps={{placeholder:'Numero', borderWidth:0.7, borderColor:'black'}}
+          textProps={{placeholder:'Numero', borderWidth:0.7, borderColor:'black', editable:false}}
           textStyle={{fontSize:16}}
-          style={{flex:1,alignItems:'center',justifyContent:'center',padding:20,marginTop:16,marginBottom:16,}}
+          style={{flex:1,alignItems:'center',justifyContent:'center',padding:20,marginTop:16,marginBottom:16, width:120}}
           pickerItemStyle={{borderWidth:0.7, borderColor:'black'}}
+          diabled={true}
         />
 
         <CountryPicker
@@ -113,12 +116,4 @@ const styles = StyleSheet.create({
     color:'gray',
     textAlign:'center'
   },
-  phone: {
-    flex:1,
-    alignItems:'center',
-    justifyContent:'center',
-    padding:20,
-    marginTop:16,
-    marginBottom:16,
-  }
 });
