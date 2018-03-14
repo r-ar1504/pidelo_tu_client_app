@@ -4,15 +4,17 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity
+  TouchableOpacity,
+  TextInput,
+  ScrollView
 } from 'react-native';
 
 import PhoneInput from 'react-native-phone-input';
 import CountryPicker from 'react-native-country-picker-modal';
 
 export default class Register extends Component {     
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.onPressFlag = this.onPressFlag.bind(this);
     this.selectCountry = this.selectCountry.bind(this);
@@ -23,7 +25,7 @@ export default class Register extends Component {
   }  
 
   onPressFlag() {
-    this.countryPicker.openModal();
+    //this.countryPicker.openModal();
   }
 
   selectCountry(country) {
@@ -47,47 +49,50 @@ export default class Register extends Component {
 
   render() {
     return (
+      <ScrollView contentContainerStyle={styles.contentContainer}>
       <View style={styles.container}>
         <Text style={styles.signupText}>REGISTRATE</Text>
-        <PhoneInput
+        <View style={styles.inputBox}>
+          <PhoneInput
           ref={(ref) => {
             this.phone = ref;
           }}
-          onPressFlag={this.onPressFlag}
+          //onPressFlag={this.onPressFlag}
           initialCountry='mx'
-          pickerItemStyle={{fontSize:16}}          
+          pickerItemStyle={{fontSize:18, height:30}}          
           textProps={{placeholder:'Numero', borderWidth:0.7, borderColor:'black', editable:false}}
-          textStyle={{fontSize:16}}
-          style={{flex:1,alignItems:'center',justifyContent:'center',padding:20,marginTop:16,marginBottom:16, width:120}}
-          pickerItemStyle={{borderWidth:0.7, borderColor:'black'}}
+          textStyle={{fontSize:18, height:30, textAlign:'center'}}
+          style={{padding:20,marginTop:16,marginBottom:16, width:125}}          
           diabled={true}
         />
-
-        <CountryPicker
-          ref={(ref) => {
-            this.countryPicker = ref;
-          }}
-          onChange={value => this.selectCountry(value)}
-          translation="eng"
-          cca2={this.state.cca2}
-        >
-          <View />
-        </CountryPicker>
+        <TextInput
+              style={{flex:1, borderColor: 'black', borderWidth: 0.7, width:100, height:30, fontSize:10 }}             
+              keyboardType="phone-pad"           
+            />                
+        </View>        
         <Text style={styles.info}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam porta ex arcu, et scelerisque felis faucibus at. Aenean sit amet viverra mauris. Phasellus quis metus ac lectus ultrices lacinia sed ut tortor. Donec non dignissim metus, ac ornare augue. Aenean euismod velit nisl. Donec ullamcorper sagittis condimentum. Nullam pharetra lorem iaculis pharetra gravida. Nulla non pharetra ante. Aenean et libero dui. Nulla lacinia vestibulum ex sit amet elementum.</Text>
         <TouchableOpacity style={styles.button} onPress={this.confirm}>
             <Text style={styles.buttonText}>CONTINUAR</Text>
         </TouchableOpacity>
+        
       </View>
+      </ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor:'#ffffff',
     flex: 1,
-    alignItems: 'center',
+    alignItems:'center',
+    justifyContent :'center',
+    flexDirection: 'column',
     padding: 20,
     paddingTop: 60,    
+  },
+  contentContainer: {
+    flexGrow: 1,
   },
   signupText: {    
     alignItems:'flex-start',
@@ -116,4 +121,10 @@ const styles = StyleSheet.create({
     color:'gray',
     textAlign:'center'
   },
+  inputBox: {
+    flexDirection: 'row',
+    alignItems:'center',
+    justifyContent :'center', 
+    padding:20
+  },  
 });

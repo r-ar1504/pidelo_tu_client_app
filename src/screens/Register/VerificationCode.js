@@ -38,13 +38,16 @@ export default class VerificationCode extends React.Component {
         <Text style={styles.signupText}>INGRESA CODIGO DE VERIFICACIÓN</Text>
           <View style={styles.inputBox}> 
             <TextInput
-              style={{height: 40, borderColor: 'gray', borderWidth: 1, marginLeft:20}}              
+              style={{height: 40, borderColor: 'gray', borderWidth: 1, marginLeft:20}}
+              keyboardType="phone-pad"              
             />
             <TextInput
               style={{height: 40, borderColor: 'gray', borderWidth: 1, marginLeft:20}}              
+              keyboardType="phone-pad"
             />
             <TextInput
               style={{height: 40, borderColor: 'gray', borderWidth: 1, marginLeft:20}}              
+              keyboardType="phone-pad"
             />
           </View>
           
@@ -59,8 +62,11 @@ export default class VerificationCode extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor:'#ffffff',
     flex: 1,
-    alignItems: 'center',
+    alignItems:'center',
+    justifyContent :'flex-start',
+    flexDirection: 'column',
     padding: 20,
     paddingTop: 60,    
   },

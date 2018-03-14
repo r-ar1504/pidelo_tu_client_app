@@ -8,6 +8,7 @@ import Register from './Register/Register';
 import Modal from '../components/Modal';
 import VerificationCode from './Register/VerificationCode';
 import RegisterForm from './Register/Form';
+import AllowLocation from './Register/AllowLocation';
 
 
 /* Screen register */
@@ -19,5 +20,6 @@ export function registerScreens()
   Navigation.registerComponent('register.Register', () => Register);
   Navigation.registerComponent('register.modal', () => Modal);
   Navigation.registerComponent('register.verification', () => VerificationCode);
-  Navigation.registerComponent('register.form', () => RegisterForm);  
+  Navigation.registerComponent('register.form', () => RegisterForm);
+  Navigation.registerComponent('register.location', () => AllowLocation);  
 }
