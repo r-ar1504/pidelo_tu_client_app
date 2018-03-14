@@ -61,7 +61,8 @@ import Video from 'react-native-video';
       screen: 'register.Register',
       navigatorStyle: {
         navBarHidden: true
-      }
+      },
+      animationType: 'slide-horizontal',
     });
   }
 
@@ -129,23 +130,20 @@ import Video from 'react-native-video';
     bottom: 0,
     right: 0,
   },
-  fb: {
-    flexDirection:'row',
+  fb: {   
     backgroundColor:'#3b5998',
-    borderTopLeftRadius:25,
     borderBottomLeftRadius:25,
-    textAlign: 'center',
+    borderTopLeftRadius:25,
     color:'#ffffff',
     padding:15,
     width:150
   },
-  movil: {
+  movil: {    
     backgroundColor:'#00aced',
-    borderTopRightRadius:25,
     borderBottomRightRadius:25,
-    textAlign: 'center',
+    borderTopRightRadius:25,
     color:'#ffffff',
-    padding:15,
+    padding:15,    
     width:150
   },
   image:{

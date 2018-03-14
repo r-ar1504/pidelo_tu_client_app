@@ -21,13 +21,13 @@ export default class Form extends Component<{}> {
             	label={'NOMBRE'}				      
               keyboardType="email-address"
               onSubmitEditing={()=> this.correo.focus()}
-              borderColor={'#00ffff'}
+              borderColor={'#00ffff'}             
           	/>
             <Hoshi
               style={styles.inputBox}
               label={'CORREO ELECTRONICO'}              
               keyboardType="email-address"
-              ref={(input) => this.password = input}
+              ref={(input) => this.correo = input}
               onSubmitEditing={()=> this.password.focus()}
               borderColor={'#00ffff'}
             />
@@ -60,14 +60,16 @@ export default class Form extends Component<{}> {
 
 const styles = StyleSheet.create({  
   signupText: {    
-    alignItems:'flex-start',
+    alignItems:'center',
     justifyContent :'center',
     marginTop:16,
-    fontSize:20
+    fontSize:20,
+    marginBottom:16
   },
   inputBox: {          
     paddingHorizontal:13,        
-    marginVertical: 10,    
+    marginVertical: 10,
+    height:10
   },
   button: {
     width:300,
@@ -93,3 +95,26 @@ const styles = StyleSheet.create({
     fontWeight:'500'
   },  
 });
+
+const height = 37;
+
+HideoStyle = {
+    container: {
+        marginVertical: 5, 
+        borderRadius: 4,
+        borderStyle: 'solid',
+        borderWidth: 2,        
+        flex: 0,
+        height: 'auto',
+        overflow: 'hidden'
+    },
+    input: {
+        height: height,        
+        fontWeight: '600',
+        fontSize: 11,
+    },
+    size: {
+        input: height,
+        icon: 20
+    }
+}

@@ -13,25 +13,41 @@ import {
 
 export default class Modal extends Component {
 
-  comfirm(){
-    Navigation.startSingleScreenApp({
-          screen: {
+  constructor(props) {
+    super(props);
+
+    this.confirm = this.confirm.bind(this);
+  }
+
+  confirm(){
+    if (this.props.action == 'Verification'){
+          this.props.navigator.push({      
+            screen: 'register.verification',
+            navigatorStyle: {
+            navBarHidden: true
+          },          
+          animationType: 'slide-horizontal',      
+        });
+    }
+    else {
+          this.props.navigator.push({      
             screen: 'register.form',
             navigatorStyle: {
               navBarHidden: true
-            }
-          }
+            },            
+            animationType: 'slide-horizontal',      
         });
-  }
+    }
+  }  
 
 	render(){
 		return(
 		  <View style={styles.container}>
         <Image source={require('src/assets/images/gb-trans.png')} style={styles.image}/>
         <Image source={require('src/assets/images/check.png')} style={styles.check}/>
-        <Text style={styles.info}>Tu código ha sido exitoso</Text>
+        <Text style={styles.info}>{this.props.text}</Text>
         <TouchableOpacity style={styles.button} onPress={this.confirm}>
-            <Text style={styles.buttonText}>CONTINUAR</Text>
+            <Text style={styles.buttonText}>{this.props.button}</Text>
         </TouchableOpacity>
   		</View>
 		)
@@ -56,26 +72,23 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent:'center',
     resizeMode:'center',
-    position:'absolute',
   },
-   info: {
+   info: {    
     fontSize:16,
     color:'white',
-    padding:20,
-    marginTop:220
+    padding:20,   
   },
   button: {
-    alignItems:'center',
-    justifyContent :'center',
     width:300,
-    backgroundColor:'#00ffff',
+    backgroundColor:'#00ffff',           
     paddingVertical: 13,
-    marginTop: 20,
-    borderRadius:20,
+    marginTop: 20,    
+    borderRadius:20,          
   },
   buttonText: {
     fontSize:16,
     fontWeight:'500',
     color:'#ffffff',
+    textAlign:'center'
   },
 });

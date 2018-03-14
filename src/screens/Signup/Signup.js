@@ -43,8 +43,8 @@ const styles = StyleSheet.create({
     backgroundColor:'#ffffff',
     flex: 1,
     alignItems:'center',
-    justifyContent :'flex-start',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    padding: 10,    
   },
   contentContainer: {
     flexGrow: 1,
