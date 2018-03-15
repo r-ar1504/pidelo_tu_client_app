@@ -9,6 +9,15 @@ import Modal from '../components/Modal';
 import VerificationCode from './Register/VerificationCode';
 import RegisterForm from './Register/Form';
 import AllowLocation from './Register/AllowLocation';
+import Home from './Home/Home'
+
+/*Navigation Components*/
+	
+	/*Navigation Bars*/
+	import HomeBar from '../components/NavBar/HomeBar'
+
+	/*Side Bars*/
+  import SideMenu from '../components/SideMenu/SideMenu';
 
 
 /* Screen register */
@@ -21,5 +30,9 @@ export function registerScreens()
   Navigation.registerComponent('register.modal', () => Modal);
   Navigation.registerComponent('register.verification', () => VerificationCode);
   Navigation.registerComponent('register.form', () => RegisterForm);
-  Navigation.registerComponent('register.location', () => AllowLocation);  
+  Navigation.registerComponent('register.location', () => AllowLocation); 
+  Navigation.registerComponent('home.Home', () => Home);  
+  Navigation.registerComponent('nav.HomeBar', () => HomeBar);
+  Navigation.registerComponent('nav.SideMenu', () => SideMenu);
+
 }

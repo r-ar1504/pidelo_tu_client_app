@@ -39,10 +39,12 @@ import Video from 'react-native-video';
   * If user is valid, then initialize Home Screen.
   */
   signIn(){
-    this.props.navigator.push({
+    this.props.navigator.resetTo({
       screen: 'home.Home',
       navigatorStyle: {
-        navBarHidden: true
+        navBarHidden: false,
+        navBarCustomView: 'nav.HomeBar',
+        passProps: this.props,
       }
     });
   }
@@ -82,6 +84,9 @@ import Video from 'react-native-video';
         		/>*/}
 				<Logo/>
 				<Form type="Login"/>
+         <TouchableOpacity style={styles.button}>
+           <Text style={styles.buttonText} onPress={this.signIn}>INGRESAR</Text>
+         </TouchableOpacity>    
         <View style={styles.signupTextCont}>
           <TouchableOpacity onPress={this.fblogin}><Text style={styles.fb}> Facebook</Text></TouchableOpacity>
           <TouchableOpacity onPress={this.register}><Text style={styles.movil}> Movil</Text></TouchableOpacity>
@@ -130,7 +135,7 @@ import Video from 'react-native-video';
     bottom: 0,
     right: 0,
   },
-  fb: {   
+  fb: {
     backgroundColor:'#3b5998',
     borderBottomLeftRadius:25,
     borderTopLeftRadius:25,
@@ -138,12 +143,12 @@ import Video from 'react-native-video';
     padding:15,
     width:150
   },
-  movil: {    
+  movil: {
     backgroundColor:'#00aced',
     borderBottomRightRadius:25,
     borderTopRightRadius:25,
     color:'#ffffff',
-    padding:15,    
+    padding:15,
     width:150
   },
   image:{
@@ -153,5 +158,21 @@ import Video from 'react-native-video';
           width: '100%',
           height: '100%',
           justifyContent: 'center',
-  }
+  },
+    button: {
+    width:300,
+    backgroundColor:'#00000000',           
+    paddingVertical: 13,
+    marginTop: 60,
+    borderWidth: 1.5,
+    borderColor: 'white'
+  
+    
+  },
+  buttonText: {
+    fontSize:16,
+    fontWeight:'500',
+    color:'#ffffff',
+    textAlign:'center'
+  },  
 });

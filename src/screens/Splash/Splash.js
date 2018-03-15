@@ -19,16 +19,15 @@ export default class Splash extends Component<{}> {
               navBarHidden: true
             },             
           });
-		},3000)
+		},2000)
   }
 
 	render(){
 		return(
-			<View style={styles.container}>
-          <Image source={require('src/assets/images/bg.png')} style={styles.image}/>
-				  <Image  style={styles.logo}
-                source={require('src/assets/images/icon3.png')}/>
-  			</View>
+			<View style={styles.container} >
+          <Image source={require('src/assets/images/bg.png')} style={styles.image} />
+				  <Image style={styles.logo} source={require('src/assets/images/icon3.png')} />
+  		</View>
 			)
 	}
 }
