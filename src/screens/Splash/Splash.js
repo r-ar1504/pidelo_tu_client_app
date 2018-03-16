@@ -12,13 +12,24 @@ import {
 export default class Splash extends Component<{}> {
 	componentDidMount() {
     	setTimeout(() => {
-			   this.props.navigator.resetTo({
+        if (this.props.action != 'maps') {
+          this.props.navigator.resetTo({
             screen: 'login.Login',            
             animationType: 'slide-horizontal',
             navigatorStyle: {
               navBarHidden: true
             },             
           });
+        }
+        else {
+          this.props.navigator.push({
+            screen: 'login.Login',            
+            animationType: 'slide-horizontal',
+            navigatorStyle: {
+              navBarHidden: true
+            },             
+          });
+        }          
 		},2000)
   }
 

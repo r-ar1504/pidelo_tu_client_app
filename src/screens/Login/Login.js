@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Navigation } from 'react-native-navigation';
 import { YellowBox } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {
 StyleSheet,
 Text,
@@ -88,8 +89,8 @@ import Video from 'react-native-video';
            <Text style={styles.buttonText} onPress={this.signIn}>INGRESAR</Text>
          </TouchableOpacity>    
         <View style={styles.signupTextCont}>
-          <TouchableOpacity onPress={this.fblogin}><Text style={styles.fb}> Facebook</Text></TouchableOpacity>
-          <TouchableOpacity onPress={this.register}><Text style={styles.movil}> Movil</Text></TouchableOpacity>
+          <TouchableOpacity onPress={this.fblogin}><Text style={styles.fb}><Icon size={30} name={'facebook'} /></Text></TouchableOpacity>
+          <TouchableOpacity onPress={this.register}><Text style={styles.movil}><Icon size={30} name={'mobile'} /></Text></TouchableOpacity>
         </View>
 				<View style={styles.signupTextCont}>
 					<TouchableOpacity onPress={this.signup}><Text style={styles.signupButton}> Crear cuenta</Text></TouchableOpacity>
@@ -109,21 +110,21 @@ import Video from 'react-native-video';
     justifyContent :'center'
   },
   signupTextCont : {
-	flex:1,
+	  flex:1,
     alignItems:'flex-end',
     paddingVertical:16,
-    flexDirection:'row'
+    flexDirection:'row',    
   },
   signupButton: {
   	color:'#ffffff',
-  	fontSize:10,
+  	fontSize:16,
   	fontWeight:'500',
   },
   forgotpassButton: {
   	color:'#ffffff',
-  	fontSize:10,
+  	fontSize:16,
   	fontWeight:'500',
-	marginLeft:120
+	  marginLeft:120
   },
   contentContainer: {
     flexGrow: 1,
@@ -140,24 +141,26 @@ import Video from 'react-native-video';
     borderBottomLeftRadius:25,
     borderTopLeftRadius:25,
     color:'#ffffff',
-    padding:15,
-    width:150
+    padding:10,
+    width:150,  
+    textAlign:'center'
   },
   movil: {
     backgroundColor:'#00aced',
     borderBottomRightRadius:25,
     borderTopRightRadius:25,
     color:'#ffffff',
-    padding:15,
-    width:150
+    padding:10,
+    width:150,    
+    textAlign:'center'
   },
   image:{
     flex:1,
     resizeMode:'stretch',
     position: 'absolute',
-          width: '100%',
-          height: '100%',
-          justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
   },
     button: {
     width:300,
@@ -165,9 +168,7 @@ import Video from 'react-native-video';
     paddingVertical: 13,
     marginTop: 60,
     borderWidth: 1.5,
-    borderColor: 'white'
-  
-    
+    borderColor: 'white'      
   },
   buttonText: {
     fontSize:16,

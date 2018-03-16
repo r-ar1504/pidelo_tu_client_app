@@ -29,23 +29,14 @@ export default class Signup extends Component<{}> {
 
 	render() {
 		return(
-      <ScrollView contentContainerStyle={styles.contentContainer}>
-			<View style={styles.container}>
-				<Form/>
-			</View>
+      <ScrollView contentContainerStyle={styles.contentContainer}>			
+				<Form/>			
       </ScrollView>
 			)
 	}
 }
 
-const styles = StyleSheet.create({
-  container : {
-    backgroundColor:'#ffffff',
-    flex: 1,
-    alignItems:'center',
-    flexDirection: 'column',
-    padding: 10,    
-  },
+const styles = StyleSheet.create({ 
   contentContainer: {
     flexGrow: 1,
   }

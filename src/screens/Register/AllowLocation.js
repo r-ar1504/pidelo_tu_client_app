@@ -13,6 +13,24 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 export default class Form extends React.Component {
 
+  constructor(props){
+    super(props);
+
+    this.confirm = this.confirm.bind(this);    
+  }
+
+  confirm(){
+    this.props.navigator.push({      
+        screen: 'register.location',        
+        navigatorStyle: {
+          navBarHidden: true,          
+        },
+        passProps:{
+          action:'maps'
+        } // override the navigator style for the screen, see "Styling the navigator" below (optional)   
+    });
+  }
+
   render(){
     return(
         <View style={styles.container}>            
@@ -29,7 +47,7 @@ export default class Form extends React.Component {
               borderColor={'#00ffff'}
             />                        
             
-           <TouchableOpacity style={styles.button}>
+           <TouchableOpacity style={styles.button} onPress={this.confirm}>
              <Text style={styles.buttonText}>CONTINUAR</Text>
            </TouchableOpacity>     
       </View>

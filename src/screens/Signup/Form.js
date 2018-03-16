@@ -14,7 +14,7 @@ export default class Form extends Component<{}> {
 
 	render(){
 		return(
-		    <View>
+		    <View style={styles.container}>
             <Text style={styles.signupText}>REGISTRATE</Text>
             <Hoshi
 				      style={styles.inputBox}
@@ -59,17 +59,21 @@ export default class Form extends Component<{}> {
 }
 
 const styles = StyleSheet.create({  
-  signupText: {    
+   container : {
+    backgroundColor:'#ffffff',
+    flex: 1,
     alignItems:'center',
-    justifyContent :'center',
+    justifyContent :'center',          
+  },
+  signupText: {        
     marginTop:16,
-    fontSize:20,
+    fontSize:25,
     marginBottom:16
   },
   inputBox: {          
     paddingHorizontal:13,        
     marginVertical: 10,
-    height:10
+    width:300
   },
   button: {
     width:300,

@@ -6,6 +6,7 @@ import Splash from './Splash/Splash';
 import Signup from './Signup/Signup';
 import Register from './Register/Register';
 import Modal from '../components/Modal';
+//import Maps from '../components/Maps';
 import VerificationCode from './Register/VerificationCode';
 import RegisterForm from './Register/Form';
 import AllowLocation from './Register/AllowLocation';
@@ -33,6 +34,5 @@ export function registerScreens()
   Navigation.registerComponent('register.location', () => AllowLocation); 
   Navigation.registerComponent('home.Home', () => Home);  
   Navigation.registerComponent('nav.HomeBar', () => HomeBar);
-  Navigation.registerComponent('nav.SideMenu', () => SideMenu);
-
+  Navigation.registerComponent('nav.SideMenu', () => SideMenu);  
 }

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Navigation } from 'react-native-navigation';
 import {
   StyleSheet,
   Text,
@@ -9,64 +8,41 @@ import {
 } from 'react-native';
 import { Sae } from 'react-native-textinput-effects';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import Login from './Login';
 
 
 export default class Form extends Component {
 	render(){
 		return(
-		<View>
+		    <View>
             <Sae
-				style={styles.inputBox}
+				      style={styles.inputBox}
             	label={'Correo Electrónico'}
             	iconClass={FontAwesomeIcon}
             	iconName={'user'}
             	iconColor={'white'}
-				labelStyle={{ color: 'white' }}
-              	keyboardType="email-address"
-              	onSubmitEditing={()=> this.password.focus()}
+				      labelStyle={{ color: 'white' }}
+              keyboardType="email-address"
+              onSubmitEditing={()=> this.password.focus()}
           	/>
           	<Sae
             	style={styles.inputBox}
-				label={'Contraseña'}
-				iconClass={FontAwesomeIcon}
+				      label={'Contraseña'}
+				      iconClass={FontAwesomeIcon}
             	iconName={'lock'}
-				iconColor={'white'}
-				secureTextEntry={true}
-				labelStyle={{ color: 'white' }}
-              	ref={(input) => this.password = input}
+				      iconColor={'white'}
+				      secureTextEntry={true}
+				      labelStyle={{ color: 'white' }}
+              ref={(input) => this.password = input}
           	/>
-  		</View>
+  		  </View>
 			)
 	}
 }
 
-const styles = StyleSheet.create({
-  container : {
-    flexGrow: 1,
-    justifyContent:'center',
-    alignItems: 'center',
-  },
-
+const styles = StyleSheet.create({  
   inputBox: {
     width:300,
     paddingHorizontal:13,
-    marginVertical: 10
-  },
-  button: {
-    width:300,
-    backgroundColor:'#00000000',
-    paddingVertical: 13,
-	marginTop: 60,
-	borderWidth: 1.5,
-	borderColor: 'white'
-
-
-  },
-  buttonText: {
-    fontSize:16,
-    fontWeight:'500',
-    color:'#ffffff',
-    textAlign:'center'
-  },
+    marginVertical: 10,
+  },  
 });

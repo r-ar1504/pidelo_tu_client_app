@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Navigation } from 'react-native-navigation';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {
   StyleSheet,
   Text,
@@ -48,10 +49,26 @@ export default class Form extends React.Component {
               label={'CORREO ELECTRONICO'}                            
               keyboardType="email-address"
               ref={(input) => this.correo = input}
+              onSubmitEditing={()=> this.password.focus()}
+              borderColor={'#00ffff'}
+            />
+            <Hoshi
+              style={styles.inputBox}
+              label={'CONTRASEÑA'}              
+              secureTextEntry={true}                
+              ref={(input) => this.password = input}
+              onSubmitEditing={()=> this.confirm.focus()}
+              borderColor={'#00ffff'}
+            />
+            <Hoshi
+              style={styles.inputBox}
+              label={'CONFIRMACIÓN DE CONTRASEÑA'}              
+              secureTextEntry={true}                
+              ref={(input) => this.confirm = input}
               borderColor={'#00ffff'}
             />            
             <View style={styles.signupTextCont}>          
-              <Text> Móvil: </Text><Text style={styles.lada}>(871)</Text><Text>1453061</Text>      
+              <Text> Móvil: </Text><Text style={styles.lada}>(871)</Text><Text>1453061</Text><Icon size={12} name="check" color="grey"/>      
             </View>
             
            <TouchableOpacity style={styles.button} onPress={this.confirm}>
@@ -67,15 +84,16 @@ const styles = StyleSheet.create({
     backgroundColor:'#ffffff',
     flex: 1,
     alignItems:'center',
-    justifyContent :'flex-start',  
+    justifyContent :'center',  
   },
   contentContainer: {
     flexGrow: 1,
   },
   signupText: {    
     marginTop:16,
-    fontSize:20,
-    marginBottom:16
+    fontSize:25,
+    marginBottom:16,
+    alignItems:'flex-end'
   },    
   inputBox: {          
     paddingHorizontal:13,        

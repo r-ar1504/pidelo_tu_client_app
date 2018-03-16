@@ -78,12 +78,8 @@ export default class HomeBar extends Component{
           </View>
           <View style={style.sidebar_section}>
             <Text style={{fontSize: 15, color: '#fff', textAlign: 'left', borderBottomWidth: 1, borderBottomColor: '#fff', paddingTop: 20, width: 200, paddingBottom: 10}}>Mi Perfil</Text>
-          </View>
-          <View style={style.sidebar_links}>
-            <Icon size={30} name="arrow-left" color="#fff" onPress={this.dissmisSideMenu}/>
-
-          </View>
-
+          </View>          
+          
       </View>
     );
   }
