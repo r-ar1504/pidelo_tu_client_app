@@ -23,7 +23,7 @@ export default class Splash extends Component<{}> {
         }
         else {
           this.props.navigator.push({
-            screen: 'login.Login',            
+            screen: 'maps.Map',            
             animationType: 'slide-horizontal',
             navigatorStyle: {
               navBarHidden: true

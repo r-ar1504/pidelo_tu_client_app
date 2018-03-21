@@ -11,6 +11,9 @@
       android:allowBackup="false"
       android:theme="@style/AppTheme"
       android:screenOrientation="portrait">
+      <meta-data
+          android:name="com.google.android.geo.API_KEY"
+          android:value="AIzaSyCYIhiPOMgLbwZrN9vT8ChwNtPKqKkOrs0"/>
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
@@ -21,13 +24,7 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>      
-      <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
-      <application>
-        <!-- You will only need to add this meta-data tag, but make sure it's a child of application -->
-        <meta-data
-          android:name="com.google.android.geo.API_KEY"
-          android:value="AIzaSyCYIhiPOMgLbwZrN9vT8ChwNtPKqKkOrs0"/>
-      </application>
+      <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />      
     </application>
 
 </manifest>

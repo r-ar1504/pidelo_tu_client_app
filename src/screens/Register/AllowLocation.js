@@ -21,7 +21,7 @@ export default class Form extends React.Component {
 
   confirm(){
     this.props.navigator.push({      
-        screen: 'register.location',        
+        screen: 'splash.Splash',        
         navigatorStyle: {
           navBarHidden: true,          
         },
