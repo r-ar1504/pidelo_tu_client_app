@@ -10,6 +10,7 @@ import Maps from '../components/Maps';
 import VerificationCode from './Register/VerificationCode';
 import RegisterForm from './Register/Form';
 import AllowLocation from './Register/AllowLocation';
+import Payment from './Payment/Payment';
 import Home from './Home/Home'
 
 /*Navigation Components*/
@@ -36,4 +37,5 @@ export function registerScreens()
   Navigation.registerComponent('nav.HomeBar', () => HomeBar);
   Navigation.registerComponent('nav.SideMenu', () => SideMenu);  
   Navigation.registerComponent('maps.Map', () => Maps);
+  Navigation.registerComponent('pay.Payment', () => Payment);
 }

@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     justifyContent :'center',
     marginTop:16,
     fontSize:20,
-    marginBottom:16
+    marginBottom:16    
   },
   button: {
     alignItems:'center',

@@ -207,7 +207,23 @@ export default class Maps extends React.Component {
     ]);   
   }
 
-  onMapPress(e) {
+  componentDidMount() {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        this.setState({
+          region: {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            error: null
+          }
+        });
+      },
+      (error) => this.setState({ error: error.message }),
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+    );
+  }
+
+  onMapPress(e) {    
     this.setState({
       markers: [        
         {
@@ -225,7 +241,7 @@ export default class Maps extends React.Component {
         <MapView
           provider={this.props.provider}
           style={styles.map}
-          initialRegion={this.state.region}
+          region={this.state.region}
           customMapStyle={customStyle}
           onPress={(e) => this.onMapPress(e)}
         >
