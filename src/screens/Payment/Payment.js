@@ -31,10 +31,7 @@ import Form from './Form';
       <ScrollView contentContainerStyle={styles.contentContainer}>
 			<View style={styles.container}>
         <Image source={require('src/assets/images/background.png')} style={styles.image}/>        						
-				<Form/>
-         <TouchableOpacity style={styles.button}>
-           <Text style={styles.buttonText} onPress={this.accept}>CONTINUAR</Text>
-         </TouchableOpacity>            
+				<Form/>                    
 			</View>
       </ScrollView>
 		)
@@ -44,7 +41,6 @@ import Form from './Form';
  const styles = StyleSheet.create({
   container : {
     flex: 1,
-    backgroundColor:'#455a64',
     alignItems:'center',
     justifyContent :'center'
   },  
@@ -58,20 +54,5 @@ import Form from './Form';
     width: '100%',
     height: '100%',
     justifyContent: 'center',
-  },
-  button: {
-    alignItems:'center',
-    justifyContent :'center',    
-    width:300,
-    backgroundColor:'#00ffff',           
-    paddingVertical: 13,
-    marginTop: 20,    
-    borderRadius:20,       
-  },
-  buttonText: {
-    fontSize:16,
-    fontWeight:'500',
-    color:'#ffffff',
-    textAlign:'center'
   },  
 });

@@ -71,7 +71,7 @@ export default class HomeBar extends Component{
             <Icon size={30} name="arrow-left" color="#fff" onPress={this.dissmisSideMenu}/>
           </View>
           <View style={style.sidebar_section}>
-          <Image source={require('src/assets/images/icon3.png')} style={style.side_profile}/>
+          <Image source={require('src/assets/images/icon.gif')} style={style.side_profile}/>
           </View>
           <View style={style.sidebar_section}>
             <Text style={{fontSize: 15, color: '#fff', paddingTop: 10}}>Rodolfo Ríos</Text>

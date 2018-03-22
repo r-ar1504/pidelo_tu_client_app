@@ -36,7 +36,8 @@ export default class Form extends Component {
             <Hoshi
 				      style={styles.inputBox}
             	label={'Numero de tarjeta'}            	
-				      labelStyle={{ color: 'white' }}                            
+				      labelStyle={{ color: 'white' }}
+              borderColor={'#00caff'}                            
           	/>
             <FontAwesomeIcon size={20} name="cc-visa" color="#fff" style={{}}/>                              
   		    </View>
@@ -50,8 +51,7 @@ export default class Form extends Component {
               defaultText  = {this.state.month}
               style = {{borderWidth : 1, borderColor : "white", width: 150}}
               textStyle = {{color:'white'}}
-              indicator={"down"}
-              transparent={true}
+              indicator={"down"}              
               indicatorColor={"white"}
             >
               <Option value = "01">01</Option>
@@ -69,14 +69,16 @@ export default class Form extends Component {
               defaultText  = {this.state.year}
               style = {{borderWidth : 1, borderColor : "white", width: 150, marginLeft:6}}
               textStyle = {{color:'white'}}
-              indicator={"down"}
-              transparent={true}
+              indicator={"down"}              
               indicatorColor={"white"}
             >
               <Option value = "01">01</Option>
               <Option value = "02">02</Option>              
             </Select>
           </View>
+          <TouchableOpacity style={styles.button}>
+           <Text style={styles.buttonText} onPress={this.accept}>CONTINUAR</Text>
+         </TouchableOpacity> 
       </View>     
 		)
 	}
@@ -86,6 +88,7 @@ const styles = StyleSheet.create({
   container : {
     flex: 1,    
     alignItems:'flex-start',
+    flexDirection:'column'
   },   
   inputBox: {
     width:300,    
@@ -124,5 +127,20 @@ const styles = StyleSheet.create({
     color:'#ffffff',
     textAlign:'center',
     marginTop:40,        
-  },  
+  }, 
+  button: {
+    alignItems:'center',
+    justifyContent :'center',    
+    width:300,
+    backgroundColor:'#00caff',           
+    paddingVertical: 13,
+    marginTop: 20,    
+    borderRadius:20,       
+  },
+  buttonText: {
+    fontSize:16,
+    fontWeight:'500',
+    color:'#ffffff',
+    textAlign:'center'
+  },   
 });

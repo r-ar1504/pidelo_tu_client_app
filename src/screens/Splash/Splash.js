@@ -22,7 +22,7 @@ export default class Splash extends Component<{}> {
           });
         }
         else {
-          this.props.navigator.push({
+          this.props.navigator.resetTo({
             screen: 'maps.Map',            
             animationType: 'slide-horizontal',
             navigatorStyle: {
@@ -37,7 +37,7 @@ export default class Splash extends Component<{}> {
 		return(
 			<View style={styles.container} >
           <Image source={require('src/assets/images/bg.png')} style={styles.image} />
-				  <Image style={styles.logo} source={require('src/assets/images/icon3.png')} />
+				  <Image style={styles.logo} source={require('src/assets/images/icon.gif')} style={{width: 144, height: 144}}/>
   		</View>
 			)
 	}
@@ -47,8 +47,7 @@ const styles = StyleSheet.create({
   container : {
     flexGrow: 1,
     justifyContent:'center',
-    alignItems: 'center',
-	  backgroundColor:'#455a64'
+    alignItems: 'center',	  
   },
   image:{
     flex:1,
