@@ -66,8 +66,8 @@ export default class HomeBar extends Component{
   render(){
     return(
       <View style={style.sidebar_container}>
-       
-          <View style={style.sidebar_section_arrow}>       
+
+          <View style={style.sidebar_section_arrow}>
             <Icon size={30} name="arrow-left" color="#fff" onPress={this.dissmisSideMenu}/>
           </View>
           <View style={style.sidebar_section}>
@@ -78,12 +78,14 @@ export default class HomeBar extends Component{
           </View>
           <View style={style.sidebar_section}>
             <Text style={{fontSize: 15, color: '#fff', textAlign: 'left', borderBottomWidth: 1, borderBottomColor: '#fff', paddingTop: 20, width: 200, paddingBottom: 10}}>Mi Perfil</Text>
-          </View>          
-          
+          </View>
+          <View style={style.sidebar_links}>
+
+            <Text style={{fontSize: 15, color: '#fff', paddingTop: 10}}>Rodolfo Ríos</Text>
+          </View>
+
       </View>
     );
   }
 
 }
-
-

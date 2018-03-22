@@ -17,7 +17,7 @@ export default StyleSheet.create({
     borderRightWidth: 1,
   },
   sidebar_section_arrow:{
-    alignSelf: 'flex-end', 
+    alignSelf: 'flex-end',
     paddingRight: 10,
   },
     sidebar_section:{
@@ -33,7 +33,12 @@ export default StyleSheet.create({
   	flex:1,
   },
   sidebar_links:{
-
+    width: 150,
+    flexDirection: "column",
+    justifyContent: "flex-start"
   },
+  sidebar_link:{
+    
+  }
 
 });
