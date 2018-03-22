@@ -13,7 +13,7 @@ export default StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    borderRightColor: '#878787',
+    borderRightColor: '#00caff',
     borderRightWidth: 1,
   },
   sidebar_section_arrow:{

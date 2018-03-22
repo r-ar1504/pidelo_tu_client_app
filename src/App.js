@@ -10,7 +10,7 @@ registerScreens();
 */
 Navigation.startSingleScreenApp({
   screen: {
-    screen: 'splash.Splash',
+    screen: 'pay.Payment',
     navigatorStyle: {
     	navBarHidden: true
     }
