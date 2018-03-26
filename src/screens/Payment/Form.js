@@ -15,7 +15,22 @@ export default class Form extends Component {
 
   constructor(props){
     super(props)    
-    this.state = {month : " ", year: " "}
+    this.state = {month : " ", year: " "};
+    this.confirm = this.confirm.bind(this);
+  }
+  
+  confirm(){
+    this.props.navigator.push({      
+        screen: 'register.modal',
+        passProps:{
+          text:'Tu forma de pago ha sido aprovada',
+          button:'Continuar',
+          action: 'Payment'
+        },
+        navigatorStyle: {
+          navBarHidden: true,          
+        }, // override the navigator style for the screen, see "Styling the navigator" below (optional)   
+    });
   }
 
   month(value, label) {
@@ -27,20 +42,19 @@ export default class Form extends Component {
     this.setState({year : value});
   }
 
-	render(){
-		return(                       
-		    <View style={styles.container}>
+  render(){
+    return(                       
+        <View style={styles.container}>
           <Text style={styles.MainText}>Forma de Pago</Text> 
           <View style={styles.inputContainer}>
             <FontAwesomeIcon size={20} name="credit-card" color="#fff" style={{padding: 5}}/>
             <Hoshi
-				      style={styles.inputBox}
-            	label={'Numero de tarjeta'}            	
-				      labelStyle={{ color: 'white' }}
+              style={styles.inputBox}
+              label={'Numero de tarjeta'}             
+              labelStyle={{ color: 'white' }}
               borderColor={'#00caff'}                            
-          	/>
-            <FontAwesomeIcon size={20} name="cc-visa" color="#fff" style={{}}/>                              
-  		    </View>
+            />                                        
+          </View>
           <View style={styles.dateContainer}>
             <FontAwesomeIcon size={20} name="calendar" color="#fff" style={{padding: 5}}/>
             <Text style={styles.text}>Fecha exp.</Text>
@@ -76,12 +90,30 @@ export default class Form extends Component {
               <Option value = "02">02</Option>              
             </Select>
           </View>
+          <View style={styles.inputContainer}>            
+            <Hoshi
+              style={styles.input}
+              label={'CSV'}             
+              labelStyle={{ color: 'white' }}
+              borderColor={'#00caff'}                            
+            />
+            <FontAwesomeIcon size={20} name="eye" color="#fff" style={{padding: 5}}/>
+            <Hoshi
+              style={styles.input}
+              label={'Código Postal'}             
+              labelStyle={{ color: 'white' }}
+              borderColor={'#00caff'}                            
+            />                                            
+          </View>
+          <View style={styles.dateContainer}>            
+            <Text style={styles.text}>Acepto términos y condiciones.</Text>
+          </View>
           <TouchableOpacity style={styles.button}>
-           <Text style={styles.buttonText} onPress={this.accept}>CONTINUAR</Text>
+           <Text style={styles.buttonText} onPress={this.confirm}>CONTINUAR</Text>
          </TouchableOpacity> 
       </View>     
-		)
-	}
+    )
+  }
 }
 
 const styles = StyleSheet.create({  
@@ -92,6 +124,13 @@ const styles = StyleSheet.create({
   },   
   inputBox: {
     width:300,    
+    paddingTop: 10,
+    paddingRight: 10,
+    paddingBottom: 10,
+    paddingLeft: 0,  
+  },  
+  input: {
+    width:150,    
     paddingTop: 10,
     paddingRight: 10,
     paddingBottom: 10,

@@ -27,15 +27,15 @@ import Form from './Form';
   }
 
    render() {
-		return(
+    return(
       <ScrollView contentContainerStyle={styles.contentContainer}>
-			<View style={styles.container}>
-        <Image source={require('src/assets/images/background.png')} style={styles.image}/>        						
-				<Form/>                    
-			</View>
+      <View style={styles.container}>
+        <Image source={require('src/assets/images/background.png')} style={styles.image}/>                    
+        <Form/>                    
+      </View>
       </ScrollView>
-		)
-	}
+    )
+  }
  }
 
  const styles = StyleSheet.create({

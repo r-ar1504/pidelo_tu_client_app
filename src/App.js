@@ -15,29 +15,32 @@ import Home,{HomeDrawer} from './screens/Home/Home';
 // import Signup from './screens/Signup/Signup';
 import SideMenu from './components/SideMenu/SideMenu'
 import Maps from './components/Maps';
-
+import Discounts from './screens/Discounts/Discounts';
 
 export default DrawerNavigator({
   Login: {
    screen: Login
  },
- Home:{
+  Home:{
    screen: Home
  },
- Splash:{
+  Splash:{
      screen: Splash,
   },
   Search:{
       screen: Search,
    },
-Profile:{
+  Profile:{
     screen: Profile,
  },
- Maps:{
+  Maps:{
      screen: Maps,
+  },
+  Discounts: {
+    screen: Discounts,
   }
 },{
-  initialRouteName: 'Splash',
+  initialRouteName: 'Discounts',
   // contentComponent: SideMenu,
   drawerWidth: 250
 });
