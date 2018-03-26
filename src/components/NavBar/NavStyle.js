@@ -8,14 +8,14 @@ export default StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-around",
-    alignItems: 'center', 
+    alignItems: 'center',
     height: 100,
     borderBottomWidth: 1,
     borderBottomColor: '#9C9A9A'
   },
   search_food: {
     height: 40,
-    borderStyle: 'solid', 
+    borderStyle: 'solid',
     borderColor: '#C6C6C6',
     borderWidth: 1,
     borderRadius: 25,
@@ -29,6 +29,11 @@ export default StyleSheet.create({
   },
   empty:{
     width: 60
-  }
-
+  },
+  profile_bar:{
+    flex:1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: 'center',
+  },
 });

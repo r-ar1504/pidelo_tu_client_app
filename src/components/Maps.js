@@ -194,8 +194,11 @@ export default class Maps extends React.Component {
       region: {
         latitude: LATITUDE,
         longitude: LONGITUDE,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
+        // latitudeDelta: LATITUDE_DELTA,
+        // longitudeDelta: LONGITUDE_DELTA,
+        latitudeDelta: 3,
+        longitudeDelta: 4,
+
       },
       markers: [],
     };
@@ -204,28 +207,28 @@ export default class Maps extends React.Component {
      'Warning: componentWillMount is deprecated',
      'Warning: componentWillReceiveProps is deprecated',
      'Warning: componentWillUpdate is deprecated'
-    ]);   
+    ]);
   }
 
   componentDidMount() {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        this.setState({
-          region: {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            error: null
-          }
-        });
-      },
-      (error) => this.setState({ error: error.message }),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-    );
+    // navigator.geolocation.getCurrentPosition(
+    //   (position) => {
+    //     this.setState({
+    //       region: {
+    //         latitude: position.coords.latitude,
+    //         longitude: position.coords.longitude,
+    //         error: null
+    //       }
+    //     });
+    //   },
+    //   (error) => this.setState({ error: error.message }),
+    //   { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+    // );
   }
 
-  onMapPress(e) {    
+  onMapPress(e) {
     this.setState({
-      markers: [        
+      markers: [
         {
           coordinate: e.nativeEvent.coordinate,
           key: id,
@@ -246,10 +249,10 @@ export default class Maps extends React.Component {
           onPress={(e) => this.onMapPress(e)}
         >
           {this.state.markers.map(marker => (
-            <Marker              
+            <Marker
               key={marker.key}
               coordinate={marker.coordinate}
-              image={require('src/assets/images/location-red.png')}              
+              image={require('src/assets/images/location-red.png')}
             />
           ))}
         </MapView>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Navigation } from 'react-native-navigation';
+import { StackNavigator } from 'react-navigation';
 import {
   StyleSheet,
   Text,
@@ -10,34 +10,27 @@ import {
 
 
 export default class Splash extends Component<{}> {
-	componentDidMount() {
-    	setTimeout(() => {
-        if (this.props.action != 'maps') {
-          this.props.navigator.resetTo({
-            screen: 'login.Login',            
-            animationType: 'slide-horizontal',
-            navigatorStyle: {
-              navBarHidden: true
-            },             
-          });
-        }
-        else {
-          this.props.navigator.resetTo({
-            screen: 'maps.Map',            
-            animationType: 'slide-horizontal',
-            navigatorStyle: {
-              navBarHidden: true
-            },             
-          });
-        }          
-		},2000)
+  static navigationOptions = {
+    headerStyle:{
+      display: 'none'
+    }
+  }
+  constructor(props){
+    super(props);
+  }
+  componentDidMount(){
+
+    setTimeout(()=>{
+      this.props.navigation.navigate('Login');
+    },3000);
+
   }
 
 	render(){
 		return(
 			<View style={styles.container} >
           <Image source={require('src/assets/images/bg.png')} style={styles.image} />
-				  <Image style={styles.logo} source={require('src/assets/images/icon.gif')} style={{width: 144, height: 144}}/>
+				  <Image style={styles.logo} source={require('src/assets/images/icon.gif')} style={{width: 50, height: 50}}/>
   		</View>
 			)
 	}
@@ -47,7 +40,7 @@ const styles = StyleSheet.create({
   container : {
     flexGrow: 1,
     justifyContent:'center',
-    alignItems: 'center',	  
+    alignItems: 'center',
   },
   image:{
     flex:1,

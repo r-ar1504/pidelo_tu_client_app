@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Navigation } from 'react-native-navigation';
 import { YellowBox } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { StackNavigator } from 'react-navigation';
+
 import {
 StyleSheet,
 Text,
@@ -18,7 +19,11 @@ import Form from './Form';
 import Video from 'react-native-video';
 
  export default class Login extends Component {
-
+   static navigationOptions = {
+     headerStyle:{
+       display: 'none'
+     }
+   }
    /*
    * Contructor , if a function other than render needs to use props it needs to be binded here.
    * example: this.signup = this.signup.bind(this); now signup can use props.navigator.
@@ -34,39 +39,20 @@ import Video from 'react-native-video';
      'Warning: componentWillReceiveProps is deprecated',
     ]);
   }
-
   /*
   * SignIn Function.
   * If user is valid, then initialize Home Screen.
   */
   signIn(){
-    this.props.navigator.resetTo({
-      screen: 'home.Home',
-      navigatorStyle: {
-        navBarHidden: false,
-        navBarCustomView: 'nav.HomeBar',
-        passProps: this.props,
-      }
-    });
+      this.props.navigation.navigate('Home');
   }
 
   signup(){
-    this.props.navigator.push({
-      screen: 'signup.Signup',
-      navigatorStyle: {
-        navBarHidden: true
-      }
-    });
+
   }
 
   register(){
-    this.props.navigator.push({
-      screen: 'register.Register',
-      navigatorStyle: {
-        navBarHidden: true
-      },
-      animationType: 'slide-horizontal',
-    });
+
   }
 
    render() {
@@ -87,7 +73,7 @@ import Video from 'react-native-video';
 				<Form type="Login"/>
          <TouchableOpacity style={styles.button}>
            <Text style={styles.buttonText} onPress={this.signIn}>INGRESAR</Text>
-         </TouchableOpacity>    
+         </TouchableOpacity>
         <View style={styles.signupTextCont}>
           <TouchableOpacity onPress={this.fblogin}><Text style={styles.fb}><Icon size={30} name={'facebook'} /></Text></TouchableOpacity>
           <TouchableOpacity onPress={this.register}><Text style={styles.movil}><Icon size={30} name={'mobile'} /></Text></TouchableOpacity>
@@ -113,7 +99,7 @@ import Video from 'react-native-video';
 	  flex:1,
     alignItems:'flex-end',
     paddingVertical:16,
-    flexDirection:'row',    
+    flexDirection:'row',
   },
   signupButton: {
   	color:'#ffffff',
@@ -142,7 +128,7 @@ import Video from 'react-native-video';
     borderTopLeftRadius:25,
     color:'#ffffff',
     padding:10,
-    width:150,  
+    width:150,
     textAlign:'center'
   },
   movil: {
@@ -151,7 +137,7 @@ import Video from 'react-native-video';
     borderTopRightRadius:25,
     color:'#ffffff',
     padding:10,
-    width:150,    
+    width:150,
     textAlign:'center'
   },
   image:{
@@ -164,16 +150,16 @@ import Video from 'react-native-video';
   },
     button: {
     width:300,
-    backgroundColor:'#00000000',           
+    backgroundColor:'#00000000',
     paddingVertical: 13,
     marginTop: 60,
     borderWidth: 1.5,
-    borderColor: 'white'      
+    borderColor: 'white'
   },
   buttonText: {
     fontSize:16,
     fontWeight:'500',
     color:'#ffffff',
     textAlign:'center'
-  },  
+  },
 });

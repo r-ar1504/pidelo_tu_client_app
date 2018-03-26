@@ -5,10 +5,10 @@ const side_width = Dimensions.get('window').width*.60;
 const screen_height = Dimensions.get('window').height;
 export default StyleSheet.create({
   sidebar_container: {
-    backgroundColor: COLOR_PRIMARY,
+    backgroundColor: 'rgba(0, 118, 255, .70)',
     zIndex: 999,
     position: 'relative',
-    width:  side_width,
+    width:  250,
     height: screen_height,
     flexDirection: 'column',
     justifyContent: 'flex-start',
@@ -35,10 +35,18 @@ export default StyleSheet.create({
   sidebar_links:{
     width: 150,
     flexDirection: "column",
-    justifyContent: "flex-start"
+    justifyContent: "flex-start",
+    paddingLeft: 10
   },
   sidebar_link:{
-    
+    marginTop: 10,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flexDirection: 'row',
+    flexWrap: 'nowrap'
+  },
+  sidebar_bottom:{
+    marginTop: 310
   }
 
 });

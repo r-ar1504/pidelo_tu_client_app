@@ -18,7 +18,6 @@ import style from './NavStyle';
 
 import SideMenu from '../SideMenu/SideMenu';
 
-
 export default class HomeBar extends Component{
   constructor(props){
     super(props);
@@ -56,11 +55,9 @@ export default class HomeBar extends Component{
   render(){
     return(
 
-
-
-        <View style={style.home_bar}> 
+        <View style={style.home_bar}>
           <Icon size={30} name="bars" color="#000" onPress={this.openSideMenu}/>
-          
+
           <View style={style.empty}/>
 
           <Hideo
@@ -77,7 +74,7 @@ export default class HomeBar extends Component{
 
           <Image source={require('src/assets/images/icon3.png')} style={style.notification_image}/>
         </View>
-     
+
     );
   }
 
