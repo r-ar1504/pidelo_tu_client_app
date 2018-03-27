@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Navigation } from 'react-native-navigation';
 import { YellowBox } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {
@@ -16,9 +15,9 @@ import Form from './Form';
 
 
  export default class Payment extends Component {
-   
+
   constructor(props){
-    super(props);    
+    super(props);
 
     YellowBox.ignoreWarnings([
      'Warning: componentWillMount is deprecated',
@@ -30,8 +29,8 @@ import Form from './Form';
 		return(
       <ScrollView contentContainerStyle={styles.contentContainer}>
 			<View style={styles.container}>
-        <Image source={require('src/assets/images/background.png')} style={styles.image}/>        						
-				<Form/>                    
+        <Image source={require('src/assets/images/background.png')} style={styles.image}/>
+				<Form/>
 			</View>
       </ScrollView>
 		)
@@ -43,7 +42,7 @@ import Form from './Form';
     flex: 1,
     alignItems:'center',
     justifyContent :'center'
-  },  
+  },
   contentContainer: {
     flexGrow: 1,
   },
@@ -54,5 +53,5 @@ import Form from './Form';
     width: '100%',
     height: '100%',
     justifyContent: 'center',
-  },  
+  },
 });

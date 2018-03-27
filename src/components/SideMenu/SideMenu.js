@@ -6,7 +6,8 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 export default class SideMenu extends Component{
   static navigationOptions = {
-    headerStyle: {
+    gesturesEnabled: false,
+    headerStyle:{
       display: 'none'
     }
   }
@@ -66,7 +67,7 @@ export default class SideMenu extends Component{
     return(
       <View style={style.sidebar_container}>
 
-          <View style={style.sidebar_section_arrow} onPress={this.props.navigation.navigate('DrawerToggle')}>
+          <View style={style.sidebar_section_arrow} >
             <Icon size={20} name="arrow-left" color="#fff" />
           </View>
           <View style={style.sidebar_section}>
@@ -75,7 +76,7 @@ export default class SideMenu extends Component{
           <View style={style.sidebar_section}>
             <Text style={{fontSize: 15, color: '#fff', paddingTop: 10}}>Rodolfo Ríos</Text>
           </View>
-          <View style={style.sidebar_section} onPress={this.props.navigation.navigate('Profile')}>
+          <View style={style.sidebar_section} >
             <Text style={{fontSize: 15, color: '#fff', textAlign: 'left', borderBottomWidth: 1, borderBottomColor: '#fff', paddingTop: 20, width: 200, paddingBottom: 10}}>Mi Perfil</Text>
           </View>
           <View style={style.sidebar_links}>
@@ -85,7 +86,7 @@ export default class SideMenu extends Component{
               <Text style={{fontSize: 15, color: '#fff', paddingTop: 10}}>Promociones</Text>
             </View>
             <View style={style.sidebar_link}>
-              <Icon name="cogs" size={15} color="#fff"  style={{marginTop: 2, paddingRight:3}} onPress={this.accountSettings}/>
+              <Icon name="cogs" size={15} color="#fff"  style={{marginTop: 2, paddingRight:3}} />
               <Text style={{fontSize: 15, color: '#fff', paddingTop: 10}} onPress={this.accountSettings}>Ajustes de perfil</Text>
             </View>
             <View style={style.sidebar_link}>

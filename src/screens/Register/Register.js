@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Navigation } from 'react-native-navigation';
 import {
   StyleSheet,
   Text,
@@ -12,7 +11,7 @@ import {
 import PhoneInput from 'react-native-phone-input';
 import CountryPicker from 'react-native-country-picker-modal';
 
-export default class Register extends Component {     
+export default class Register extends Component {
   constructor(props) {
     super(props);
 
@@ -22,7 +21,7 @@ export default class Register extends Component {
     this.state = {
       cca2: 'MX',
     };
-  }  
+  }
 
   onPressFlag() {
     //this.countryPicker.openModal();
@@ -34,7 +33,7 @@ export default class Register extends Component {
   }
 
   confirm(){
-    this.props.navigator.push({      
+    this.props.navigator.push({
         screen: 'register.modal',
         passProps:{
           text: 'Se ha enviado un código de verificación vía SMS a tu móvil',
@@ -42,8 +41,8 @@ export default class Register extends Component {
           action: 'Verification'
         },
         navigatorStyle: {
-          navBarHidden: true,          
-        }, // override the navigator style for the screen, see "Styling the navigator" below (optional)   
+          navBarHidden: true,
+        }, // override the navigator style for the screen, see "Styling the navigator" below (optional)
     });
   }
 
@@ -59,22 +58,22 @@ export default class Register extends Component {
           }}
           //onPressFlag={this.onPressFlag}
           initialCountry='mx'
-          pickerItemStyle={{fontSize:18, height:30}}          
+          pickerItemStyle={{fontSize:18, height:30}}
           textProps={{placeholder:'Numero', borderWidth:0.7, borderColor:'black', editable:false}}
           textStyle={{fontSize:18, height:30, textAlign:'center'}}
-          style={{padding:20,marginTop:16,marginBottom:16, width:125}}          
+          style={{padding:20,marginTop:16,marginBottom:16, width:125}}
           diabled={true}
         />
         <TextInput
-              style={{flex:1, borderColor: 'black', borderWidth: 0.7, width:100, height:30, fontSize:10 }}             
-              keyboardType="phone-pad"           
-            />                
-        </View>        
+              style={{flex:1, borderColor: 'black', borderWidth: 0.7, width:100, height:30, fontSize:10 }}
+              keyboardType="phone-pad"
+            />
+        </View>
         <Text style={styles.info}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam porta ex arcu, et scelerisque felis faucibus at. Aenean sit amet viverra mauris. Phasellus quis metus ac lectus ultrices lacinia sed ut tortor. Donec non dignissim metus, ac ornare augue. Aenean euismod velit nisl. Donec ullamcorper sagittis condimentum. Nullam pharetra lorem iaculis pharetra gravida. Nulla non pharetra ante. Aenean et libero dui. Nulla lacinia vestibulum ex sit amet elementum.</Text>
         <TouchableOpacity style={styles.button} onPress={this.confirm}>
             <Text style={styles.buttonText}>CONTINUAR</Text>
         </TouchableOpacity>
-        
+
       </View>
       </ScrollView>
     );
@@ -89,31 +88,31 @@ const styles = StyleSheet.create({
     justifyContent :'center',
     flexDirection: 'column',
     padding: 20,
-    paddingTop: 60,    
+    paddingTop: 60,
   },
   contentContainer: {
     flexGrow: 1,
   },
-  signupText: {    
+  signupText: {
     alignItems:'flex-start',
     justifyContent :'center',
     marginTop:16,
     fontSize:20,
-    marginBottom:16    
+    marginBottom:16
   },
   button: {
     alignItems:'center',
-    justifyContent :'center',    
+    justifyContent :'center',
     width:300,
-    backgroundColor:'#00ffff',           
+    backgroundColor:'#00ffff',
     paddingVertical: 13,
-    marginTop: 20,    
-    borderRadius:20,          
+    marginTop: 20,
+    borderRadius:20,
   },
-  buttonText: { 
+  buttonText: {
     fontSize:16,
     fontWeight:'500',
-    color:'#ffffff',   
+    color:'#ffffff',
   },
   info: {
     flexGrow:1,
@@ -124,7 +123,7 @@ const styles = StyleSheet.create({
   inputBox: {
     flexDirection: 'row',
     alignItems:'center',
-    justifyContent :'center', 
+    justifyContent :'center',
     padding:20
-  },  
+  },
 });
