@@ -10,6 +10,9 @@ import com.oblador.vectoricons.VectorIconsPackage;
 import com.brentvatne.react.ReactVideoPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.facebook.react.ReactApplication;
+import com.brentvatne.react.ReactVideoPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.airbnb.android.react.maps.MapsPackage;
 import java.util.Arrays;
 import java.util.List;
 import com.airbnb.android.react.maps.MapsPackage;
@@ -25,6 +28,9 @@ public class MainApplication extends Application implements ReactApplication{
       protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
+            new ReactVideoPackage(),
+            new VectorIconsPackage(),
+            new MapsPackage(),
             new MapsPackage()
         );
       }

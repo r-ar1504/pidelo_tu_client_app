@@ -37,31 +37,46 @@ export default class Discounts extends React.Component {
             		
           		</Separator>
             	<CardItem>
+                <Left>
+                  <Text style={styles.textPromo}>2 x 1 </Text>
+                </Left>
             		<Body>
-            			<Image source={require('src/assets/images/salad.jpeg')} style={styles.food}/>
-            			<Text style={styles.textPromo}>2 x 1 </Text>
+            			<Image source={require('src/assets/images/salad.jpeg')} style={styles.food}/>            			
             			<Text style={styles.description}>en todas las ensaladas</Text>  			              		
             		</Body>
+                <Right>
+                  <Text>Ensaladas</Text>
+                </Right>
             	</CardItem>
             	<Separator style={{backgroundColor:'#fff'}}>
             		
           		</Separator>
             	<CardItem>
+                <Left>
+                  <Text style={styles.textPromo}>20 % </Text>
+                </Left>
             		<Body>
-            			<Image source={require('src/assets/images/chicken.jpeg')} style={styles.food}/>
-            			<Text style={styles.textPromo}>20 % </Text>
+            			<Image source={require('src/assets/images/chicken.jpeg')} style={styles.food}/>            			
             			<Text style={styles.description}>en la compra de la segunda orden</Text>  			              		
             		</Body>
+                <Right>
+                  <Text>Alitas</Text>
+                </Right>
             	</CardItem>
             	<Separator style={{backgroundColor:'#fff'}}>
             		
           		</Separator>
             	<CardItem>
+                <Left>
+                  <Text style={styles.textPromo}>3 </Text>
+                </Left>
             		<Body>
-            			<Image source={require('src/assets/images/food2.jpg')} style={styles.food}/>
-            			<Text style={styles.textPromo}>3 </Text>
+            			<Image source={require('src/assets/images/food2.jpg')} style={styles.food}/>            			
             			<Text style={styles.description}>ingredientes extras gratis en la compra de pizza grande</Text>  			              		
             		</Body>
+                <Right>
+                  <Text>Pizza</Text>
+                </Right>
             	</CardItem>
           	</Card>                     
           </Content>

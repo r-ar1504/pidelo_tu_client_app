@@ -8,7 +8,6 @@ export default StyleSheet.create({
     backgroundColor: 'rgba(0, 118, 255, .70)',
     zIndex: 999,
     position: 'relative',
-    width:  250,
     height: screen_height,
     flexDirection: 'column',
     justifyContent: 'flex-start',

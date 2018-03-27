@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Navigation } from 'react-native-navigation';
 import {
   StyleSheet,
   Text,
@@ -29,14 +28,14 @@ export default class Signup extends Component<{}> {
 
 	render() {
 		return(
-      <ScrollView contentContainerStyle={styles.contentContainer}>			
-				<Form/>			
+      <ScrollView contentContainerStyle={styles.contentContainer}>
+				<Form/>
       </ScrollView>
 			)
 	}
 }
 
-const styles = StyleSheet.create({ 
+const styles = StyleSheet.create({
   contentContainer: {
     flexGrow: 1,
   }

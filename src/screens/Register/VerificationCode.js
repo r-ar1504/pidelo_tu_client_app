@@ -1,16 +1,15 @@
 import React from 'react';
-import { Navigation } from 'react-native-navigation';
 import {
   StyleSheet,
   Text,
   View,
   StatusBar,
-  TextInput, 
+  TextInput,
   TouchableOpacity
 } from 'react-native';
 
 
-export default class VerificationCode extends React.Component {       
+export default class VerificationCode extends React.Component {
 
   constructor(props){
     super(props);
@@ -19,7 +18,7 @@ export default class VerificationCode extends React.Component {
   }
 
   confirm(){
-    this.props.navigator.push({      
+    this.props.navigator.push({
         screen: 'register.modal',
         passProps:{
           text:'Tu código ha sido exitoso',
@@ -27,8 +26,8 @@ export default class VerificationCode extends React.Component {
           action: 'Form'
         },
         navigatorStyle: {
-          navBarHidden: true,          
-        }, // override the navigator style for the screen, see "Styling the navigator" below (optional)   
+          navBarHidden: true,
+        }, // override the navigator style for the screen, see "Styling the navigator" below (optional)
     });
   }
 
@@ -36,22 +35,22 @@ export default class VerificationCode extends React.Component {
     return (
       <View style={styles.container}>
         <Text style={styles.signupText}>INGRESA CODIGO DE VERIFICACIÓN</Text>
-          <View style={styles.inputBox}> 
+          <View style={styles.inputBox}>
             <TextInput
               style={{height: 40, borderColor: 'gray', borderWidth: 1, marginLeft:20}}
-              keyboardType="phone-pad"              
-            />
-            <TextInput
-              style={{height: 40, borderColor: 'gray', borderWidth: 1, marginLeft:20}}              
               keyboardType="phone-pad"
             />
             <TextInput
-              style={{height: 40, borderColor: 'gray', borderWidth: 1, marginLeft:20}}              
+              style={{height: 40, borderColor: 'gray', borderWidth: 1, marginLeft:20}}
+              keyboardType="phone-pad"
+            />
+            <TextInput
+              style={{height: 40, borderColor: 'gray', borderWidth: 1, marginLeft:20}}
               keyboardType="phone-pad"
             />
           </View>
-          
-              
+
+
         <TouchableOpacity style={styles.button} onPress={this.confirm}>
             <Text style={styles.buttonText}>CONTINUAR</Text>
         </TouchableOpacity>
@@ -68,9 +67,9 @@ const styles = StyleSheet.create({
     justifyContent :'flex-start',
     flexDirection: 'column',
     padding: 20,
-    paddingTop: 60,    
+    paddingTop: 60,
   },
-  signupText: {    
+  signupText: {
     alignItems:'flex-start',
     justifyContent :'center',
     marginTop:16,
@@ -79,22 +78,22 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems:'center',
-    justifyContent :'center',    
+    justifyContent :'center',
     width:300,
-    backgroundColor:'#00ffff',           
+    backgroundColor:'#00ffff',
     paddingVertical: 13,
-    marginTop: 20,    
-    borderRadius:20,          
+    marginTop: 20,
+    borderRadius:20,
   },
-  buttonText: { 
+  buttonText: {
     fontSize:16,
     fontWeight:'500',
-    color:'#ffffff',   
+    color:'#ffffff',
   },
   inputBox: {
     flexDirection: 'row',
     alignItems:'center',
-    justifyContent :'center', 
+    justifyContent :'center',
     padding:20
-  },  
+  },
 });
