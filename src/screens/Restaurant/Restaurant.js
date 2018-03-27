@@ -10,6 +10,7 @@ Text,
 View,
 StatusBar ,
 TouchableOpacity,
+TouchableWithoutFeedback,
 ScrollView,
 BackHandler,
 Image,
@@ -20,8 +21,13 @@ export default class Search extends Component{
   constructor(props){
     super(props);
     console.log(this.props.navigation);
+
+    this.openDiscounts = this.openDiscounts.bind(this);
   }
 
+openDiscounts(){
+  this.props.navigation.navigate('Discounts')
+}
   render(){
     return(
       <Container>
@@ -43,7 +49,9 @@ export default class Search extends Component{
 
           </Body>
           <Right style={{ flex: 1}}>
+          <TouchableWithoutFeedback onPress={this.openDiscounts}>
             <Icon name="ticket" size={20} color="#fff" />
+          </TouchableWithoutFeedback>
           </Right>
         </Header>
         <Content>
@@ -63,7 +71,7 @@ export default class Search extends Component{
             fontWeight: 'bold',
             marginRight: 10
           }}>PIZZA HUT</Text>
-          <Image source={require('src/assets/images/food1.png')} style={{width:50, height:50, margin: 10}}/>
+          <Image source={require('src/assets/images/pizzah.png')} style={{width:50, height:50, margin: 10}}/>
         </View>
 
         <View style={{
@@ -84,8 +92,8 @@ export default class Search extends Component{
           flexDirection: 'row',
           justifyContent: 'center'
         }}>
-          <Image source={require('src/assets/images/food1.png')} style={{width:150, height:150, margin: 10}}/>
-          <Image source={require('src/assets/images/food1.png')} style={{width:150, height:150, margin: 10}}/>
+          <Image source={require('src/assets/images/food2.jpg')} style={{width:150, height:150, margin: 10}}/>
+          <Image source={require('src/assets/images/food2.jpg')} style={{width:150, height:150, margin: 10}}/>
         </View>
 
 
@@ -107,8 +115,8 @@ export default class Search extends Component{
           flexDirection: 'row',
           justifyContent: 'center'
         }}>
-          <Image source={require('src/assets/images/food1.png')} style={{width:150, height:150, margin: 10}}/>
-          <Image source={require('src/assets/images/food1.png')} style={{width:150, height:150, margin: 10}}/>
+          <Image source={require('src/assets/images/boneless.jpg')} style={{width:150, height:150, margin: 10}}/>
+          <Image source={require('src/assets/images/boneless.jpg')} style={{width:150, height:150, margin: 10}}/>
         </View>
         </Content>
       </Container>

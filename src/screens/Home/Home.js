@@ -31,10 +31,20 @@ export default class Home extends Component{
     console.log(this.props.navigation);
 
     this.openDrawer = this.openDrawer.bind(this);
+    this.openRestaurant = this.openRestaurant.bind(this);
+    this.searchScreen = this.searchScreen.bind(this);
   }
 
   openDrawer(){
     this.props.navigation.navigate('DrawerOpen');
+  }
+
+  openRestaurant(){
+    this.props.navigation.navigate('Restaurant');
+  }
+
+  searchScreen(){
+    this.props.navigation.navigate('Search');
   }
 
   render(){
@@ -46,9 +56,11 @@ export default class Home extends Component{
                 <Image source={require('src/assets/images/menu.png')} style={{width: 30,  height: 30 }}  />
               </TouchableWithoutFeedback>
             </Left>
+            <TouchableWithoutFeedback onPress={this.searchScreen}>
             <Body style={{ flex: 1,  justifyContent: 'center', alignItems: 'center' }}>
               <SearchButton />
             </Body>
+            </TouchableWithoutFeedback>
             <Right style={{ flex: 1 }}>
               <RightTittleNav />
             </Right>
@@ -57,7 +69,9 @@ export default class Home extends Component{
           <Content>
             <FoodFeed />
 
-            <Image source={require('src/assets/images/offer.jpg')} style={{ alignSelf: 'center', width: '90%',  height: 200 , paddingTop: 10}}/>
+            <TouchableWithoutFeedback onPress={this.openRestaurant}>
+            <Image source={require('src/assets/images/offer.jpg')} style={{ alignSelf: 'center', width: '90%',  height: 200 , marginTop: 10}}/>
+            </TouchableWithoutFeedback>
           </Content>
         </Container>
     );

@@ -9,6 +9,7 @@ import Restaurant from './screens/Restaurant/Restaurant';
 import Search from './screens/Search/Search';
 import Home from './screens/Home/Home';
 import Payment from './screens/Payment/Payment';
+import Discounts from './screens/Discounts/Discounts';
 import Register from './screens/Register/Register';
 import AllowLocation from './screens/Register/AllowLocation';
 import VerificationCode from './screens/Register/VerificationCode';
@@ -30,6 +31,12 @@ const HomeDrawer = DrawerNavigator({
    },
   Profile:{
     screen: Profile,
+  },
+  Payment:{
+    screen: Payment
+  },
+  Discounts:{
+    screen: Discounts
   },
   Maps:{
    screen: Maps,

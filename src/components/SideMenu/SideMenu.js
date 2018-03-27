@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {  StyleSheet,  Text, View, Image} from 'react-native';
+import {  StyleSheet,  Text, View, Image, TouchableWithoutFeedback,} from 'react-native';
 import style from './SideStyle';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
@@ -28,26 +28,27 @@ export default class SideMenu extends Component{
 
   /* Close side menu. */
   dissmisSideMenu(){
+    this.props.navigation.navigate('DrawerClose');
   }
 
   /* Open discounts and coupons. */
   openPromos(){
-
+    // this.props.navigation.navigate('DrawerOpen');
   }
 
   /* Go to user settings. */
   accountSettings(){
-
+    this.props.navigation.navigate('Profile');
   }
 
   /* Search by current location. */
   currentLocation(){
-
+    this.props.navigation.navigate('Maps');
   }
 
   /* User order history. */
   orderHistory(){
-
+    this.props.navigation.navigate('Payment');
   }
 
   /* Sign Out. */
@@ -68,7 +69,9 @@ export default class SideMenu extends Component{
       <View style={style.sidebar_container}>
 
           <View style={style.sidebar_section_arrow} >
-            <Icon size={20} name="arrow-left" color="#fff" />
+            <TouchableWithoutFeedback onPress={this.dissmisSideMenu}>
+              <Icon size={20} name="arrow-left" color="#fff" />
+            </TouchableWithoutFeedback>
           </View>
           <View style={style.sidebar_section}>
           <Image source={require('src/assets/images/profile.jpg')} style={style.side_profile}/>
@@ -77,26 +80,42 @@ export default class SideMenu extends Component{
             <Text style={{fontSize: 15, color: '#fff', paddingTop: 10}}>Rodolfo Ríos</Text>
           </View>
           <View style={style.sidebar_section} >
+          <TouchableWithoutFeedback onPress={this.accountSettings}>
             <Text style={{fontSize: 15, color: '#fff', textAlign: 'left', borderBottomWidth: 1, borderBottomColor: '#fff', paddingTop: 20, width: 200, paddingBottom: 10}}>Mi Perfil</Text>
+          </TouchableWithoutFeedback>
           </View>
           <View style={style.sidebar_links}>
-
+          <TouchableWithoutFeedback onPress={this.accountSettings}>
             <View style={style.sidebar_link}>
               <Icon name="ticket" size={15} color="#fff" style={{marginTop: 2, paddingRight:4}} />
               <Text style={{fontSize: 15, color: '#fff', paddingTop: 10}}>Promociones</Text>
             </View>
+            </TouchableWithoutFeedback>
+
+            <TouchableWithoutFeedback onPress={this.accountSettings}>
             <View style={style.sidebar_link}>
               <Icon name="cogs" size={15} color="#fff"  style={{marginTop: 2, paddingRight:3}} />
-              <Text style={{fontSize: 15, color: '#fff', paddingTop: 10}} onPress={this.accountSettings}>Ajustes de perfil</Text>
+              <Text style={{fontSize: 15, color: '#fff', paddingTop: 10}}>Ajustes de perfil</Text>
+
+
             </View>
+                  </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={this.currentLocation}>
             <View style={style.sidebar_link}>
+
               <Icon name="map-marker" size={15} color="#fff"  style={{marginTop: 2, paddingRight:6, paddingLeft: 3}}/>
               <Text style={{fontSize: 15, color: '#fff', paddingTop: 10}}>Ubicación Actual</Text>
+
             </View>
-            <View style={style.sidebar_link}>
-              <Icon name="list-ol" size={15} color="#fff" style={{marginTop: 2, paddingRight:4}} />
-              <Text style={{fontSize: 15, color: '#fff', paddingTop: 10}}>Historial de pedidos</Text>
-            </View>
+                </TouchableWithoutFeedback>
+
+            <TouchableWithoutFeedback onPress={this.orderHistory}>
+              <View style={style.sidebar_link}>
+                <Icon name="list-ol" size={15} color="#fff" style={{marginTop: 2, paddingRight:4}} />
+                <Text style={{fontSize: 15, color: '#fff', paddingTop: 10}}>Historial de pedidos</Text>
+
+              </View>
+            </TouchableWithoutFeedback>
 
           </View>
 

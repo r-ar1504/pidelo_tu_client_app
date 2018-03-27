@@ -60,15 +60,15 @@ import Video from 'react-native-video';
       <ScrollView contentContainerStyle={styles.contentContainer}>
 			<View style={styles.container}>
         <Image source={require('src/assets/images/background.png')} style={styles.image}/>
-				{/*<Video
-					source={require('src/video/broadchurch.mp4')}
+				<Video
+					source={require('src/video/video.mp4')}
           			rate={1.0}
           			volume={1.0}
           			muted={true}
           			resizeMode={"cover"}
 					     repeat
           			style={styles.video}
-        		/>*/}
+        		/>
 				<Logo/>
 				<Form type="Login"/>
          <TouchableOpacity style={styles.button}>
