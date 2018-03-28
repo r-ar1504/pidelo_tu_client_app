@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { YellowBox } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+//import Icon from 'react-native-vector-icons/FontAwesome';
 import { StackNavigator } from 'react-navigation';
 
 import {
@@ -17,6 +17,7 @@ Image
 import Logo from '../../components/Logo';
 import Form from './Form';
 import Video from 'react-native-video';
+import { Container, Header, Content, Item, Label, Input, Icon, Left, Right } from 'native-base';
 
  export default class Login extends Component {
    static navigationOptions = {
@@ -37,6 +38,7 @@ import Video from 'react-native-video';
     YellowBox.ignoreWarnings([
      'Warning: componentWillMount is deprecated',
      'Warning: componentWillReceiveProps is deprecated',
+     'Warning: componentWillUpdate is deprecated',
     ]);
   }
   /*
@@ -69,19 +71,10 @@ import Video from 'react-native-video';
 					     repeat
           			style={styles.video}
         		/>
-				<Logo/>
-				<Form type="Login"/>
-         <TouchableOpacity style={styles.button}>
-           <Text style={styles.buttonText} onPress={this.signIn}>INGRESAR</Text>
-         </TouchableOpacity>
-        <View style={styles.signupTextCont}>
-          <TouchableOpacity onPress={this.fblogin}><Text style={styles.fb}><Icon size={30} name={'facebook'} /></Text></TouchableOpacity>
-          <TouchableOpacity onPress={this.register}><Text style={styles.movil}><Icon size={30} name={'mobile'} /></Text></TouchableOpacity>
-        </View>
-				<View style={styles.signupTextCont}>
-					<TouchableOpacity onPress={this.signup}><Text style={styles.signupButton}> Crear cuenta</Text></TouchableOpacity>
-					<TouchableOpacity onPress={this.forgotpass}><Text style={styles.forgotpassButton}> ¿Olvidaste tu contraseña?</Text></TouchableOpacity>
-				</View>
+          <Logo/>                               		        
+        <Container>          
+          <Form/>       
+        </Container>                      		         
 			</View>
       </ScrollView>
 		)
@@ -94,24 +87,7 @@ import Video from 'react-native-video';
     backgroundColor:'#455a64',
     alignItems:'center',
     justifyContent :'center'
-  },
-  signupTextCont : {
-	  flex:1,
-    alignItems:'flex-end',
-    paddingVertical:16,
-    flexDirection:'row',
-  },
-  signupButton: {
-  	color:'#ffffff',
-  	fontSize:16,
-  	fontWeight:'500',
-  },
-  forgotpassButton: {
-  	color:'#ffffff',
-  	fontSize:16,
-  	fontWeight:'500',
-	  marginLeft:120
-  },
+  },  
   contentContainer: {
     flexGrow: 1,
   },
@@ -121,25 +97,7 @@ import Video from 'react-native-video';
     left: 0,
     bottom: 0,
     right: 0,
-  },
-  fb: {
-    backgroundColor:'#3b5998',
-    borderBottomLeftRadius:25,
-    borderTopLeftRadius:25,
-    color:'#ffffff',
-    padding:10,
-    width:150,
-    textAlign:'center'
-  },
-  movil: {
-    backgroundColor:'#00aced',
-    borderBottomRightRadius:25,
-    borderTopRightRadius:25,
-    color:'#ffffff',
-    padding:10,
-    width:150,
-    textAlign:'center'
-  },
+  }, 
   image:{
     flex:1,
     resizeMode:'stretch',
@@ -147,19 +105,5 @@ import Video from 'react-native-video';
     width: '100%',
     height: '100%',
     justifyContent: 'center',
-  },
-    button: {
-    width:300,
-    backgroundColor:'#00000000',
-    paddingVertical: 13,
-    marginTop: 60,
-    borderWidth: 1.5,
-    borderColor: 'white'
-  },
-  buttonText: {
-    fontSize:16,
-    fontWeight:'500',
-    color:'#ffffff',
-    textAlign:'center'
-  },
+  },    
 });

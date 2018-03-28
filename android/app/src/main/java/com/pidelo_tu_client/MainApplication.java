@@ -10,10 +10,9 @@ import com.oblador.vectoricons.VectorIconsPackage;
 import com.brentvatne.react.ReactVideoPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.facebook.react.ReactApplication;
-import com.brentvatne.react.ReactVideoPackage;
 import java.util.Arrays;
 import java.util.List;
-import com.airbnb.android.react.maps.MapsPackage;
+
 
 public class MainApplication extends Application implements ReactApplication{
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
