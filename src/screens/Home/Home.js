@@ -10,7 +10,8 @@ TouchableOpacity,
 TouchableWithoutFeedback,
 ScrollView,
 BackHandler,
-Image } from 'react-native';
+Image,
+YellowBox } from 'react-native';
 import style from './HomeStyle';
 import FoodFeed from './FoodFeed';
 import SearchButton from './SearchButton';
@@ -33,6 +34,13 @@ export default class Home extends Component{
     this.openDrawer = this.openDrawer.bind(this);
     this.openRestaurant = this.openRestaurant.bind(this);
     this.searchScreen = this.searchScreen.bind(this);
+
+    YellowBox.ignoreWarnings([
+     'Warning: componentWillMount is deprecated',
+     'Warning: componentWillReceiveProps is deprecated',
+     'Warning: componentWillUpdate is deprecated',
+     'Warning: TouchableWithoutFeedback does not work well with Text children'
+    ]);
   }
 
   openDrawer(){

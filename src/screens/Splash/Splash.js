@@ -2,12 +2,10 @@ import React, { Component } from 'react';
 import { StackNavigator } from 'react-navigation';
 import {
   StyleSheet,
-  Text,
   View,
-   Image
+   Image,
+   YellowBox
 } from 'react-native';
-
-
 
 export default class Splash extends Component<{}> {
   static navigationOptions = {
@@ -15,22 +13,29 @@ export default class Splash extends Component<{}> {
       display: 'none'
     }
   }
+
   constructor(props){
     super(props);
-  }
-  componentDidMount(){
 
+    YellowBox.ignoreWarnings([
+     'Warning: componentWillMount is deprecated',
+     'Warning: componentWillReceiveProps is deprecated',
+     'Warning: componentWillUpdate is deprecated',
+     'Warning: Failed prop type'
+    ]);
+  }
+
+  componentDidMount(){
     setTimeout(()=>{
       this.props.navigation.navigate('Login');
     },3000);
-
   }
 
 	render(){
 		return(
 			<View style={styles.container} >
           <Image source={require('src/assets/images/bg.png')} style={styles.image} />
-				  <Image style={styles.logo} source={require('src/assets/images/icon.gif')} style={{width: 50, height: 50}}/>
+				  <Image style={styles.logo} source={require('src/assets/images/icon.gif')} style={{width: 75, height: 75}}/>
   		</View>
 			)
 	}
@@ -53,6 +58,6 @@ const styles = StyleSheet.create({
   logo: {
     alignItems: 'flex-start',
     justifyContent:'center',
-    resizeMode:'stretch',
+    resizeMode:'center',
   },
 });

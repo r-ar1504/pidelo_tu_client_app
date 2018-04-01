@@ -3695,7 +3695,7 @@ minimist@~0.0.1:
   dependencies:
     minimist "0.0.8"
 
-moment@2.x.x:
+moment@2.x.x, moment@^2.11.2:
   version "2.21.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.21.0.tgz#2a114b51d2a6ec9e6d83cf803f838a878d8a023a"
 
@@ -4301,6 +4301,13 @@ react-native-easy-grid@0.1.17:
   resolved "https://registry.yarnpkg.com/react-native-easy-grid/-/react-native-easy-grid-0.1.17.tgz#fad8cb371d465828c1c71daa4d8b513d33253452"
   dependencies:
     lodash "^4.11.1"
+
+react-native-form-validator@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-form-validator/-/react-native-form-validator-0.2.0.tgz#773016d522412185475f0bbeb6191c8f90542272"
+  dependencies:
+    moment "^2.11.2"
+    prop-types "15.6.0"
 
 react-native-iphone-x-helper@^1.0.1:
   version "1.0.2"

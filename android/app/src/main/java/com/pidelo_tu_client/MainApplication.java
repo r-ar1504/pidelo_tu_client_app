@@ -26,8 +26,8 @@ public class MainApplication extends Application implements ReactApplication{
         return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
             new ReactVideoPackage(),
-            new MapsPackage(),
-            new VectorIconsPackage()
+            new VectorIconsPackage(),
+            new MapsPackage()            
         );
       }
 

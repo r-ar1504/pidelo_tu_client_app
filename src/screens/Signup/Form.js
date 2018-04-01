@@ -1,124 +1,61 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity 
-} from 'react-native';
+import { StackNavigator } from 'react-navigation';
+import { Text,View, TouchableOpacity  } from 'react-native';
+import { Content, Item, Footer } from 'native-base';
 import { Hoshi } from 'react-native-textinput-effects';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+
+import ValidationComponent from 'react-native-form-validator';
+import styles from './SignupStyle';
 
 
 export default class Form extends Component<{}> {
 
 	render(){
-		return(
-		    <View style={styles.container}>
+		return(		    
+          <Content scrollEnabled={false}>            
             <Text style={styles.signupText}>REGISTRATE</Text>
             <Hoshi
-				      style={styles.inputBox}
-            	label={'NOMBRE'}				      
-              keyboardType="email-address"
+              style={styles.inputBox}
+              label={'NOMBRE'}                            
               onSubmitEditing={()=> this.correo.focus()}
-              borderColor={'#00ffff'}             
-          	/>
+              borderColor={'#00000000'}             
+            />
             <Hoshi
               style={styles.inputBox}
               label={'CORREO ELECTRONICO'}              
               keyboardType="email-address"
               ref={(input) => this.correo = input}
+              value={this.props.email} 
+              onChangeText={this.props.email}
               onSubmitEditing={()=> this.password.focus()}
-              borderColor={'#00ffff'}
+              borderColor={'#00000000'}
             />
-          	<Hoshi
-            	style={styles.inputBox}
-				      label={'CONTRASEÑA'}				      
-				      secureTextEntry={true}  				      
+            <Hoshi
+              style={styles.inputBox}
+              label={'CONTRASEÑA'}              
+              secureTextEntry={true}                
               ref={(input) => this.password = input}
+              value={this.props.password} 
+              onChangeText={this.props.password}
               onSubmitEditing={()=> this.confirm.focus()}
-              borderColor={'#00ffff'}
-          	/>
+              borderColor={'#00000000'}
+            />
             <Hoshi
               style={styles.inputBox}
               label={'CONFIRMACIÓN DE CONTRASEÑA'}              
               secureTextEntry={true}                
               ref={(input) => this.confirm = input}
-              borderColor={'#00ffff'}
+              borderColor={'#00000000'}
             />
-            <View style={styles.signupTextCont}>          
-              <TouchableOpacity onPress={this.goBack}><Text style={styles.signupButton}> Conoce nuestros terminos y condiciones</Text></TouchableOpacity>      
-            </View>
             
-           <TouchableOpacity style={styles.button}>
-             <Text style={styles.buttonText}>CREAR CUENTA</Text>
-           </TouchableOpacity>     
-  		</View>
+            <View style={styles.signupTextCont}>
+              <TouchableOpacity><Text style={styles.signupButton}> Conoce nuestros terminos y condiciones</Text></TouchableOpacity>      
+            </View>
+            <Footer style={{backgroundColor:'#00000000', alignItems:'center', justifyContent:'center'}}>            
+              <TouchableOpacity style={styles.button} onPress={this.props.signup}><Text style={styles.buttonText}>CREAR CUENTA</Text></TouchableOpacity>    
+            </Footer>            
+          </Content>     
 			)
 	}
-}
-
-const styles = StyleSheet.create({  
-   container : {
-    backgroundColor:'#ffffff',
-    flex: 1,
-    alignItems:'center',
-    justifyContent :'center',          
-  },
-  signupText: {        
-    marginTop:16,
-    fontSize:25,
-    marginBottom:16
-  },
-  inputBox: {          
-    paddingHorizontal:13,        
-    marginVertical: 10,
-    width:300
-  },
-  button: {
-    width:300,
-    backgroundColor:'#00ffff',           
-    paddingVertical: 13,
-    marginTop: 20,  	
-    borderRadius:20,    		  
-  },
-  buttonText: {
-    fontSize:16,
-    fontWeight:'500',
-    color:'#ffffff',
-    textAlign:'center'
-  },
-  signupTextCont : {    
-    alignItems:'center',
-    justifyContent :'center',
-    paddingVertical:10,    
-  },
-  signupButton: {
-    color:'#00ffff',
-    fontSize:16,
-    fontWeight:'500'
-  },  
-});
-
-const height = 37;
-
-HideoStyle = {
-    container: {
-        marginVertical: 5, 
-        borderRadius: 4,
-        borderStyle: 'solid',
-        borderWidth: 2,        
-        flex: 0,
-        height: 'auto',
-        overflow: 'hidden'
-    },
-    input: {
-        height: height,        
-        fontWeight: '600',
-        fontSize: 11,
-    },
-    size: {
-        input: height,
-        icon: 20
-    }
 }

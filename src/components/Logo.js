@@ -8,19 +8,10 @@ import {
 
 export default class Logo extends Component<{}> {
 	render(){
-		return(
-			<View style={styles.container}>
-				<Image  style={{width:230, height: 70, marginVertical: 35,}}
+		return(			
+				<Image  style={{width:230, height: 70, marginVertical: 35, marginTop:80}}
           			source={require('src/assets/images/logo.png')}/>
-  			</View>
 			)
 	}
 }
 
-const styles = StyleSheet.create({
-  container : {
-	  flexGrow:1,
-    flexDirection: 'row',  
-    alignItems: 'flex-end'
-  },  
-});
