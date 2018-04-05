@@ -1,57 +1,77 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  StatusBar,
-  TextInput,
-  TouchableOpacity
-} from 'react-native';
+import {  Text, View, StatusBar, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import {  Input, Item } from 'native-base';
+import styles from './RegisterStyle';
 
 
 export default class VerificationCode extends React.Component {
+  static navigationOptions = {
+     headerStyle:{
+       display: 'none'
+     }
+   }
 
   constructor(props){
     super(props);
-
-    this.confirm = this.confirm.bind(this);
+    
+    this.state = { codeInput1: '', codeInput2: '', codeInput3: '', loading: false }
   }
 
-  confirm(){
-    this.props.navigator.push({
-        screen: 'register.modal',
-        passProps:{
+  confirm(confirmResult){
+    this.setState({ loading: true });
+    const codeInput = this.state.codeInput1+this.state.codeInput2+this.state.codeInput3;
+
+    if (confirmResult && codeInput.length) {
+      confirmResult.confirm(codeInput)
+        .then((user) => {
+          this.setState({ loading: false });
+          this.props.navigation.navigate('Modal',{
           text:'Tu código ha sido exitoso',
           button:'Finalizar',
-          action: 'Form'
-        },
-        navigatorStyle: {
-          navBarHidden: true,
-        }, // override the navigator style for the screen, see "Styling the navigator" below (optional)
-    });
+          action: 'Form'});
+        })
+        .catch((error) => { 
+          this.setState({ loading: false });
+          alert('Code Confirm Error:'+error);
+        });
+    }    
   }
 
   render() {
+    const { params } = this.props.navigation.state;
+    const confirmResult = params ? params.confirmResult : null;
+
+    if(this.state.loading) {
+        return(    
+          <View style={styles.body}>
+            <ActivityIndicator size="large"/>
+          </View>
+        )
+      }     
+
     return (
       <View style={styles.container}>
         <Text style={styles.signupText}>INGRESA CODIGO DE VERIFICACIÓN</Text>
           <View style={styles.inputBox}>
-            <TextInput
-              style={{height: 40, borderColor: 'gray', borderWidth: 1, marginLeft:20}}
-              keyboardType="phone-pad"
-            />
-            <TextInput
-              style={{height: 40, borderColor: 'gray', borderWidth: 1, marginLeft:20}}
-              keyboardType="phone-pad"
-            />
-            <TextInput
-              style={{height: 40, borderColor: 'gray', borderWidth: 1, marginLeft:20}}
-              keyboardType="phone-pad"
-            />
+            <Item regular style={{borderColor: 'gray', borderWidth: 1, width:40,  height:40, marginLeft: 20 }}>
+              <Input                
+                keyboardType="phone-pad" value={this.state.codeInput1} onChangeText={codeInput1 => this.setState({codeInput1})}
+              />
+            </Item>
+            <Item regular style={{borderColor: 'gray', borderWidth: 1, width: 40, height:40,  marginLeft: 20 }}>
+              <Input
+                keyboardType="phone-pad" value={this.state.codeInput2} onChangeText={codeInput2 => this.setState({codeInput2})}
+              />
+            </Item>
+            <Item regular style={{borderColor: 'gray', borderWidth: 1, width: 40, height:40,  marginLeft: 20 }}>
+              <Input              
+                keyboardType="phone-pad" value={this.state.codeInput3} onChangeText={codeInput3 => this.setState({codeInput3})}
+              />
+            </Item>
           </View>
 
 
-        <TouchableOpacity style={styles.button} onPress={this.confirm}>
+        <TouchableOpacity style={styles.button} onPress={this.confirm.bind(this, confirmResult)}>
             <Text style={styles.buttonText}>CONTINUAR</Text>
         </TouchableOpacity>
       </View>
@@ -59,41 +79,3 @@ export default class VerificationCode extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor:'#ffffff',
-    flex: 1,
-    alignItems:'center',
-    justifyContent :'flex-start',
-    flexDirection: 'column',
-    padding: 20,
-    paddingTop: 60,
-  },
-  signupText: {
-    alignItems:'flex-start',
-    justifyContent :'center',
-    marginTop:16,
-    fontSize:16,
-    marginBottom:16
-  },
-  button: {
-    alignItems:'center',
-    justifyContent :'center',
-    width:300,
-    backgroundColor:'#00ffff',
-    paddingVertical: 13,
-    marginTop: 20,
-    borderRadius:20,
-  },
-  buttonText: {
-    fontSize:16,
-    fontWeight:'500',
-    color:'#ffffff',
-  },
-  inputBox: {
-    flexDirection: 'row',
-    alignItems:'center',
-    justifyContent :'center',
-    padding:20
-  },
-});

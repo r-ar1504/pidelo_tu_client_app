@@ -20,12 +20,12 @@ export default class Form extends Component {
           <Content scrollEnabled={false}>            
             <Item floatingLabel style={styles.inputBox}>              
               <Label style={{marginLeft: 15, marginTop: 5, color: 'white'}}>Correo Electronico</Label>              
-              <Input style={styles.input} ref="email" value={this.props.email} onChangeText={this.props.email} keyboardType="email-address"/>
+              <Input style={styles.input} ref="email" onChangeText={this.props.email} keyboardType="email-address"/>
               <Icon active name='person' style={{color:'white'}} />
             </Item>
             <Item floatingLabel style={styles.inputBox}>              
               <Label style={{marginLeft: 15, marginTop: 5, color: 'white'}}>Contraseña</Label>              
-              <Input style={styles.input} ref="password" value={this.props.password} onChangeText={this.props.password} secureTextEntry={true}/>
+              <Input style={styles.input} ref="password" onChangeText={this.props.password} secureTextEntry={true}/>
               <Icon active name='lock' style={{color:'white'}} />
             </Item>
             <TouchableOpacity style={styles.button}>

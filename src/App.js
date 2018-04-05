@@ -11,12 +11,13 @@ import Home from './screens/Home/Home';
 import Payment from './screens/Payment/Payment';
 import Discounts from './screens/Discounts/Discounts';
 import Register from './screens/Register/Register';
+import RegisterForm from './screens/Register/Form';
 import AllowLocation from './screens/Register/AllowLocation';
 import VerificationCode from './screens/Register/VerificationCode';
 import Signup from './screens/Signup/Signup';
 import SideMenu from './components/SideMenu/SideMenu'
 import Maps from './components/Maps';
-
+import Modal from './components/Modal';
 
 const HomeDrawer = DrawerNavigator({
   Home:{
@@ -43,7 +44,7 @@ const HomeDrawer = DrawerNavigator({
   },
   Restaurant:{
     screen: Restaurant
-  },
+  }
 },{
     contentComponent: SideMenu
   }
@@ -73,9 +74,18 @@ export default StackNavigator({
   },
   Signup:{
     screen: Signup
-  }
+  },
+  Modal: {
+    screen: Modal
+  },
+  RegisterForm: {
+    screen: RegisterForm
+  },
+  Discounts:{
+    screen: Discounts
+  },  
 },
   {
-  initialRouteName: 'Splash'
+  initialRouteName: 'Discounts'
   }
 );

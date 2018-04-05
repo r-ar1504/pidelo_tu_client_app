@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { YellowBox } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import { View, BackHandler, Alert, AsyncStorage, ActivityIndicator } from 'react-native';
+import { View, BackHandler, Alert, ActivityIndicator } from 'react-native';
 
 import Logo from '../../components/Logo';
 import Form from './Form';
 import Video from 'react-native-video';
 import { Container } from 'native-base';
 import styles from './LoginStyle';
-import firebase from 'firebase';
+import firebase from 'react-native-firebase';
 
  export default class Login extends Component {
    static navigationOptions = {
@@ -37,7 +37,7 @@ import firebase from 'firebase';
   componentWillMount() {
     /*try connect to the firebase 
     and then trying to get the current user that is log in*/
-      if (!firebase.apps.length) {
+      /*if (!firebase.apps.length) {
           firebase.initializeApp({
           apiKey: 'AIzaSyDMjLkU36MBqIttrDnfPYY5fBEJsNHEhu4',
           authDomain: 'imperial-legacy-150804.firebaseapp.com',
@@ -46,10 +46,11 @@ import firebase from 'firebase';
           storageBucket: 'imperial-legacy-150804.appspot.com',
           messagingSenderId: '44425980713'
         });
-      }
+      }*/
 
-    try {
-        const userData = this.props.firebaseApp.auth().currentUser;
+    /*try {
+        this.setState({ loading: true });
+        //const userData = this.props.firebaseApp.auth().currentUser;
         AsyncStorage.getItem('userData').then((user_data_json) => {
         let userData = JSON.parse(user_data_json);
         this.setState({
@@ -62,7 +63,8 @@ import firebase from 'firebase';
         this.setState({            
             loading: false
           });
-      }      
+        alert(error);
+      } */
   }  
   /*
   * SignIn Function.
@@ -72,13 +74,12 @@ import firebase from 'firebase';
     this.setState({ loading: true });
 
     firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).then((userData) => {
-        this.setState({ loading: false });
-        AsyncStorage.setItem('userData', JSON.stringify(userData));
+        this.setState({ loading: false });        
         this.props.navigation.navigate('Home')
       }
     ).catch((error) => {
         this.setState({ loading: false });
-        alert('Login Failed. Please try again'+error);
+        alert(error);
     });      
   }
 

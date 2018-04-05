@@ -6,7 +6,7 @@ import { Container } from 'native-base';
 import Logo from 'src/components/Logo';
 import Form from './Form';
 import styles from './SignupStyle';
-import firebase from 'firebase';
+import firebase from 'react-native-firebase';
 
 
 export default class Signup extends Component<{}> {
@@ -25,30 +25,20 @@ export default class Signup extends Component<{}> {
      'Warning: componentWillMount is deprecated',
      'Warning: componentWillReceiveProps is deprecated',
      'Warning: Failed prop type'
-    ]);   
-  }
-
-  componentWillMount() {
-    if (!firebase.apps.length) {
-        firebase.initializeApp({
-        apiKey: 'AIzaSyDMjLkU36MBqIttrDnfPYY5fBEJsNHEhu4',
-        authDomain: 'imperial-legacy-150804.firebaseapp.com',
-        databaseURL: 'https://imperial-legacy-150804.firebaseio.com',
-        projectId: 'imperial-legacy-150804',
-        storageBucket: 'imperial-legacy-150804.appspot.com',
-        messagingSenderId: '44425980713'
-      });
-    }
-  }
+    ]);     
+  }  
 
   signup(){
-    this.setState({ error: '', loading: true }); 
+    this.setState({ loading: true }); 
     const { email, password } = this.state;
     firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then(() => { this.setState({ error: '', loading: false }); alert('Cuenta creada con éxito') })
+            .then(() => { 
+              this.setState({ loading: false });
+              this.props.navigation.navigate('Login');
+            })
             .catch((error) => {
-                this.setState({ error: 'Authentication failed.', loading: false });
-                alert('Hubo un problema'+error)
+              this.setState({ loading: false });
+              alert(error)
             });
   }
 

@@ -3,7 +3,6 @@ import { StackNavigator } from 'react-navigation';
 import { Text,View, TouchableOpacity  } from 'react-native';
 import { Content, Item, Footer } from 'native-base';
 import { Hoshi } from 'react-native-textinput-effects';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 import ValidationComponent from 'react-native-form-validator';
 import styles from './SignupStyle';
@@ -11,7 +10,7 @@ import styles from './SignupStyle';
 
 export default class Form extends Component<{}> {
 
-	render(){
+	render(){      
 		return(		    
           <Content scrollEnabled={false}>            
             <Text style={styles.signupText}>REGISTRATE</Text>
@@ -48,7 +47,6 @@ export default class Form extends Component<{}> {
               ref={(input) => this.confirm = input}
               borderColor={'#00000000'}
             />
-            
             <View style={styles.signupTextCont}>
               <TouchableOpacity><Text style={styles.signupButton}> Conoce nuestros terminos y condiciones</Text></TouchableOpacity>      
             </View>

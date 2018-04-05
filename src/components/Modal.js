@@ -1,54 +1,53 @@
 import React, { Component } from 'react';
-import { Navigation } from 'react-native-navigation';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity ,
-  Image
-} from 'react-native';
-
-
+import { StackNavigator } from 'react-navigation';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, YellowBox } from 'react-native';
 
 export default class Modal extends Component {
+  static navigationOptions = {
+     headerStyle:{
+       display: 'none'
+     }
+   }
 
   constructor(props) {
-    super(props);
-
-    this.confirm = this.confirm.bind(this);
+    super(props);    
+    
+    YellowBox.ignoreWarnings([
+     'Warning: componentWillMount is deprecated',
+     'Warning: componentWillReceiveProps is deprecated',     
+    ]);
   }
 
-  confirm(){
-    if (this.props.action == 'Verification'){
-          this.props.navigator.push({      
-            screen: 'register.verification',
-            navigatorStyle: {
-            navBarHidden: true
-          },          
-          animationType: 'slide-horizontal',      
-        });
-    }
-    else {
-          this.props.navigator.push({      
-            screen: 'register.form',
-            navigatorStyle: {
-              navBarHidden: true
-            },            
-            animationType: 'slide-horizontal',      
-        });
-    }
+  confirm(action, confirmResult){
+    
+    switch(action){
+      case 'Verification': {
+        this.props.navigation.navigate('VerificationCode', {confirmResult: confirmResult});
+      } break;
+      case 'Payment': {
+        this.props.navigation.navigate('Home');
+      } break;
+      case 'Form': {
+          this.props.navigation.navigate('Signup', {phone: true});
+      } break;
+    }        
   }  
 
-	render(){
+	render(){    
+    const { params } = this.props.navigation.state;
+    const text = params ? params.text : null;
+    const button = params ? params.button : null;
+    const action = params ? params.action : null;
+    const confirmResult = params ? params.confirmResult : null;
+
 		return(
 		  <View style={styles.container}>
         <Image source={require('src/assets/images/gb-trans.png')} style={styles.image}/>
         <Image source={require('src/assets/images/check.png')} style={styles.check}/>
-        <Text style={styles.info}>{this.props.text}</Text>
-        <TouchableOpacity style={styles.button} onPress={this.confirm}>
-            <Text style={styles.buttonText}>{this.props.button}</Text>
-        </TouchableOpacity>
+        <Text style={styles.info}>{text}</Text>
+        <TouchableOpacity style={styles.button} onPress={this.confirm.bind(this, action, confirmResult)}>
+            <Text style={styles.buttonText}>{button}</Text>
+        </TouchableOpacity>                
   		</View>
 		)
 	}

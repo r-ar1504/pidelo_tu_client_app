@@ -43,5 +43,13 @@ export default StyleSheet.create({
     fontSize:14,
     fontWeight:'200',
     color:'#000',    
-  },  
+  },
+  header:{
+    flex:1,
+    resizeMode:'stretch',
+    position: 'absolute',
+    width: '100%',
+    height: 140,
+    justifyContent: 'center'
+  }  
 });

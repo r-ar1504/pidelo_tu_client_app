@@ -21,17 +21,36 @@ export default class Discounts extends React.Component {
 	render(){
 		return (
 		<Container>
-          <Header style={{flexDirection: 'row', justifyContent: 'space-around', width: '100%', height: 150}} backgroundColor="#0f44cd">
-            <Left style={{ flex: 1 }}>
-              <Icon size={20} name="arrow-left" color="#fff" onPress={()=>{
-              this.props.navigation.navigate('Home')}} />
+          <Image source={require('src/assets/images/bg.png')} style={styles.header}/>
+          <Header style={{ backgroundColor:'transparent', elevation: 0, flexWrap: 'nowrap', flexDirection: 'row', justifyContent: 'flex-start', height: 50 }}>
+            <Left style={{flex: 1}}>
+              <Icon name="arrow-left" size={20} color="#fff" onPress={()=>{this.props.navigation.navigate('Home')}} />
             </Left>
-            <Right style={{ flex: 1 }}>
-              <Text style={styles.MainText}>CUPONES & {"\n"} PROMOCIONES</Text>
-            </Right>
+            <Body style={{flex: 1}}>
 
-          </Header>
+            </Body>
+            <Right style={{ flex: 1}}>          
+                <Icon name="ticket" size={20} color="#fff" />              
+            </Right>
+          </Header>          
           <Content>
+            <View style={{                
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'flex-end',
+                alignItems: 'flex-end',
+                marginRight: 15,
+                height:90
+            }}>
+            <Text style={{
+              color: '#fff',
+              opacity: 0.8,
+              fontSize: 40,
+              letterSpacing: 20,
+              fontWeight: 'bold',
+              marginRight: 10
+            }}>CUPONES & {"\n"} PROMOCIONES</Text>          
+            </View>
           	<Card>
           		<Separator style={{backgroundColor:'#fff'}}>
 
