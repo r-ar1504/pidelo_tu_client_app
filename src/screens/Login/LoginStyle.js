@@ -89,5 +89,13 @@ export default StyleSheet.create({
     fontSize:16,
     fontWeight:'500',     
     fontFamily:FONT_NORMAL
+  }, 
+  image:{
+    flex:1,
+    resizeMode:'cover',
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
   },  
 });

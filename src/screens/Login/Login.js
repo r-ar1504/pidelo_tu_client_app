@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { YellowBox } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import { View, BackHandler, Alert, ActivityIndicator } from 'react-native';
+import { View, BackHandler, Alert, ActivityIndicator, Image } from 'react-native';
 
 import Logo from '../../components/Logo';
 import Form from './Form';
@@ -34,50 +34,18 @@ import firebase from 'react-native-firebase';
      'Warning: Failed prop type'
     ]);
   }
-  componentWillMount() {
-    /*try connect to the firebase 
-    and then trying to get the current user that is log in*/
-      /*if (!firebase.apps.length) {
-          firebase.initializeApp({
-          apiKey: 'AIzaSyDMjLkU36MBqIttrDnfPYY5fBEJsNHEhu4',
-          authDomain: 'imperial-legacy-150804.firebaseapp.com',
-          databaseURL: 'https://imperial-legacy-150804.firebaseio.com',
-          projectId: 'imperial-legacy-150804',
-          storageBucket: 'imperial-legacy-150804.appspot.com',
-          messagingSenderId: '44425980713'
-        });
-      }*/
-
-    /*try {
-        this.setState({ loading: true });
-        //const userData = this.props.firebaseApp.auth().currentUser;
-        AsyncStorage.getItem('userData').then((user_data_json) => {
-        let userData = JSON.parse(user_data_json);
-        this.setState({
-            user: userData,
-            loading: false
-          });
-        });
-        this.props.navigation.navigate('Home');                
-      } catch (error) {
-        this.setState({            
-            loading: false
-          });
-        alert(error);
-      } */
-  }  
   /*
   * SignIn Function.
   * If user is valid, then initialize Home Screen.
   */
-  signIn(){
+  signIn(email,password){
     this.setState({ loading: true });
 
-    firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).then((userData) => {
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .then((user) => {
         this.setState({ loading: false });        
-        this.props.navigation.navigate('Home')
-      }
-    ).catch((error) => {
+      })
+      .catch((error) => {
         this.setState({ loading: false });
         alert(error);
     });      
@@ -95,7 +63,8 @@ import firebase from 'react-native-firebase';
     if(this.state.loading) {
         return(    
           <View style={styles.body}>
-            <ActivityIndicator size="large"/>
+            <Image source={require('src/assets/images/bg.png')} style={styles.image} />
+            <ActivityIndicator size={50} color="white"/>
           </View>
         )
       }    
@@ -112,7 +81,7 @@ import firebase from 'react-native-firebase';
             />
         <Logo/>                                           
         <Container>          
-          <Form signIn={this.signIn} register={this.register} signup={this.signup} email={(email) => this.setState({email})} password={(password)=> this.setState({password})}/>       
+          <Form signIn={this.signIn} register={this.register} signup={this.signup} deviceLocale="es"/>       
         </Container>                                   
       </View>    
 		)

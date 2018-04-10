@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import { StackNavigator } from 'react-navigation';
-import {
-  StyleSheet,
-  View,
-   Image,
-   YellowBox
-} from 'react-native';
+import { StyleSheet, View, Image, YellowBox, ActivityIndicator } from 'react-native';
+import firebase from 'react-native-firebase';
 
 export default class Splash extends Component<{}> {
   static navigationOptions = {
@@ -17,6 +13,8 @@ export default class Splash extends Component<{}> {
   constructor(props){
     super(props);
 
+    this. state = { authSubscription: null, user: null }
+
     YellowBox.ignoreWarnings([
      'Warning: componentWillMount is deprecated',
      'Warning: componentWillReceiveProps is deprecated',
@@ -27,15 +25,27 @@ export default class Splash extends Component<{}> {
 
   componentDidMount(){
     setTimeout(()=>{
-      this.props.navigation.navigate('Login');
+      this.authSubscription = firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          console.log(user.toJSON());
+          this.props.navigation.navigate('Home');
+        }
+        else {
+          this.props.navigation.navigate('Login');
+        }
+      });
     },3000);
   }
+  componentWillUnmount() {
+    this.authSubscription();
+  }
 
-	render(){
+	render(){    
 		return(
 			<View style={styles.container} >
           <Image source={require('src/assets/images/bg.png')} style={styles.image} />
-				  <Image style={styles.logo} source={require('src/assets/images/icon.gif')} style={{width: 75, height: 75}}/>
+				  {/*<Image style={styles.logo} source={require('src/assets/images/icon.gif')} style={{width: 75, height: 75}}/>*/}
+          <ActivityIndicator size={50} color="white" />
   		</View>
 			)
 	}
@@ -51,9 +61,9 @@ const styles = StyleSheet.create({
     flex:1,
     resizeMode:'cover',
     position: 'absolute',
-          width: '100%',
-          height: '100%',
-          justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
   },
   logo: {
     alignItems: 'flex-start',

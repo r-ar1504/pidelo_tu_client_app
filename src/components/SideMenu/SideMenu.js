@@ -3,7 +3,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {  StyleSheet,  Text, View, Image, TouchableWithoutFeedback,} from 'react-native';
 import style from './SideStyle';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-
+import {  Item, Footer } from 'native-base';
+import firebase from 'react-native-firebase';
 export default class SideMenu extends Component{
   static navigationOptions = {
     gesturesEnabled: false,
@@ -33,7 +34,7 @@ export default class SideMenu extends Component{
 
   /* Open discounts and coupons. */
   openPromos(){
-    // this.props.navigation.navigate('DrawerOpen');
+    this.props.navigation.navigate('Discounts');
   }
 
   /* Go to user settings. */
@@ -53,13 +54,13 @@ export default class SideMenu extends Component{
 
   /* Sign Out. */
   logOut(){
-
+    firebase.auth().signOut(); 
   }
 
   /* Help Section. */
   openHelp(){
 
-  }
+  }  
 
   /*
   * Render Function.
@@ -85,7 +86,7 @@ export default class SideMenu extends Component{
           </TouchableWithoutFeedback>
           </View>
           <View style={style.sidebar_links}>
-          <TouchableWithoutFeedback onPress={this.accountSettings}>
+          <TouchableWithoutFeedback onPress={this.openPromos}>
             <View style={style.sidebar_link}>
               <Icon name="ticket" size={15} color="#fff" style={{marginTop: 2, paddingRight:4}} />
               <Text style={{fontSize: 15, color: '#fff', paddingTop: 10}}>Promociones</Text>
@@ -116,12 +117,12 @@ export default class SideMenu extends Component{
 
               </View>
             </TouchableWithoutFeedback>
-
-          </View>
-
-          <View style={style.sidebar_bottom}>
-            <Text style={{fontSize: 15, color: '#fff', textAlign: 'left', borderTopWidth: 1, borderTopColor: '#fff', paddingTop: 10, width: 200, paddingBottom: 10}}>Cerrar Sesión</Text>
-          </View>
+            <Footer style={{backgroundColor: 'transparent'}}>
+              <Item style={style.sidebar_bottom}>
+                <Text style={{fontSize: 15, color: '#fff', textAlign: 'left', paddingTop: 10, paddingBottom: 10}} onPress={this.logOut}>Cerrar Sesión</Text>
+              </Item>              
+            </Footer>
+          </View>          
       </View>
     );
   }

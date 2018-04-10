@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StackNavigator } from 'react-navigation';
-import { View, BackHandler, Alert, AsyncStorage, ActivityIndicator, YellowBox } from 'react-native';
+import { View, BackHandler, Alert, AsyncStorage, ActivityIndicator, YellowBox, Image } from 'react-native';
 import { Container } from 'native-base';
 
 import Logo from 'src/components/Logo';
@@ -19,7 +19,7 @@ export default class Signup extends Component<{}> {
    constructor(props){
     super(props);
     this.signup = this.signup.bind(this);
-    this.state = { name: "", email: '', password: '', loading:false };  
+    this.state = { loading:false };  
 
     YellowBox.ignoreWarnings([
      'Warning: componentWillMount is deprecated',
@@ -28,32 +28,31 @@ export default class Signup extends Component<{}> {
     ]);     
   }  
 
-  signup(){
-    this.setState({ loading: true }); 
-    const { email, password } = this.state;
+  signup(name,email,password){
+    this.setState({ loading: true });         
     firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then(() => { 
-              this.setState({ loading: false });
-              this.props.navigation.navigate('Login');
-            })
-            .catch((error) => {
-              this.setState({ loading: false });
-              alert(error)
-            });
+    .then((user) => {               
+      this.setState({ loading: false });
+    })
+    .catch(error => {
+      this.setState({ loading: false })
+        alert(error)
+    });
   }
 
 	render() {
     if(this.state.loading) {
         return(    
           <View style={styles.body}>
-            <ActivityIndicator size="large"/>
+            <Image source={require('src/assets/images/bg.png')} style={styles.image} />
+            <ActivityIndicator size={50} color="white" animating={true}/>
           </View>
         )
       }  
 		return(
      <View style={styles.container}>                
         <Container>          
-          <Form signup={this.signup} email={(email) => this.setState({email})} password={(password) => this.setState({password})} name={(name) => this.setState({name})}/>       
+          <Form signup={this.signup} deviceLocale="es"/>       
         </Container>                                   
       </View>   
 		)

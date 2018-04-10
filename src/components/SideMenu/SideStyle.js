@@ -45,7 +45,7 @@ export default StyleSheet.create({
     flexWrap: 'nowrap'
   },
   sidebar_bottom:{
-    marginTop: 310
+    
   }
 
 });

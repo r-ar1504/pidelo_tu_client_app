@@ -80,12 +80,9 @@ export default StackNavigator({
   },
   RegisterForm: {
     screen: RegisterForm
-  },
-  Discounts:{
-    screen: Discounts
-  },  
+  }, 
 },
   {
-  initialRouteName: 'Discounts'
+  initialRouteName: 'Splash'
   }
 );

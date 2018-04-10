@@ -15,11 +15,9 @@ export default StyleSheet.create({
     textAlign:'center'
   },
   body: {
-    flex: 9,
-    flexDirection:'row',
-    alignItems:'center',
+    flexGrow: 1,
     justifyContent:'center',
-    backgroundColor: '#F5FCFF',
+    alignItems: 'center',
   },     
   inputBox: {
     width:300,
@@ -49,5 +47,13 @@ export default StyleSheet.create({
     fontSize:16,
     fontWeight:'500',  
     fontFamily:FONT_NORMAL  
-  },  
+  },
+  image:{
+    flex:1,
+    resizeMode:'cover',
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+  }, 
 });

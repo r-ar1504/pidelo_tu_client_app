@@ -41,7 +41,7 @@ export default class Home extends Component{
      'Warning: componentWillUpdate is deprecated',
      'Warning: TouchableWithoutFeedback does not work well with Text children'
     ]);
-  }
+  }  
 
   openDrawer(){
     this.props.navigation.navigate('DrawerOpen');

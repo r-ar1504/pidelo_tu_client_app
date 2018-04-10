@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StackNavigator } from 'react-navigation';
-import { Text,View, TouchableOpacity  } from 'react-native';
+import { Text,View, TouchableOpacity, Alert  } from 'react-native';
 import { Content, Item, Footer } from 'native-base';
 import { Hoshi } from 'react-native-textinput-effects';
 
@@ -8,15 +8,41 @@ import ValidationComponent from 'react-native-form-validator';
 import styles from './SignupStyle';
 
 
-export default class Form extends Component<{}> {
+export default class Form extends ValidationComponent {
+  constructor(props) {
+    super(props);  
+    this.state = {name: "", email: "", password: "", confirmpass:""}        
+  }  
 
-	render(){      
+  signup(name,email,password){
+    this.validate({
+      name: {required: true},   
+      email: {required: true, email: true},   
+      password: {required: true, minlength: 6},
+      confirmpass: {required: true}
+    });
+
+
+    if(this.isFormValid()){
+      this.props.signup(name,email,password);
+    }
+    else {
+      alert(this.getErrorMessages());
+    }    
+  }  
+
+	render(){
+    const name = this.state.name;
+    const email = this.state.email; 
+    const password = this.state.password;     
 		return(		    
           <Content scrollEnabled={false}>            
             <Text style={styles.signupText}>REGISTRATE</Text>
             <Hoshi
               style={styles.inputBox}
-              label={'NOMBRE'}                            
+              label={'NOMBRE'}
+              ref="name"            
+              onChangeText={(name) => {this.setState({name});}}                                
               onSubmitEditing={()=> this.correo.focus()}
               borderColor={'#00000000'}             
             />
@@ -24,9 +50,8 @@ export default class Form extends Component<{}> {
               style={styles.inputBox}
               label={'CORREO ELECTRONICO'}              
               keyboardType="email-address"
-              ref={(input) => this.correo = input}
-              value={this.props.email} 
-              onChangeText={this.props.email}
+              ref={(email) => this.correo = email}              
+              onChangeText={(email)=> {this.setState({email});}}
               onSubmitEditing={()=> this.password.focus()}
               borderColor={'#00000000'}
             />
@@ -34,24 +59,24 @@ export default class Form extends Component<{}> {
               style={styles.inputBox}
               label={'CONTRASEÑA'}              
               secureTextEntry={true}                
-              ref={(input) => this.password = input}
-              value={this.props.password} 
-              onChangeText={this.props.password}
-              onSubmitEditing={()=> this.confirm.focus()}
+              ref={(password) => this.password = password}              
+              onChangeText={(password) => {this.setState({password});}}
+              onSubmitEditing={()=> this.confirmpass.focus()}
               borderColor={'#00000000'}
             />
             <Hoshi
               style={styles.inputBox}
               label={'CONFIRMACIÓN DE CONTRASEÑA'}              
               secureTextEntry={true}                
-              ref={(input) => this.confirm = input}
+              ref={(confirmpass) => this.confirmpass = confirmpass}
+              onChangeText={(confirmpass)=> {this.setState({confirmpass});}}              
               borderColor={'#00000000'}
             />
-            <View style={styles.signupTextCont}>
+            <View style={styles.signupTextCont}>              
               <TouchableOpacity><Text style={styles.signupButton}> Conoce nuestros terminos y condiciones</Text></TouchableOpacity>      
-            </View>
+            </View>            
             <Footer style={{backgroundColor:'#00000000', alignItems:'center', justifyContent:'center'}}>            
-              <TouchableOpacity style={styles.button} onPress={this.props.signup}><Text style={styles.buttonText}>CREAR CUENTA</Text></TouchableOpacity>    
+              <TouchableOpacity style={styles.button} onPress={this.signup.bind(this, name, email, password,)}><Text style={styles.buttonText}>CREAR CUENTA</Text></TouchableOpacity>    
             </Footer>            
           </Content>     
 			)
