@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { COLOR_PRIMARY, COLOR_FOURTH, FONT_NORMAL } from 'src/assets/GlobalStyleSheet';
+import { COLOR_PRIMARY, COLOR_SECONDARY, FONT_NORMAL } from 'src/assets/GlobalStyleSheet';
 
 export default StyleSheet.create({ 
   container : {
@@ -44,15 +44,13 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderColor: 'white'
   },
-  buttonText: {
-    fontSize:16,
-    fontWeight:'500',
+  buttonText: {    
     color:'#ffffff',
     textAlign:'center',
-    fontFamily:FONT_NORMAL
+    fontFamily: 'Lato-Regular'
   },
    fb: {
-    backgroundColor:COLOR_FOURTH,
+    backgroundColor:COLOR_SECONDARY,
     borderBottomLeftRadius:25,
     borderTopLeftRadius:25,
     color:'#ffffff',
@@ -60,7 +58,8 @@ export default StyleSheet.create({
     width:150,
     textAlign:'center',
     borderWidth:1,
-    borderColor:'white'
+    borderColor:'white',
+    fontFamily: 'Lato-Regular'
   },
   movil: {
     backgroundColor:COLOR_PRIMARY,
@@ -71,7 +70,8 @@ export default StyleSheet.create({
     width:150,
     textAlign:'center',
     borderWidth:1,
-    borderColor:'white'
+    borderColor:'white',
+    fontFamily: 'Lato-Regular'
   },
   signupTextCont : {
     paddingVertical:16,
@@ -79,16 +79,12 @@ export default StyleSheet.create({
     flexDirection:'row',
   },
   signupButton: {
-    color:'#ffffff',
-    fontSize:16,
-    fontWeight:'500',  
-    fontFamily:FONT_NORMAL  
+    color:'#ffffff',      
+    fontFamily: 'Lato-Regular'  
   },
   forgotpassButton: {
-    color:'#ffffff',
-    fontSize:16,
-    fontWeight:'500',     
-    fontFamily:FONT_NORMAL
+    color:'#ffffff',        
+    fontFamily: 'Lato-Regular'
   }, 
   image:{
     flex:1,

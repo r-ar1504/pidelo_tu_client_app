@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StackNavigator } from 'react-navigation';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, YellowBox } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, YellowBox, BackHandler} from 'react-native';
 
 export default class Modal extends Component {
   static navigationOptions = {
@@ -18,18 +18,30 @@ export default class Modal extends Component {
     ]);
   }
 
-  confirm(action, confirmResult){
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
+  }
+
+  onBackButtonPressAndroid = () => {
+    return true;
+  };
+
+  confirm(action, phoneAuthSnapshot, phoneNumber, credential){
     
     switch(action){
       case 'Verification': {
-        this.props.navigation.navigate('VerificationCode', {confirmResult: confirmResult});
-      } break;
-      case 'Payment': {
-        this.props.navigation.navigate('Home');
+        this.props.navigation.navigate('VerificationCode', { phoneAuthSnapshot: phoneAuthSnapshot, phoneNumber: phoneNumber });
       } break;
       case 'Form': {
-          this.props.navigation.navigate('Signup', {phone: true});
+          this.props.navigation.navigate('RegisterForm', { phoneNumber: phoneNumber, credential: credential});
       } break;
+      case 'Payment': {
+        this.props.navigation.navigate('Payment');
+      } break;      
     }        
   }  
 
@@ -38,14 +50,16 @@ export default class Modal extends Component {
     const text = params ? params.text : null;
     const button = params ? params.button : null;
     const action = params ? params.action : null;
-    const confirmResult = params ? params.confirmResult : null;
+    const phoneAuthSnapshot = params ? params.phoneAuthSnapshot : null;
+    const phoneNumber = params ? params.phoneNumber : null;
+    const credential = params ? params.credential : null;
 
 		return(
 		  <View style={styles.container}>
         <Image source={require('src/assets/images/gb-trans.png')} style={styles.image}/>
         <Image source={require('src/assets/images/check.png')} style={styles.check}/>
         <Text style={styles.info}>{text}</Text>
-        <TouchableOpacity style={styles.button} onPress={this.confirm.bind(this, action, confirmResult)}>
+        <TouchableOpacity style={styles.button} onPress={this.confirm.bind(this, action, phoneAuthSnapshot, phoneNumber, credential)}>
             <Text style={styles.buttonText}>{button}</Text>
         </TouchableOpacity>                
   		</View>

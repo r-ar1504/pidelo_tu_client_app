@@ -34,6 +34,17 @@ import firebase from 'react-native-firebase';
      'Warning: Failed prop type'
     ]);
   }
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
+  }
+
+  onBackButtonPressAndroid = () => {
+    return true;
+  };
   /*
   * SignIn Function.
   * If user is valid, then initialize Home Screen.
@@ -43,7 +54,8 @@ import firebase from 'react-native-firebase';
 
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then((user) => {
-        this.setState({ loading: false });        
+        this.setState({ loading: false }); 
+        this.props.navigation.navigate('Home');       
       })
       .catch((error) => {
         this.setState({ loading: false });

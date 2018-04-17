@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { StackNavigator } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, YellowBox } from 'react-native';
+import { Text, View, Image, TouchableOpacity, YellowBox, ActivityIndicator, Alert, BackHandler } from 'react-native';
 import { Hoshi } from 'react-native-textinput-effects';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import styles from './RegisterStyle';
+import firebase from 'react-native-firebase'; 
 
 
 export default class Form extends React.Component {
@@ -15,6 +15,8 @@ export default class Form extends React.Component {
    }
   constructor(props){    
     super(props);
+
+    this.state = {name: '', email: '', password: '', loading: false, user: null, phoneNumber: '' }
     
     YellowBox.ignoreWarnings([
      'Warning: componentWillMount is deprecated',
@@ -22,45 +24,112 @@ export default class Form extends React.Component {
     ]);
   }
 
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
+  }
+
+  onBackButtonPressAndroid = () => {
+    return true;
+  };
+
+  confirm(credential, phoneNumber){
+    this.setState({ loading: true, phoneNumber: phoneNumber }); 
+    firebase.auth().signInWithCredential(credential)
+      .then((user) => {
+         const emailCredential = firebase.auth.EmailAuthProvider.credential(this.state.email, this.state.password);
+         if (emailCredential){
+          this.setState({ user });
+          user.linkWithCredential(emailCredential);
+          this.sendData().then((response) => { alert(response); this.setState({loading: false})});                                    
+         }
+      })
+      .catch((error) => {
+        this.setState({ loading: false });
+        alert(error);
+      });   
+  }
+
+  sendData(){
+    return fetch('http://192.168.0.6:8000/register', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        firebaseId: this.state.user.uid,
+        name: this.state.name,
+        email: this.state.email,
+        phone: this.state.phoneNumber
+      })
+    }).then((json) => {
+      return json;
+    });
+  }
+
 
   render(){
+    const { params } = this.props.navigation.state;
+    const phoneNumber = params ? params.phoneNumber : null;
+    const credential = params ? params.credential : null;
+
+    if(this.state.loading) {
+        return(    
+          <View style={styles.body}>
+            <Image source={require('src/assets/images/bg.png')} style={styles.image} />
+            <ActivityIndicator size={50} color="white"/>
+          </View>
+        )
+      }  
+
     return(
         <View style={styles.container}>
             <Text style={styles.signupText}>REGISTRATE</Text>
             <Hoshi
               style={styles.input}
-              label={'NOMBRE'}                            
+              label={'NOMBRE'}
+              value={this.state.name}
+              onChangeText={(name) => this.setState({name})}                            
               onSubmitEditing={()=> this.correo.focus()}
-              borderColor={'#00ffff'}
+              borderColor={'#00000000'}
             />
-            {/*<Hoshi
-              style={styles.inputBox}
+            <Hoshi
+              style={styles.input}
               label={'CORREO ELECTRONICO'}                            
               keyboardType="email-address"
               ref={(input) => this.correo = input}
               onSubmitEditing={()=> this.password.focus()}
-              borderColor={'#00ffff'}
-            />*/}
+              borderColor={'#00000000'}
+              value={this.state.email}
+              onChangeText={(email) => this.setState({email})}
+            />
             <Hoshi
               style={styles.input}
               label={'CONTRASEÑA'}              
               secureTextEntry={true}                
               ref={(input) => this.password = input}
               onSubmitEditing={()=> this.confirm.focus()}
-              borderColor={'#00ffff'}
+              borderColor={'#00000000'}
+              value={this.state.password}
+              onChangeText={(password) => this.setState({password})}
             />
+            {/*
             <Hoshi
               style={styles.input}
               label={'CONFIRMACIÓN DE CONTRASEÑA'}              
               secureTextEntry={true}                
               ref={(input) => this.confirm = input}
               borderColor={'#00ffff'}
-            />            
+            />*/}            
             <View style={styles.movilTextCont}>          
-              <Text> Móvil: </Text><Text style={styles.lada}>(871)</Text><Text>1453061</Text><Icon size={12} name="check" color="grey"/>      
+              <Text> Móvil: </Text><Text style={styles.lada}>{phoneNumber}</Text><Text></Text><Icon size={12} name="check" color="grey"/>      
             </View>
             
-           <TouchableOpacity style={styles.button} onPress={this.confirm}>
+           <TouchableOpacity style={styles.button} onPress={this.confirm.bind(this, credential, phoneNumber)}>
              <Text style={styles.buttonText}>CREAR CUENTA</Text>
            </TouchableOpacity>     
       </View>

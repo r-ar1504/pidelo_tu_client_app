@@ -14,7 +14,15 @@ export default StyleSheet.create({
     textAlign:'center',
     marginTop:16,
     fontSize:20,
-    marginBottom:16
+    marginBottom:16,
+    fontFamily: FONT_NORMAL
+  },
+  body: {
+    flex: 9,
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'center',
+    backgroundColor: '#F5FCFF',
   },
   button: {    
     width:300,
@@ -28,7 +36,7 @@ export default StyleSheet.create({
     fontWeight:'500',
     color:'#ffffff',
     textAlign:'center',  
-    fontFamily: FONT_BOLD
+    fontFamily: FONT_NORMAL
   },
   info: {
     flexGrow:1,
@@ -54,5 +62,13 @@ export default StyleSheet.create({
   },
   lada: {
     color:'#00ffff'
-  } 
+  },
+  image:{
+    flex:1,
+    resizeMode:'cover',
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+  },     
 });

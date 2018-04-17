@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StackNavigator } from 'react-navigation';
-import { StyleSheet, View, Image, YellowBox, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Image, YellowBox, ActivityIndicator, Alert } from 'react-native';
 import firebase from 'react-native-firebase';
 
 export default class Splash extends Component<{}> {
@@ -26,8 +26,7 @@ export default class Splash extends Component<{}> {
   componentDidMount(){
     setTimeout(()=>{
       this.authSubscription = firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-          console.log(user.toJSON());
+        if (user) {       
           this.props.navigation.navigate('Home');
         }
         else {
