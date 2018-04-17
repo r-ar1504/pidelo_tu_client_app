@@ -1,52 +1,55 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity
-} from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 import { Hoshi } from 'react-native-textinput-effects';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import ValidationComponent from 'react-native-form-validator';
+import styles from './RegisterStyle';
 
 
-export default class Form extends React.Component {
-
+export default class Form extends ValidationComponent {
+  static navigationOptions = {
+     headerStyle:{
+       display: 'none'
+     }
+   }
+   
   constructor(props){
-    super(props);
+    super(props);  
 
-    this.confirm = this.confirm.bind(this);
+    this.state = { address: '', dept: ''}  
   }
 
   confirm(){
-    this.props.navigator.push({
-        screen: 'splash.Splash',
-        navigatorStyle: {
-          navBarHidden: true,
-        },
-        passProps:{
-          action:'maps'
-        } // override the navigator style for the screen, see "Styling the navigator" below (optional)
-    });
+    this.validate({ address: {required: true}, dept: {required: true} });
+    if(this.isFormValid()){
+      this.props.navigation.navigate('Maps', { screen: 'AllowLocation' });
+    }
+    else {
+      alert(this.getErrorMessages());
+    }
   }
 
   render(){
     return(
         <View style={styles.container}>
             <Hoshi
-              style={styles.inputBox}
+              style={styles.input}
               label={'INGRESA TU DIRECCION'}
               onSubmitEditing={()=> this.dep.focus()}
-              borderColor={'#00ffff'}
+              borderColor={'#00000000'}
+              ref="dirección"
+              value={this.state.address} 
+              onChangeText={(address) => {this.setState({address})}}
             />
             <Hoshi
-              style={styles.inputBox}
+              style={styles.input}
               label={'DEPT/APT'}
               ref={(input) => this.dep = input}
-              borderColor={'#00ffff'}
+              borderColor={'#00000000'}
+              value={this.state.dept} 
+              onChangeText={(dept) => {this.setState({dept})}}
             />
 
-           <TouchableOpacity style={styles.button} onPress={this.confirm}>
+           <TouchableOpacity style={styles.button} onPress={this.confirm.bind(this)}>
              <Text style={styles.buttonText}>CONTINUAR</Text>
            </TouchableOpacity>
       </View>
@@ -54,36 +57,3 @@ export default class Form extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
-  container : {
-    backgroundColor:'#ffffff',
-    flex: 1,
-    alignItems:'center',
-    justifyContent :'flex-start',
-  },
-  contentContainer: {
-    flexGrow: 1,
-  },
-  inputBox: {
-    paddingHorizontal:13,
-    marginVertical: 10,
-    width:300
-  },
-  button: {
-    alignItems:'center',
-    justifyContent :'center',
-    width:300,
-    backgroundColor:'#00ffff',
-    paddingVertical: 13,
-    marginTop: 20,
-    borderRadius:20,
-  },
-  buttonText: {
-    fontSize:16,
-    fontWeight:'500',
-    color:'#ffffff',
-  },
-  lada: {
-    color:'#00ffff'
-  }
-});

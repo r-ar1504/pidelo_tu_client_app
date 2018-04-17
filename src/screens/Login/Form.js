@@ -37,12 +37,12 @@ export default class Form extends ValidationComponent {
 		return(		    
           <Content>            
             <Item floatingLabel style={styles.inputBox}>              
-              <Label style={{marginLeft: 15, marginTop: 5, color: 'white'}}>Correo Electronico</Label>              
+              <Label style={{marginLeft: 15, marginTop: 5, color: 'white', fontFamily: 'Lato-Regular'}}>Correo Electrónico</Label>              
               <Input style={styles.input} ref={(email) => this.correo = email} onChangeText={(email)=> {this.setState({email});}} onSubmitEditing={()=> this.password.focus()} keyboardType="email-address"/>
               <Icon active name='person' style={{color:'white'}} />
             </Item>
             <Item floatingLabel style={styles.inputBox}>              
-              <Label style={{marginLeft: 15, marginTop: 5, color: 'white'}}>Contraseña</Label>              
+              <Label style={{marginLeft: 15, marginTop: 5, color: 'white', fontFamily: 'Lato-Regular'}}>Contraseña</Label>              
               <Input style={styles.input} ref={(password) => this.password = password} onChangeText={(password) => {this.setState({password});}} secureTextEntry={true}/>
               <Icon active name='lock' style={{color:'white'}} />
             </Item>

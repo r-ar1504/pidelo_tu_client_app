@@ -15,8 +15,8 @@ import RegisterForm from './screens/Register/Form';
 import AllowLocation from './screens/Register/AllowLocation';
 import VerificationCode from './screens/Register/VerificationCode';
 import Signup from './screens/Signup/Signup';
-import SideMenu from './components/SideMenu/SideMenu'
-import Maps from './components/Maps';
+import SideMenu from './components/SideMenu/SideMenu';
+import Maps from './components/Maps/Maps';
 import Modal from './components/Modal';
 
 const HomeDrawer = DrawerNavigator({
