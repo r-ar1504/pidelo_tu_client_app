@@ -27,7 +27,7 @@ export default class Splash extends Component<{}> {
     setTimeout(()=>{
       this.authSubscription = firebase.auth().onAuthStateChanged((user) => {
         if (user) {       
-          this.props.navigation.navigate('Home');
+          this.props.navigation.navigate('Home', {user: user});
         }
         else {
           this.props.navigation.navigate('Login');

@@ -40,12 +40,13 @@ export default class Form extends React.Component {
     this.setState({ loading: true, phoneNumber: phoneNumber }); 
     firebase.auth().signInWithCredential(credential)
       .then((user) => {
+        this.setState({ user });
          const emailCredential = firebase.auth.EmailAuthProvider.credential(this.state.email, this.state.password);
-         if (emailCredential){
-          this.setState({ user });
-          user.linkWithCredential(emailCredential);
-          this.sendData().then((response) => { alert(response); this.setState({loading: false})});                                    
-         }
+         if (emailCredential) {
+              user.updateProfile({ displayName: this.state.name });
+              user.linkWithCredential(emailCredential);
+              this.sendData().then((response) => { this.setState({loading: false})});                                                       
+          }
       })
       .catch((error) => {
         this.setState({ loading: false });
@@ -54,7 +55,7 @@ export default class Form extends React.Component {
   }
 
   sendData(){
-    return fetch('http://192.168.0.6:8000/register', {
+    return fetch('http://192.168.0.12:8000/register', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -66,8 +67,11 @@ export default class Form extends React.Component {
         email: this.state.email,
         phone: this.state.phoneNumber
       })
-    }).then((json) => {
-      return json;
+    }).then(response => response.json())
+      .then(json => {
+        return json;    
+    }).catch((error) => {
+      return error;
     });
   }
 

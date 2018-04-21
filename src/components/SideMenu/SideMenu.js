@@ -44,7 +44,7 @@ export default class SideMenu extends Component{
 
   /* Search by current location. */
   currentLocation(){
-    this.props.navigation.navigate('Maps');
+    this.props.navigation.navigate('Maps',{ address: null });
   }
 
   /* User order history. */
@@ -66,6 +66,8 @@ export default class SideMenu extends Component{
   * Render Function.
   */
   render(){
+    const { params } = this.props.navigation.state;
+    const user = params ? params.user : null;
     return(
       <View style={style.sidebar_container}>
 
