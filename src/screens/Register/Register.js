@@ -37,7 +37,10 @@ export default class Register extends ValidationComponent {
   }
 
   onBackButtonPressAndroid = () => {
-    return true;
+    if (this.state.loading) {
+      return true;
+    }    
+    return false;
   };
  
   selectCountry(country) {

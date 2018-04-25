@@ -34,7 +34,7 @@ export default StyleSheet.create({
   input: {
     alignSelf: 'center',
     backgroundColor: '#dbdbdb',
-    width: '100%',
+    width: '90%',
     height: 40,
     flexDirection: 'row',
     justifyContent: 'center',

@@ -21,7 +21,7 @@ export default class Form extends ValidationComponent {
   confirm(){
     this.validate({ address: {required: true}, dept: {required: true} });
     if(this.isFormValid()){
-      this.props.navigation.navigate('Maps', { screen: 'AllowLocation' });
+      this.props.navigation.navigate('Maps', { address: this.state.address });
     }
     else {
       alert(this.getErrorMessages());

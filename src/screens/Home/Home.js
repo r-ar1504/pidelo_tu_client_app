@@ -28,10 +28,8 @@ export default class Home extends Component{
     }
   }
   constructor(props){
-    super(props);
-    console.log(this.props.navigation);
-
-    this.openDrawer = this.openDrawer.bind(this);
+    super(props);   
+    
     this.openRestaurant = this.openRestaurant.bind(this);
     this.searchScreen = this.searchScreen.bind(this);
 
@@ -43,8 +41,8 @@ export default class Home extends Component{
     ]);
   }  
 
-  openDrawer(){
-    this.props.navigation.navigate('DrawerOpen');
+  openDrawer(user){  
+    this.props.navigation.navigate('DrawerOpen',{ user: user });
   }
 
   openRestaurant(){
@@ -56,11 +54,13 @@ export default class Home extends Component{
   }
 
   render(){
+    const { params } = this.props.navigation.state;
+    const user = params ? params.user : null;
     return(
         <Container>
           <Header style={{flexDirection: 'row', justifyContent: 'space-around', backgroundColor: '#fff', width: '100%'}}>
             <Left style={{ flex: 1 }} >
-              <TouchableWithoutFeedback onPress={this.openDrawer}>
+              <TouchableWithoutFeedback onPress={this.openDrawer.bind(this,user)}>
                 <Image source={require('src/assets/images/menu.png')} style={{width: 30,  height: 30 }}  />
               </TouchableWithoutFeedback>
             </Left>

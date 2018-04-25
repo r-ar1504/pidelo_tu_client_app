@@ -25,7 +25,7 @@ import firebase from 'react-native-firebase';
     this.signup = this.signup.bind(this);
     this.register = this.register.bind(this);
     this.signIn = this.signIn.bind(this);
-    this.state = {email: "", password: "", loading:false, user: ""}; 
+    this.state = {email: "", password: "", loading:false, user: null}; 
 
     YellowBox.ignoreWarnings([
      'Warning: componentWillMount is deprecated',
@@ -50,17 +50,16 @@ import firebase from 'react-native-firebase';
   * If user is valid, then initialize Home Screen.
   */
   signIn(email,password){
-    this.setState({ loading: true });
-
+    this.setState({ loading: true });    
     firebase.auth().signInWithEmailAndPassword(email, password)
       .then((user) => {
-        this.setState({ loading: false }); 
-        this.props.navigation.navigate('Home');       
+        this.setState({ loading: false });         
       })
       .catch((error) => {
         this.setState({ loading: false });
         alert(error);
-    });      
+    });
+
   }
 
   signup(){

@@ -23,6 +23,8 @@ export default class Profile extends Component{
   }
 
   render(){
+    const { params } = this.props.navigation.state;
+    const user = params ? params.user : null;
     return(
 			<View style={{height: '100%'}}>
         <Image source={require('src/assets/images/background.png')} style={style.image}/>

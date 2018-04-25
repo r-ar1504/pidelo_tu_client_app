@@ -42,8 +42,7 @@ export default class VerificationCode extends React.Component {
 
       if (code == codeInput){
         const credential = firebase.auth.PhoneAuthProvider.credential(verificationId, codeInput);
-
-        alert(JSON.stringify(code));
+        
           this.setState({ loading: false });
           this.props.navigation.navigate('Modal',{
             text:'Tu código ha sido exitoso',
