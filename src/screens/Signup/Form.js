@@ -11,10 +11,10 @@ import styles from './SignupStyle';
 export default class Form extends ValidationComponent {
   constructor(props) {
     super(props);  
-    this.state = {name: "", email: "", password: "", confirmpass:""}        
+    this.state = { name: "", email: "", password: "", confirmpass:"" }        
   }  
 
-  signup(name,email,password){
+  signup(name,email,password, confirmpass){
     this.validate({
       name: {required: true},   
       email: {required: true, email: true},   
@@ -24,7 +24,12 @@ export default class Form extends ValidationComponent {
 
 
     if(this.isFormValid()){
-      this.props.signup(name,email,password);
+      if (password == confirmpass) {
+        this.props.signup(name,email,password);
+      }
+      else {
+        alert ("Las contraseñas no coinciden");  
+      }
     }
     else {
       alert(this.getErrorMessages());
@@ -34,9 +39,10 @@ export default class Form extends ValidationComponent {
 	render(){
     const name = this.state.name;
     const email = this.state.email; 
-    const password = this.state.password;     
+    const password = this.state.password; 
+    const confirmpass = this.state.confirmpass;    
 		return(		    
-          <Content scrollEnabled={false}>            
+          <Content scrollEnabled={false} disableKBDismissScroll={false} bounces={false}>            
             <Text style={styles.signupText}>REGISTRATE</Text>
             <Hoshi
               style={styles.inputBox}
@@ -76,7 +82,7 @@ export default class Form extends ValidationComponent {
               <TouchableOpacity><Text style={styles.signupButton}> Conoce nuestros terminos y condiciones</Text></TouchableOpacity>      
             </View>            
             <Footer style={{backgroundColor:'#00000000', alignItems:'center', justifyContent:'center'}}>            
-              <TouchableOpacity style={styles.button} onPress={this.signup.bind(this, name, email, password,)}><Text style={styles.buttonText}>CREAR CUENTA</Text></TouchableOpacity>    
+              <TouchableOpacity style={styles.button} onPress={this.signup.bind(this, name, email, password, confirmpass)}><Text style={styles.buttonText}>CREAR CUENTA</Text></TouchableOpacity>    
             </Footer>            
           </Content>     
 			)

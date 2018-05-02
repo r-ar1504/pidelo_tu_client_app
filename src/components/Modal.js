@@ -40,7 +40,7 @@ export default class Modal extends Component {
           this.props.navigation.navigate('RegisterForm', { phoneNumber: phoneNumber, credential: credential});
       } break;
       case 'Payment': {
-        this.props.navigation.navigate('Payment');
+        this.props.navigation.navigate('Home');
       } break;      
     }        
   }  
@@ -57,7 +57,9 @@ export default class Modal extends Component {
 		return(
 		  <View style={styles.container}>
         <Image source={require('src/assets/images/gb-trans.png')} style={styles.image}/>
-        <Image source={require('src/assets/images/check.png')} style={styles.check}/>
+        <View style={styles.circle}>
+          <Image source={require('src/assets/images/check.png')} style={styles.check}/>
+        </View>
         <Text style={styles.info}>{text}</Text>
         <TouchableOpacity style={styles.button} onPress={this.confirm.bind(this, action, phoneAuthSnapshot, phoneNumber, credential)}>
             <Text style={styles.buttonText}>{button}</Text>
@@ -77,31 +79,42 @@ const styles = StyleSheet.create({
     flex:1,
     resizeMode:'cover',
     position: 'absolute',
-          width: '100%',
-          height: '100%',
-          justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
   },
   check: {
     alignItems: 'flex-start',
     justifyContent:'center',
     resizeMode:'center',
+    height: 80,
+    width: 80
   },
    info: {    
     fontSize:16,
     color:'white',
-    padding:20,   
+    padding:20, 
+    fontFamily: 'Lato-Light'  
   },
   button: {
     width:300,
-    backgroundColor:'#00ffff',           
+    backgroundColor:'#11c0f6',           
     paddingVertical: 13,
     marginTop: 20,    
     borderRadius:20,          
   },
   buttonText: {
     fontSize:16,
-    fontWeight:'500',
     color:'#ffffff',
-    textAlign:'center'
+    textAlign:'center',
+    fontFamily: 'Lato-Light'
   },
+  circle: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    borderWidth: 10,
+    borderColor: '#11c0f6',
+    backgroundColor: 'rgba(17,191,245,.9)'
+  }
 });

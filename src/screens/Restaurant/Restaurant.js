@@ -1,37 +1,39 @@
 import React, { Component } from 'react';
 import { DrawerNavigator, NavigationActions } from 'react-navigation';
-import {Container, Header, Content, Body, Right, Left} from 'native-base';
+import { Container, Header, Content, Body, Right, Left } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import style from './RestaurantStyle';
-import{
-StyleSheet,
-Text,
-View,
-StatusBar ,
-TouchableOpacity,
-TouchableWithoutFeedback,
-ScrollView,
-BackHandler,
-Image,
-TextInput } from 'react-native';
+import styles from './RestaurantStyle';
+import Swiper from 'react-native-swiper';
+import{ Text, View, TouchableWithoutFeedback, BackHandler, Image } from 'react-native';
 
 
 export default class Search extends Component{
   constructor(props){
-    super(props);
-    console.log(this.props.navigation);
+    super(props);  
 
     this.openDiscounts = this.openDiscounts.bind(this);
   }
 
-openDiscounts(){
-  this.props.navigation.navigate('Discounts')
-}
+  componentDidMount(){
+    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);     
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
+  }
+
+  onBackButtonPressAndroid = () => {
+    this.props.navigation.goBack();
+  };  
+
+  openDiscounts(){
+    this.props.navigation.navigate('Discounts')
+  }  
+  
   render(){
     return(
       <Container>
-        <Image source={require('src/assets/images/pizzaBack.jpg')} style={style.image}/>
+        <Image source={require('src/assets/images/pizzaBack.jpg')} style={styles.image}/>
 
         <Header
           style={{
@@ -43,7 +45,7 @@ openDiscounts(){
             height: 50,
         }}>
           <Left style={{flex: 1}}>
-            <Icon name="arrow-left" size={20} color="#fff" />
+            <Icon name="arrow-left" size={20} color="#fff" onPress={ () => {this.props.navigation.goBack()}} />
           </Left>
           <Body style={{flex: 1}}>
 
@@ -73,51 +75,101 @@ openDiscounts(){
           }}>PIZZA HUT</Text>
           <Image source={require('src/assets/images/pizzah.png')} style={{width:50, height:50, margin: 10}}/>
         </View>
-
-        <View style={{
-          marginTop: 20,
-          width: '85%',
-          alignSelf: 'center',
-          margin: 5
-        }}>
-          <Text style={{
-            color: '#000',
-            fontSize: 20,
-            letterSpacing: 20
-          }}>Pizzas</Text>
+        <View style={styles.titleCont}>
+          <Text style={styles.titleText}>Pizzas</Text>
         </View>
-        <View style={{
-          width: '90%',
-          alignSelf: 'center',
-          flexDirection: 'row',
-          justifyContent: 'center'
-        }}>
-          <Image source={require('src/assets/images/food2.jpg')} style={{width:150, height:150, margin: 10}}/>
-          <Image source={require('src/assets/images/food2.jpg')} style={{width:150, height:150, margin: 10}}/>
+          <Swiper style={styles.wrapper} height={210} activeDotColor={'#11c0f6'} autoplay>
+            <View style={styles.slide}>
+              <View style={styles.mealCont}>
+                <Image source={require('src/assets/images/pizza.png')} style={styles.mealImg}/>
+                <View style={styles.infoCont}>
+                  <Text style={styles.description}>Pizza Grande con Jamón</Text><Text style={styles.price}>$120</Text>
+                </View>              
+              </View>
+              <View style={styles.mealCont}>
+                <Image source={require('src/assets/images/pizza2.png')} style={styles.mealImg}/>
+                <View style={styles.infoCont}>
+                  <Text style={styles.description}>Pizza Grande con Queso</Text><Text style={styles.price}>$95</Text>
+                </View>
+              </View>
+            </View>
+            <View style={styles.slide}>
+              <View style={styles.mealCont}>
+                <Image source={require('src/assets/images/pizza.png')} style={styles.mealImg}/> 
+                <View style={styles.infoCont}>
+                  <Text style={styles.description}>Pizza Grande con Jamón</Text><Text style={styles.price}>$120</Text>
+                </View>             
+              </View>
+              <View style={styles.mealCont}>
+                <Image source={require('src/assets/images/pizza2.png')} style={styles.mealImg}/>
+                <View style={styles.infoCont}>
+                  <Text style={styles.description}>Pizza Grande con Queso</Text><Text style={styles.price}>$95</Text>
+                </View>
+              </View>
+            </View>
+            <View style={styles.slide}>
+              <View style={styles.mealCont}>
+                <Image source={require('src/assets/images/pizza.png')} style={styles.mealImg}/>              
+                <View style={styles.infoCont}>
+                  <Text style={styles.description}>Pizza Grande con Jamón</Text><Text style={styles.price}>$120</Text>
+                </View>
+              </View>
+              <View style={styles.mealCont}>
+                <Image source={require('src/assets/images/pizza2.png')} style={styles.mealImg}/>
+                <View style={styles.infoCont}>
+                  <Text style={styles.description}>Pizza Grande con Queso</Text><Text style={styles.price}>$95</Text>
+                </View>
+              </View>
+            </View>
+          </Swiper>
+                
+        <View style={styles.titleCont}>
+          <Text style={styles.titleText}>Appetizers</Text>
         </View>
-
-
-        <View style={{
-          marginTop: 30,
-          width: '85%',
-          alignSelf: 'center',
-          margin: 5
-        }}>
-          <Text style={{
-            color: '#000',
-            fontSize: 20,
-            letterSpacing: 20
-          }}>Appetizers</Text>
-        </View>
-        <View style={{
-          width: '90%',
-          alignSelf: 'center',
-          flexDirection: 'row',
-          justifyContent: 'center'
-        }}>
-          <Image source={require('src/assets/images/boneless.jpg')} style={{width:150, height:150, margin: 10}}/>
-          <Image source={require('src/assets/images/boneless.jpg')} style={{width:150, height:150, margin: 10}}/>
-        </View>
+          <Swiper style={styles.wrapper} height={210} activeDotColor={'#11c0f6'} autoplay>
+            <View style={styles.slide}>
+              <View style={styles.mealCont}>
+                <Image source={require('src/assets/images/hotwings.png')} style={styles.mealImg}/>
+                <View style={styles.infoCont}>
+                  <Text style={styles.description}>Hot Wings 5 Pieces</Text><Text style={styles.price}>$69</Text>
+                </View>              
+              </View>
+              <View style={styles.mealCont}>
+                <Image source={require('src/assets/images/breadsticks.png')} style={styles.mealImg}/>
+                <View style={styles.infoCont}>
+                  <Text style={styles.description}>BreadSticks 12 Pieces</Text><Text style={styles.price}>$40</Text>
+                </View>   
+              </View>
+            </View>
+            <View style={styles.slide}>
+              <View style={styles.mealCont}>
+                <Image source={require('src/assets/images/hotwings.png')} style={styles.mealImg}/>
+                <View style={styles.infoCont}>
+                  <Text style={styles.description}>Hot Wings 5 Pieces</Text><Text style={styles.price}>$69</Text>
+                </View>               
+              </View>
+              <View style={styles.mealCont}>
+                <Image source={require('src/assets/images/breadsticks.png')} style={styles.mealImg}/>
+                <View style={styles.infoCont}>
+                  <Text style={styles.description}>BreadSticks 12 Pieces</Text><Text style={styles.price}>$40</Text>
+                </View>   
+              </View>
+            </View>
+            <View style={styles.slide}>
+              <View style={styles.mealCont}>
+                <Image source={require('src/assets/images/hotwings.png')} style={styles.mealImg}/>              
+                <View style={styles.infoCont}>
+                  <Text style={styles.description}>Hot Wings 5 Pieces</Text><Text style={styles.price}>$69</Text>
+                </View> 
+              </View>
+              <View style={styles.mealCont}>
+                <Image source={require('src/assets/images/breadsticks.png')} style={styles.mealImg}/>
+                <View style={styles.infoCont}>
+                  <Text style={styles.description}>BreadSticks 12 Pieces</Text><Text style={styles.price}>$40</Text>
+                </View>   
+              </View>
+            </View>
+          </Swiper>
         </Content>
       </Container>
     );

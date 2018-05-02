@@ -12,7 +12,8 @@ export default StyleSheet.create({
     marginTop:86,
     fontSize:25,
     marginBottom:16,
-    textAlign:'center'
+    textAlign:'center',
+    fontFamily: FONT_NORMAL
   },
   body: {
     flexGrow: 1,
@@ -31,11 +32,10 @@ export default StyleSheet.create({
     marginTop: 8,    
     borderRadius:20,              
   },
-  buttonText: {
-    fontSize:16,
-    fontWeight:'500',
+  buttonText: {    
     color:'#ffffff',
-    textAlign:'center',    
+    textAlign:'center',
+    fontFamily: FONT_NORMAL    
   },
   signupTextCont : {    
     alignItems:'center',
@@ -45,7 +45,6 @@ export default StyleSheet.create({
   signupButton: {
     color:COLOR_PRIMARY,
     fontSize:16,
-    fontWeight:'500',  
     fontFamily:FONT_NORMAL  
   },
   image:{

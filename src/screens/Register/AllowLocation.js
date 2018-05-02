@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity, BackHandler } from 'react-native';
 import { Hoshi } from 'react-native-textinput-effects';
 import ValidationComponent from 'react-native-form-validator';
 import styles from './RegisterStyle';
@@ -17,6 +17,18 @@ export default class Form extends ValidationComponent {
 
     this.state = { address: '', dept: ''}  
   }
+
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);  
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
+  }
+
+  onBackButtonPressAndroid = () => {
+    this.props.navigation.goBack();
+  };
 
   confirm(){
     this.validate({ address: {required: true}, dept: {required: true} });

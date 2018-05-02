@@ -30,7 +30,6 @@ export default class Home extends Component{
   constructor(props){
     super(props);   
     
-    this.openRestaurant = this.openRestaurant.bind(this);
     this.searchScreen = this.searchScreen.bind(this);
 
     YellowBox.ignoreWarnings([
@@ -39,10 +38,10 @@ export default class Home extends Component{
      'Warning: componentWillUpdate is deprecated',
      'Warning: TouchableWithoutFeedback does not work well with Text children'
     ]);
-  }  
-
-  openDrawer(user){  
-    this.props.navigation.navigate('DrawerOpen',{ user: user });
+  }
+     
+  openDrawer(user){      
+    this.props.navigation.navigate('DrawerOpen', { user: user });
   }
 
   openRestaurant(){
@@ -77,8 +76,8 @@ export default class Home extends Component{
           <Content>
             <FoodFeed />
 
-            <TouchableWithoutFeedback onPress={this.openRestaurant}>
-            <Image source={require('src/assets/images/offer.jpg')} style={{ alignSelf: 'center', width: '90%',  height: 200 , marginTop: 10}}/>
+            <TouchableWithoutFeedback onPress={this.openRestaurant.bind(this)}>
+            <Image source={require('src/assets/images/offer.jpg')} style={{ alignSelf: 'center', width: '90%',  height: 180 , marginTop: 10, resizeMode: 'stretch',}}/>
             </TouchableWithoutFeedback>
           </Content>
         </Container>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StackNavigator } from 'react-navigation';
-import { Text, View, TouchableOpacity, YellowBox, Alert, ActivityIndicator, Platform, Image, BackHandler } from 'react-native';
+import { Text, View, TouchableOpacity, YellowBox, Alert, ActivityIndicator, Image, BackHandler, AsyncStorage } from 'react-native';
 import { Container, Content, Footer, Input, Item } from 'native-base';
 import PhoneInput from 'react-native-phone-input';
 import ValidationComponent from 'react-native-form-validator';
@@ -28,9 +28,10 @@ export default class Register extends ValidationComponent {
      'Warning: Failed prop type'
     ]);
   }
-  componentDidMount() {    
-    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);    
-  }
+
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
+  }  
 
   componentWillUnmount() {    
     BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid);   
@@ -39,8 +40,10 @@ export default class Register extends ValidationComponent {
   onBackButtonPressAndroid = () => {
     if (this.state.loading) {
       return true;
-    }    
-    return false;
+    }
+    else {    
+      this.props.navigation.goBack();
+    }
   };
  
   selectCountry(country) {
@@ -48,33 +51,83 @@ export default class Register extends ValidationComponent {
     this.setState({ cca2: country.cca2 });
   }
 
-  confirm(){
+  confirm(){    
     this.validate({ number: {required: true} });
 
     const phoneNumber = this.phone.getCountryCode()+this.state.number;
 
     if(this.isFormValid()){
       this.setState({ loading: true }); 
-      /* Send phone number to display in the next screen */              
-      firebase.auth().verifyPhoneNumber(phoneNumber)
-      .then((phoneAuthSnapshot) => {
-          this.setState({ loading: false });          
-          this.props.navigation.navigate('Modal',{        
-            text: 'Se ha enviado un código de verificación vía SMS a tu móvil',
-            button:'Continuar',
-            action: 'Verification',
-            phoneAuthSnapshot: phoneAuthSnapshot,
-            phoneNumber: phoneNumber        
-          });                  
-      })      
-      .catch((error) => { 
-          this.setState({ loading: false });
-          alert(error) 
-      });  
+      this.checkNumber(phoneNumber).then((response) => {        
+        if (response.length == 0) {
+            /* Send phone number to display in the next screen */ 
+            firebase.auth().languageCode = 'es';             
+            firebase.auth().verifyPhoneNumber(phoneNumber)
+            .on('state_changed', (phoneAuthSnapshot) => {    
+            switch (phoneAuthSnapshot.state) {
+              // ------------------------
+              //  IOS AND ANDROID EVENTS
+              // ------------------------
+              case firebase.auth.PhoneAuthState.CODE_SENT: // or 'sent'
+                const { verificationId, code } = phoneAuthSnapshot;
+                this.setState({ loading: false });       
+                alert(code);                   
+                this.props.navigation.navigate('Modal',{        
+                  text: 'Se ha enviado un código de verificación vía SMS a tu móvil',
+                  button:'Continuar',
+                  action: 'Verification',
+                  phoneAuthSnapshot: phoneAuthSnapshot,
+                  phoneNumber: phoneNumber        
+                }); 
+              break;
+              case firebase.auth.PhoneAuthState.ERROR: // or 'error'
+                this.setState({ loading: false });
+                alert(phoneAuthSnapshot.error);                
+              break;
+
+              // ---------------------
+              // ANDROID ONLY EVENTS
+              // ---------------------
+              case firebase.auth.PhoneAuthState.AUTO_VERIFY_TIMEOUT: // or 'timeout'
+                
+              break;
+              case firebase.auth.PhoneAuthState.AUTO_VERIFIED: // or 'verified'                 
+                 
+              break;
+            }
+          }, (error) => {
+            this.setState({ loading: false });
+            alert(error + "Id:" + error.verificationId);
+            this.props.navigation.goBack();             
+          }, (phoneAuthSnapshot) => {
+            
+          });            
+        }
+        else {
+          try {            
+            AsyncStorage.getItem(response[0].email, (err, item) => {
+              const emailCredential = firebase.auth.EmailAuthProvider.credential(response[0].email, item);
+              if (emailCredential !== null){
+                firebase.auth().signInWithCredential(emailCredential);              
+              }
+            });                        
+          } catch (error) {
+              alert(error);
+          }
+        }
+      });      
     }
     else {
       alert(this.getErrorMessages());
     }           
+  }
+
+  checkNumber(phoneNumber){
+    const url = 'http://192.168.0.26:8000/checkNumber/'+phoneNumber;
+    return fetch(url)      
+      .then((response) => {              
+        return response.json();
+      }); 
   }
 
   render() {
@@ -96,13 +149,13 @@ export default class Register extends ValidationComponent {
             pickerItemStyle={{fontSize:18, height:30}}
             textProps={{borderWidth:0.7, borderColor:'black', editable:false}}
             textStyle={{fontSize:18, height:30, textAlign:'center'}}
-            style={{padding:20,marginTop:16,marginBottom:16, width:120}}
+            style={{padding:20,marginTop:16,marginBottom:16, width:125}}
             diabled={true}
             cancelText="Cancelar"
             confirmText="Confirmar"            
             />
             <Item regular style={{flex:1, borderColor: 'black', borderWidth: 0.7, width:100, height:30, fontSize:8 }}>
-              <Input keyboardType="phone-pad" ref="number" value={this.state.number} onChangeText={(number) => {this.setState({number})}}/>
+              <Input keyboardType="phone-pad" ref="number" value={this.state.number} onChangeText={(number) => {this.setState({number})}} maxLength={10}/>
             </Item>
           </View>
           <Text style={styles.info}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam porta ex arcu, et scelerisque felis faucibus at. Aenean sit amet viverra mauris. Phasellus quis metus ac lectus ultrices lacinia sed ut tortor. Donec non dignissim metus, ac ornare augue. Aenean euismod velit nisl. Donec ullamcorper sagittis condimentum. Nullam pharetra lorem iaculis pharetra gravida. Nulla non pharetra ante. Aenean et libero dui. Nulla lacinia vestibulum ex sit amet elementum.</Text>

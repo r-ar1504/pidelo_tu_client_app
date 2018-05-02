@@ -39,10 +39,9 @@ export default class VerificationCode extends React.Component {
       /* Pass credential through the next forms until the register finish*/
       this.setState({ loading: true });
       const { verificationId, code } = phoneAuthSnapshot;
-
-      if (code == codeInput){
-        const credential = firebase.auth.PhoneAuthProvider.credential(verificationId, codeInput);
-        
+      
+      //if (code == codeInput){
+        const credential = firebase.auth.PhoneAuthProvider.credential(verificationId, codeInput);          
           this.setState({ loading: false });
           this.props.navigation.navigate('Modal',{
             text:'Tu código ha sido exitoso',
@@ -51,11 +50,11 @@ export default class VerificationCode extends React.Component {
             credential: credential,
             phoneNumber: phoneNumber
         });
-      }
-      else {
-        this.setState({ loading: false });
-        alert("El código no coincide, por favor intente de nuevo");
-      }                
+      //}
+      //else {
+        //this.setState({ loading: false });
+        //alert("El código no coincide, por favor intente de nuevo");
+      //}                
     }       
   }
 

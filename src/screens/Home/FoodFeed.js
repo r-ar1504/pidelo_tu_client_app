@@ -18,11 +18,11 @@ export default class FoodFeed extends Component{
 		return(
 				<View style={styles.feed_container}>
 					<View style={styles.food_banner}>
-						<Image source={require('src/assets/images/food1.jpeg')} style={styles.big_food}/>
+						<Image source={require('src/assets/images/fresas.jpeg')} style={styles.big_food}/>
 					</View>
 					<View style={styles.food_mini}>
-					<Image source={require('src/assets/images/food2.png')} style={styles.food_img}/>
-					<Image source={require('src/assets/images/food3.png')} style={styles.food_img}/>
+					<Image source={require('src/assets/images/salad-plate.jpeg')} style={styles.food_img1}/>
+					<Image source={require('src/assets/images/food2.jpeg')} style={styles.food_img2}/>
 					</View>
 				</View>
 		);
@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
 		width: '50%',
 	},
 	big_food:{
+		width: 172,
 		resizeMode: 'stretch',
 		height: 400
 	},
@@ -53,13 +54,17 @@ const styles = StyleSheet.create({
 		height: 400,
 		width: '50%',
 	},
-	food_img:{
+	food_img1:{
 		width: '100%',
-		resizeMode: 'cover',
-		height: 200,
-		marginTop: 5,
+		resizeMode: 'stretch',
+		height: 100,		
 		marginBottom: 5
-
+	},
+	food_img2: {
+		width: '100%',
+		resizeMode: 'center',
+		height: 300,
+		marginTop: 5,
 	}
 
 });

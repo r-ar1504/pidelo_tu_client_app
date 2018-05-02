@@ -18,7 +18,7 @@ export default class SearchButton extends Component {
     return(
       <View style={style.searchBox}>
         <Icon name="search" size={15} color="#999999" style={{ paddingRight:10}} />
-        <Text style={{fontSize: 15, color: '#999999'}}> BUSCAR</Text>
+        <Text style={{fontSize: 15, color: '#999999', fontFamily: 'Lato-Light'}}> BUSCAR</Text>
       </View>
     );
   }

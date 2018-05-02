@@ -7,12 +7,14 @@ export default StyleSheet.create({
     flex:1,
     resizeMode:'stretch',
     position: 'absolute',
-    width: '100%',
-    height: '100%',
+    ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
   },
+  header: {
+    flexDirection: 'row',    
+  },
   avatar_section:{
-    paddingTop:100,
+    paddingTop:10,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
@@ -32,8 +34,7 @@ export default StyleSheet.create({
   profile_data:{
     paddingTop: 10,
     alignSelf: 'center',
-    flexDirection: 'column',
-    alignItems: 'flex-start'
+    flexDirection: 'column',    
   },
   profile_element:{
     paddingTop: 10,
@@ -41,6 +42,5 @@ export default StyleSheet.create({
   },
   profile_input:{
     flexDirection: 'row',
-
   }
 })

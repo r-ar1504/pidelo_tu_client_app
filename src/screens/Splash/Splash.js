@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StackNavigator } from 'react-navigation';
-import { StyleSheet, View, Image, YellowBox, ActivityIndicator, Alert } from 'react-native';
+import { StyleSheet, View, Image, YellowBox, ActivityIndicator, Alert, BackHandler } from 'react-native';
 import firebase from 'react-native-firebase';
 
 export default class Splash extends Component<{}> {
@@ -13,7 +13,7 @@ export default class Splash extends Component<{}> {
   constructor(props){
     super(props);
 
-    this. state = { authSubscription: null, user: null }
+    this. state = { authSubscription: null }
 
     YellowBox.ignoreWarnings([
      'Warning: componentWillMount is deprecated',
@@ -21,13 +21,18 @@ export default class Splash extends Component<{}> {
      'Warning: componentWillUpdate is deprecated',
      'Warning: Failed prop type'
     ]);
-  }
+  }  
+
+  onBackButtonPressAndroid = () => {
+    return true;
+  };
 
   componentDidMount(){
+    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
     setTimeout(()=>{
-      this.authSubscription = firebase.auth().onAuthStateChanged((user) => {
+      this.authSubscription = firebase.auth().onAuthStateChanged((user) => {        
         if (user) {       
-          this.props.navigation.navigate('Home', {user: user});
+          this.props.navigation.navigate('Home', { user: user });
         }
         else {
           this.props.navigation.navigate('Login');
@@ -36,7 +41,8 @@ export default class Splash extends Component<{}> {
     },3000);
   }
   componentWillUnmount() {
-    this.authSubscription();
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
+    this.setState({authSubscription: null});
   }
 
 	render(){    
@@ -60,8 +66,7 @@ const styles = StyleSheet.create({
     flex:1,
     resizeMode:'cover',
     position: 'absolute',
-    width: '100%',
-    height: '100%',
+    ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
   },
   logo: {
