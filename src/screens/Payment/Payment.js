@@ -1,17 +1,9 @@
 import React, { Component } from 'react';
-import { YellowBox } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import {
-StyleSheet,
-Text,
-View,
-TouchableOpacity,
-ScrollView,
-BackHandler,
-Image
-} from 'react-native';
+import { View, BackHandler, Image, YellowBox } from 'react-native';
 
+import styles from './PaymentStyle';
 import Form from './Form';
+
 
 
  export default class Payment extends Component {
@@ -19,39 +11,41 @@ import Form from './Form';
   constructor(props){
     super(props);
 
+    this.confirm = this.confirm.bind(this);
+
     YellowBox.ignoreWarnings([
      'Warning: componentWillMount is deprecated',
      'Warning: componentWillReceiveProps is deprecated',
     ]);
   }
 
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
+  }
+
+  onBackButtonPressAndroid = () => {
+    this.props.navigation.goBack();
+  };  
+
+
+  confirm() {
+    this.props.navigation.navigate('Modal', {
+      text: 'Tu forma de pago ha sido aprobada',
+      button:'Continuar',
+      action: 'Payment',
+    });
+  }
+
    render() {
-		return(
-      <ScrollView contentContainerStyle={styles.contentContainer}>
+		return(      
 			<View style={styles.container}>
         <Image source={require('src/assets/images/background.png')} style={styles.image}/>
-				<Form/>
-			</View>
-      </ScrollView>
+				<Form confirm={this.confirm}/>
+			</View>      
 		)
 	}
  }
-
- const styles = StyleSheet.create({
-  container : {
-    flex: 1,
-    alignItems:'center',
-    justifyContent :'center'
-  },
-  contentContainer: {
-    flexGrow: 1,
-  },
-  image:{
-    flex:1,
-    resizeMode:'stretch',
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
-  },
-});

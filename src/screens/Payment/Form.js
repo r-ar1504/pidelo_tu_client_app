@@ -1,146 +1,118 @@
 import React, { Component } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity
-} from 'react-native';
-import { Hoshi } from 'react-native-textinput-effects';
+import { Text, View, TouchableOpacity } from 'react-native';
+import { Content, Item, Label, Input, Icon, Footer, Picker } from 'native-base';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import {Select, Option} from "react-native-chooser";
+import ValidationComponent from 'react-native-form-validator';
+import moment from 'moment';
+
+import styles from './PaymentStyle'; 
 
 
-export default class Form extends Component {
+export default class Form extends ValidationComponent {
 
   constructor(props){
-    super(props)    
-    this.state = {month : " ", year: " "}
+    super(props)       
+    this.state = { number: '', month : '', year: '', cv: '', cp: '' }
   }
 
-  month(value, label) {
-    this.setState({month : value});
-    
+  confirm(number,month,year,cv,cp) {
+    this.validate({
+      number: { required: true, numbers: true },   
+      month: { required: true },   
+      year: { required: true },
+      cv: { required: true, numbers: true },
+      cp: { required: true, numbers: true }
+    });
+
+    if(this.isFormValid()){
+      this.props.confirm(number,month,year,cv,cp);
+    }
+    else {
+      alert(this.getErrorMessages());
+    }  
   }
 
-  year(value, label) {
-    this.setState({year : value});
+  month(){
+    const items = []    
+      for (let i = 1; i <= 12; i++) {
+        if (items.length < 9) {
+          items.push( 
+            <Picker.Item label={"0"+i} value={i} key={i} />
+          );
+        }
+        else {
+          items.push( 
+            <Picker.Item label={""+i} value={i} key={i} />
+          );
+        }        
+      } 
+      return items;  
   }
+
+  years(){
+    const years = []
+    const currentYear = new Date();
+    years.push(
+        <Picker.Item label={""+moment(currentYear).year()} value={moment(currentYear).year()} key={0} />
+      );
+    for (let i = 1; i <= 10; i++) {
+      years.push(
+        <Picker.Item label={""+moment(currentYear).add(i,'year').year()} value={moment(currentYear).add(i,'year').year()} key={i} />
+      );
+    }    
+    return years;
+  }  
 
 	render(){
+    const number = this.state.number;
+    const month = this.state.month; 
+    const year = this.state.year; 
+    const cv = this.state.cv;
+    const cp = this.state.cp;
+
 		return(                       
 		    <View style={styles.container}>
           <Text style={styles.MainText}>Forma de Pago</Text> 
           <View style={styles.inputContainer}>
-            <FontAwesomeIcon size={20} name="credit-card" color="#fff" style={{padding: 5}}/>
-            <Hoshi
-				      style={styles.inputBox}
-            	label={'Numero de tarjeta'}            	
-				      labelStyle={{ color: 'white' }}
-              borderColor={'#00caff'}                            
-          	/>
-            <FontAwesomeIcon size={20} name="cc-visa" color="#fff" style={{}}/>                              
+            <Item floatingLabel style={styles.inputBox}>                            
+              <Label style={{marginLeft: 15, marginBottom: 8, color: 'white', fontFamily: 'Lato-Light'}}>Número de tarjeta</Label>              
+              <Input style={styles.input} ref={(number) => this.number = number} onChangeText={(number)=> {this.setState({number});}} keyboardType="phone-pad" maxLength={16}/>              
+              <Icon active name='card' style={{color:'white'}} />              
+            </Item>                                                     
+            {/*<FontAwesomeIcon size={20} name="cc-visa" color="#fff" style={{marginTop: 20}}/>*/}              
   		    </View>
           <View style={styles.dateContainer}>
             <FontAwesomeIcon size={20} name="calendar" color="#fff" style={{padding: 5}}/>
             <Text style={styles.text}>Fecha exp.</Text>
           </View>
           <View style={styles.selectContainer}>
-            <Select
-              onSelect = {this.month.bind(this)}
-              defaultText  = {this.state.month}
-              style = {{borderWidth : 1, borderColor : "white", width: 150}}
-              textStyle = {{color:'white'}}
-              indicator={"down"}              
-              indicatorColor={"white"}
-            >
-              <Option value = "01">01</Option>
-              <Option value = "02">02</Option>
-              <Option value = "03">03</Option>
-              <Option value = "04">04</Option>
-              <Option value = "05">05</Option>
-              <Option value = "06">06</Option>
-              <Option value = "07">07</Option>
-              <Option value = "08">08</Option>
-              <Option value = "09">09</Option>
-            </Select>
-            <Select
-              onSelect = {this.year.bind(this)}
-              defaultText  = {this.state.year}
-              style = {{borderWidth : 1, borderColor : "white", width: 150, marginLeft:6}}
-              textStyle = {{color:'white'}}
-              indicator={"down"}              
-              indicatorColor={"white"}
-            >
-              <Option value = "01">01</Option>
-              <Option value = "02">02</Option>              
-            </Select>
+            <View style={{borderWidth : 1, borderColor : "white", width: 150 }}>
+            <Picker iosHeader="Select one" mode="dropdown" itemStyle={{color: 'white'}} style = {{color: 'white'}} selectedValue={this.state.month} onValueChange={(month) => {this.setState({month})}}>
+              <Picker.Item label="" value="" />
+              {this.month()}
+            </Picker>
+            </View>
+            <View style={{borderWidth : 1, borderColor : "white", width: 150, marginLeft: 6 }}>            
+            <Picker iosIcon={<Icon name="ios-arrow-down-outline" style={{color: 'white'}} />} iosHeader="Select one" mode="dropdown" style = {{color: 'white' }} selectedValue={this.state.year} onValueChange={(year) => {this.setState({year})}}>
+              <Picker.Item label="" value="" />
+              {this.years()}
+            </Picker>
+            </View>  
           </View>
-          <TouchableOpacity style={styles.button}>
-           <Text style={styles.buttonText} onPress={this.accept}>CONTINUAR</Text>
+          <View style={styles.inputContainer}>
+            <Item style={styles.inputB}>                                          
+              <Input style={styles.inputText} ref={(cv) => this.cv = cv} onChangeText={(cv)=> {this.setState({cv});}} secureTextEntry={true} placeholder='CV' placeholderTextColor='white' maxLength={3}/>
+              <Icon active name='eye' style={{color:'white'}} />              
+            </Item>                                                     
+            <Item style={styles.inputB}>                                          
+              <Input style={styles.inputText} ref={(cp) => this.cp = cp} onChangeText={(cp)=> {this.setState({cp});}} placeholder='Código Postal' placeholderTextColor='white' keyboardType="phone-pad" maxLength={5}/>               
+            </Item>
+          </View>
+          <TouchableOpacity style={styles.button} onPress={this.confirm.bind(this,number,month,year,cv,cp)}>
+           <Text style={styles.buttonText}>CONTINUAR</Text>
          </TouchableOpacity> 
       </View>     
 		)
 	}
 }
 
-const styles = StyleSheet.create({  
-  container : {
-    flex: 1,    
-    alignItems:'flex-start',
-    flexDirection:'column'
-  },   
-  inputBox: {
-    width:300,    
-    paddingTop: 10,
-    paddingRight: 10,
-    paddingBottom: 10,
-    paddingLeft: 0,  
-  },  
-  inputContainer: {    
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',      
-    marginTop:46 
-  },
-  dateContainer: {    
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',  
-    marginTop:26  
-  },
-  selectContainer: {    
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',  
-    marginTop:16  
-  },
-  contentContainer: {
-    flexGrow: 1,
-  },
-  text: {        
-    color:'white'
-  },
-  MainText: {    
-    fontSize:20,
-    fontWeight:'500',
-    color:'#ffffff',
-    textAlign:'center',
-    marginTop:40,        
-  }, 
-  button: {
-    alignItems:'center',
-    justifyContent :'center',    
-    width:300,
-    backgroundColor:'#00caff',           
-    paddingVertical: 13,
-    marginTop: 20,    
-    borderRadius:20,       
-  },
-  buttonText: {
-    fontSize:16,
-    fontWeight:'500',
-    color:'#ffffff',
-    textAlign:'center'
-  },   
-});

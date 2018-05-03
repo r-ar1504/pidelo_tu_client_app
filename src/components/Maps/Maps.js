@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Dimensions, TouchableOpacity, Alert, YellowBox, TextInput } from 'react-native';
+import { View, Text, Dimensions, TouchableOpacity, Alert, YellowBox, TextInput, BackHandler } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import styles from './MapStyles';
@@ -35,7 +35,9 @@ export default class Maps extends React.Component {
     ]);   
   }
 
-  componentDidMount() {     
+  
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);     
     if (this.state.address != null) {
       this.getLongLat(this.state.address)
         .then(response => {          
@@ -50,7 +52,7 @@ export default class Maps extends React.Component {
           });
         });
       }
-    else {      
+    else {          
       navigator.geolocation.getCurrentPosition(
         position => {
           this.setState({
@@ -68,9 +70,18 @@ export default class Maps extends React.Component {
         alert(error.message);
         this.props.navigation.goBack();
       },
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 });    
+      { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 });    
     }
   }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
+  }
+
+  onBackButtonPressAndroid = () => {
+    this.props.navigation.goBack();
+  };
+  
 
   getAddress(lat,long){
     return fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+long+'&key=AIzaSyCYIhiPOMgLbwZrN9vT8ChwNtPKqKkOrs0')

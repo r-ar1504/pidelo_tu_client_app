@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StackNavigator } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Text, View, Image, TouchableOpacity, YellowBox, ActivityIndicator, Alert, BackHandler } from 'react-native';
+import { Text, View, Image, TouchableOpacity, YellowBox, ActivityIndicator, Alert, BackHandler, AsyncStorage } from 'react-native';
 import { Hoshi } from 'react-native-textinput-effects';
 import styles from './RegisterStyle';
 import firebase from 'react-native-firebase'; 
@@ -38,24 +38,40 @@ export default class Form extends React.Component {
 
   confirm(credential, phoneNumber){
     this.setState({ loading: true, phoneNumber: phoneNumber }); 
+    /* SignIn with phone credential, then link with 
+    email credential and finally save data to local storage and server */
+    /**** fix issue to signIn with EmailAuthProvider credentials and then link the PhoneAuthCredential ***/    
     firebase.auth().signInWithCredential(credential)
       .then((user) => {
-        this.setState({ user });
-         const emailCredential = firebase.auth.EmailAuthProvider.credential(this.state.email, this.state.password);
-         if (emailCredential) {
+        this.setState({ user });         
+        const emailCredential = firebase.auth.EmailAuthProvider.credential(this.state.email, this.state.password);
+         if (user) {
               user.updateProfile({ displayName: this.state.name });
               user.linkWithCredential(emailCredential);
-              this.sendData().then((response) => { this.setState({loading: false})});                                                       
+              this.saveData();
+              this.sendData().then((response) => { alert(JSON.stringify(response)); this.setState({loading: false})});                                                       
           }
       })
       .catch((error) => {
         this.setState({ loading: false });
         alert(error);
       });   
+      /********/
+  }
+
+  saveData(){
+      try {
+        const email = this.state.email;
+        const password = this.state.password;
+
+        AsyncStorage.setItem(email.toLowerCase(), password.toString());
+      } catch (error) {
+        alert(error);
+      }
   }
 
   sendData(){
-    return fetch('http://192.168.0.12:8000/register', {
+    return fetch('http://192.168.0.26:8000/register', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

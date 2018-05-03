@@ -18,6 +18,7 @@ import Signup from './screens/Signup/Signup';
 import SideMenu from './components/SideMenu/SideMenu';
 import Maps from './components/Maps/Maps';
 import Modal from './components/Modal';
+import Orders from './screens/Orders/Orders';
 
 const HomeDrawer = DrawerNavigator({
   Home:{
@@ -44,7 +45,10 @@ const HomeDrawer = DrawerNavigator({
   },
   Restaurant:{
     screen: Restaurant
-  }
+  },
+  Orders: {
+    screen: Orders
+  },
 },{
     contentComponent: SideMenu
   }

@@ -25,7 +25,7 @@ import firebase from 'react-native-firebase';
     this.signup = this.signup.bind(this);
     this.register = this.register.bind(this);
     this.signIn = this.signIn.bind(this);
-    this.state = {email: "", password: "", loading:false, user: null}; 
+    this.state = { email: "", password: "", loading:false, user: null }; 
 
     YellowBox.ignoreWarnings([
      'Warning: componentWillMount is deprecated',

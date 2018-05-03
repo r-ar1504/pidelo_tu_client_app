@@ -6,7 +6,7 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor:'#455a64',
     alignItems:'center',
-    justifyContent :'center'
+    justifyContent :'center',
   },  
   body: {
     flex: 9,
@@ -19,11 +19,8 @@ export default StyleSheet.create({
     flexGrow: 1,
   },
   video: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
+    ...StyleSheet.absoluteFillObject,
+    position: 'absolute',    
   },   
   inputBox: {
     width:300,
@@ -90,8 +87,7 @@ export default StyleSheet.create({
     flex:1,
     resizeMode:'cover',
     position: 'absolute',
-    width: '100%',
-    height: '100%',
+    ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',
   },  
 });

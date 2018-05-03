@@ -1,6 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { COLOR_PRIMARY } from 'src/assets/GlobalStyleSheet';
-
+import { StyleSheet, Dimensions } from 'react-native';
+import { COLOR_PRIMARY, FONT_NORMAL } from 'src/assets/GlobalStyleSheet';
 
 export default StyleSheet.create({  
   image:{    
@@ -9,20 +8,22 @@ export default StyleSheet.create({
     width: '100%',
     height: '100%',    
   },
-  food:{    
+  food:{
+    alignItems:'center', 
+    justifyContent:'center',       
     alignSelf: 'center',        
     resizeMode:'cover',    
-    marginRight:10,
     width: 380,
     height: 200,
-  },    
-  MainText: {             
-    fontFamily: "Lato",
-    fontSize:30,
-    fontWeight:'500',
-    color:'#ffffff',
-    textAlign:'right',            
-  }, 
+  },
+  foodCont: {
+    width:380, 
+    height:200, 
+    backgroundColor:'rgba(0,0,0,.6)', 
+    alignItems:'center', 
+    justifyContent:'center', 
+    flexDirection:'row' 
+  },
   contentContainer: {
     flexGrow: 1,
   },
@@ -33,16 +34,20 @@ export default StyleSheet.create({
     justifyContent :'center'
   },
   textPromo: {
-    fontFamily: "Lato",            
-    fontSize:20,
-    fontWeight:'500',
-    color:'#000',    
+    fontFamily: FONT_NORMAL,            
+    fontSize:60,
+    fontWeight:'400',
+    textAlign:'center',    
+    color:'#fff',
+    marginLeft: 15    
   },
   description: {
-    fontFamily: "Lato",
-    fontSize:14,
-    fontWeight:'200',
-    color:'#000',    
+    fontFamily: FONT_NORMAL,
+    fontSize:18,
+    textAlign:'center',    
+    color:'#fff',
+    flex: 1, 
+    flexWrap: 'wrap'    
   },
   header:{
     flex:1,

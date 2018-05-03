@@ -5,19 +5,17 @@ const side_width = Dimensions.get('window').width*.60;
 const screen_height = Dimensions.get('window').height;
 export default StyleSheet.create({
   sidebar_container: {
-    backgroundColor: 'rgba(0, 118, 255, .50)',
+    backgroundColor: '#4267b2',
     zIndex: 999,
     position: 'relative',
     height: screen_height,
     flexDirection: 'column',
     justifyContent: 'flex-start',
-    alignItems: 'center',
-    borderRightColor: '#00caff',
-    borderRightWidth: 1,
+    alignItems: 'center',     
   },
   sidebar_section_arrow:{
     alignSelf: 'flex-end',
-    paddingRight: 10,
+    padding: 15,
   },
     sidebar_section:{
   },

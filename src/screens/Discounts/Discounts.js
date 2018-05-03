@@ -1,15 +1,8 @@
 import React from 'react';
 import { DrawerNavigator, NavigationActions } from 'react-navigation';
-import {Container, Header, Content, Body, Right, Left, Card, CardItem, Separator, Text} from 'native-base';
+import { Container, Header, Content, Body, Right, Left, Card, CardItem, Separator, Text} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import{
-StyleSheet,
-View,
-StatusBar ,
-TouchableOpacity,
-ScrollView,
-BackHandler,
-Image } from 'react-native';
+import { View, BackHandler, Image, ImageBackground } from 'react-native';
 import styles from './DiscountsStyle';
 
 export default class Discounts extends React.Component {
@@ -18,13 +11,25 @@ export default class Discounts extends React.Component {
 		super(props);
 	}
 
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);  
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
+  }
+
+  onBackButtonPressAndroid = () => {
+    this.props.navigation.goBack();
+  };
+
 	render(){
 		return (
 		<Container>
           <Image source={require('src/assets/images/bg.png')} style={styles.header}/>
           <Header style={{ backgroundColor:'transparent', elevation: 0, flexWrap: 'nowrap', flexDirection: 'row', justifyContent: 'flex-start', height: 50 }}>
             <Left style={{flex: 1}}>
-              <Icon name="arrow-left" size={20} color="#fff" onPress={()=>{this.props.navigation.navigate('Home')}} />
+              <Icon name="arrow-left" size={20} color="#fff" onPress={()=>{this.props.navigation.goBack()}} />
             </Left>
             <Body style={{flex: 1}}>
 
@@ -55,47 +60,41 @@ export default class Discounts extends React.Component {
           		<Separator style={{backgroundColor:'#fff'}}>
 
           		</Separator>
-            	<CardItem>
-                <Left>
-                  <Text style={styles.textPromo}>2 x 1 </Text>
-                </Left>
+            	<CardItem>                
             		<Body>
-            			<Image source={require('src/assets/images/salad.jpeg')} style={styles.food}/>
-            			<Text style={styles.description}>en todas las ensaladas</Text>
+            			<ImageBackground source={require('src/assets/images/salad.jpeg')} style={styles.food}>
+                    <View style={styles.foodCont}>
+                      <Text style={styles.textPromo}>2 x 1 </Text><Text style={styles.description}>en todas las ensaladas</Text>                      
+                      <Text style={{color: '#fff', marginTop:95, marginRight: 15}}>Ensaladas</Text>
+                    </View>                    
+                  </ImageBackground>                              			                                    
             		</Body>
-                <Right>
-                  <Text>Ensaladas</Text>
-                </Right>
             	</CardItem>
             	<Separator style={{backgroundColor:'#fff'}}>
 
           		</Separator>
-            	<CardItem>
-                <Left>
-                  <Text style={styles.textPromo}>20 % </Text>
-                </Left>
-            		<Body>
-            			<Image source={require('src/assets/images/chicken.jpeg')} style={styles.food}/>
-            			<Text style={styles.description}>en la compra de la segunda orden</Text>
+            	<CardItem>                
+            		<Body>                  
+            			<ImageBackground source={require('src/assets/images/chicken.jpeg')} style={styles.food}>
+                    <View style={styles.foodCont}>
+                      <Text style={styles.textPromo}>20 % </Text><Text style={styles.description}>en la compra de la segunda orden</Text>
+                      <Text style={{color: '#fff', marginTop:95, marginRight: 15}}>Alitas</Text>
+                    </View>                    
+                  </ImageBackground>            			                  
             		</Body>
-                <Right>
-                  <Text>Alitas</Text>
-                </Right>
             	</CardItem>
             	<Separator style={{backgroundColor:'#fff'}}>
 
           		</Separator>
-            	<CardItem>
-                <Left>
-                  <Text style={styles.textPromo}>3 </Text>
-                </Left>
-            		<Body>
-            			<Image source={require('src/assets/images/food2.jpg')} style={styles.food}/>
-            			<Text style={styles.description}>ingredientes extras gratis en la compra de pizza grande</Text>
-            		</Body>
-                <Right>
-                  <Text>Pizza</Text>
-                </Right>
+            	<CardItem>                
+            		<Body>                  
+            			<ImageBackground source={require('src/assets/images/food2.jpg')} style={styles.food}>
+                    <View style={styles.foodCont}>
+            			     <Text style={styles.textPromo}>3 </Text><Text style={styles.description}>ingredientes extras gratis en la compra de pizza grande</Text>
+                       <Text style={{color: '#fff', marginTop:95, marginRight: 15}}>Pizza</Text>
+                    </View>
+                  </ImageBackground>                  
+            		</Body>                
             	</CardItem>
           	</Card>
           </Content>

@@ -19,21 +19,33 @@ export default class Signup extends Component<{}> {
    constructor(props){
     super(props);
     this.signup = this.signup.bind(this);
-    this.state = { loading:false, user: null };  
+    this.state = { loading:false, user: null, email: '', password: '' };  
 
     YellowBox.ignoreWarnings([
      'Warning: componentWillMount is deprecated',
      'Warning: componentWillReceiveProps is deprecated',
      'Warning: Failed prop type'
     ]);     
-  }  
+  }
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
+  }
+
+  onBackButtonPressAndroid = () => {
+    this.props.navigation.goBack();
+  };  
 
   signup(name,email,password){
-    this.setState({ loading: true, name: name, email: email  });         
+    this.setState({ loading: true, name: name, email: email, password: password  });         
     firebase.auth().createUserWithEmailAndPassword(email, password)
     .then((user) => {               
       this.setState({ user });
-      user.updateProfile({ displayName: name });           
+      user.updateProfile({ displayName: name }); 
+      this.saveData();          
       this.sendData().then((response) => {         
           this.setState({loading: false})
         }); 
@@ -44,7 +56,7 @@ export default class Signup extends Component<{}> {
     });
   }
   sendData(){
-    return fetch('http://192.168.0.12:8000/signup', {
+    return fetch('http://192.168.0.16:8000/signup', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -59,8 +71,20 @@ export default class Signup extends Component<{}> {
       .then(json => {
         return json;    
     }).catch((error) => {
+      alert(error);
       return error;
     });
+  }
+
+  saveData(){
+      try {
+        const email = this.state.email;
+        const password = this.state.password;
+        
+        AsyncStorage.setItem(email.toLowerCase(), password.toString());
+      } catch (error) {
+        alert(error);
+      }
   }
 
 	render() {
