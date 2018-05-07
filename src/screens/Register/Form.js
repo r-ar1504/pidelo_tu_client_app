@@ -43,13 +43,13 @@ export default class Form extends React.Component {
     /**** fix issue to signIn with EmailAuthProvider credentials and then link the PhoneAuthCredential ***/    
     firebase.auth().signInWithCredential(credential)
       .then((user) => {
+        user.updateProfile({ displayName: this.state.name });
         this.setState({ user });         
         const emailCredential = firebase.auth.EmailAuthProvider.credential(this.state.email, this.state.password);
-         if (user) {
-              user.updateProfile({ displayName: this.state.name });
+         if (user) {              
               user.linkWithCredential(emailCredential);
               this.saveData();
-              this.sendData().then((response) => { alert(JSON.stringify(response)); this.setState({loading: false})});                                                       
+              this.sendData().then((response) => { this.setState({loading: false})});                                                       
           }
       })
       .catch((error) => {
@@ -61,10 +61,18 @@ export default class Form extends React.Component {
 
   saveData(){
       try {
+        const name = this.state.name;
         const email = this.state.email;
         const password = this.state.password;
+        const firebaseId = this.state.user.uid;
 
-        AsyncStorage.setItem(email.toLowerCase(), password.toString());
+        let user = {
+          name: name.toString(),
+          email: email.toLowerCase(),
+          password: password.toString()
+        }
+                
+        AsyncStorage.setItem(firebaseId,JSON.stringify(user));
       } catch (error) {
         alert(error);
       }

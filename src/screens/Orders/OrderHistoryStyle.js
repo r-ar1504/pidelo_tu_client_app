@@ -23,30 +23,68 @@ export default StyleSheet.create({
     alignSelf: 'center',        
     resizeMode:'cover',    
     width: 380,
-    height: 200,
+    height: 100,
   },
   foodCont: {
     width:380, 
-    height:200, 
+    height:100, 
     backgroundColor:'rgba(0,0,0,.6)', 
     alignItems:'center', 
     justifyContent:'center', 
-    flexDirection:'row' 
   },
   textPromo: {
     fontFamily: FONT_NORMAL,            
-    fontSize:60,
+    fontSize:40,
     fontWeight:'400',
     textAlign:'center',    
-    color:'#fff',
-    marginLeft: 15    
+    color:'#fff',       
   },
   description: {
     fontFamily: FONT_NORMAL,
     fontSize:18,
     textAlign:'center',    
-    color:'#fff',
-    flex: 1, 
-    flexWrap: 'wrap'    
+    color:'#fff',        
+  },
+  deliveryDetails: {
+    width: 380,
+    height: 100,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderTopWidth: 1,
+    borderColor: '#dbdbdb',      
+    alignSelf: 'center',    
+  },
+  check: {
+    alignItems: 'flex-start',
+    justifyContent:'center',
+    resizeMode:'center',
+    height: 20,
+    width: 20
+  },
+  circle: {
+    width: 20,
+    height: 20,
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: '#11c0f6',
+    backgroundColor: 'rgba(17,191,245,.9)', 
+    alignItems:'center',
+    justifyContent:'center'   
+  },
+  button: {
+    backgroundColor:COLOR_PRIMARY,                   
+    marginLeft: 5,    
+  },
+  buttonText: {    
+    color:'#ffffff',
+    textAlign:'center',
+    fontFamily: FONT_NORMAL    
+  },
+  deliveryProgress: {
+    width: 380,
+    height: 150,
+    borderWidth: 1,    
+    borderColor: '#dbdbdb',      
+    alignSelf: 'center',    
   },
 })

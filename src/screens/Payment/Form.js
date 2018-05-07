@@ -12,7 +12,7 @@ export default class Form extends ValidationComponent {
 
   constructor(props){
     super(props)       
-    this.state = { number: '', month : '', year: '', cv: '', cp: '' }
+    this.state = { number: '', month : '', year: '', cv: '', cp: '', secure: true, eyeIcon: 'eye' }
   }
 
   confirm(number,month,year,cv,cp) {
@@ -30,6 +30,17 @@ export default class Form extends ValidationComponent {
     else {
       alert(this.getErrorMessages());
     }  
+  }
+
+  showCV(){
+    if (this.state.secure){
+      this.setState({ secure: false });
+      this.setState({ eyeIcon: 'eye-off' });
+    }
+    else {
+      this.setState({ secure: true });
+      this.setState({ eyeIcon: 'eye' })
+    }
   }
 
   month(){
@@ -61,6 +72,10 @@ export default class Form extends ValidationComponent {
       );
     }    
     return years;
+  }
+
+  setNumber(number){    
+    
   }  
 
 	render(){
@@ -76,7 +91,7 @@ export default class Form extends ValidationComponent {
           <View style={styles.inputContainer}>
             <Item floatingLabel style={styles.inputBox}>                            
               <Label style={{marginLeft: 15, marginBottom: 8, color: 'white', fontFamily: 'Lato-Light'}}>Número de tarjeta</Label>              
-              <Input style={styles.input} ref={(number) => this.number = number} onChangeText={(number)=> {this.setState({number});}} keyboardType="phone-pad" maxLength={16}/>              
+              <Input style={styles.input} ref={(number) => this.number = number} onChangeText={(number) => { this.setState({number})}} value={this.state.number.toString()} keyboardType="phone-pad" maxLength={16}/>              
               <Icon active name='card' style={{color:'white'}} />              
             </Item>                                                     
             {/*<FontAwesomeIcon size={20} name="cc-visa" color="#fff" style={{marginTop: 20}}/>*/}              
@@ -101,8 +116,8 @@ export default class Form extends ValidationComponent {
           </View>
           <View style={styles.inputContainer}>
             <Item style={styles.inputB}>                                          
-              <Input style={styles.inputText} ref={(cv) => this.cv = cv} onChangeText={(cv)=> {this.setState({cv});}} secureTextEntry={true} placeholder='CV' placeholderTextColor='white' maxLength={3}/>
-              <Icon active name='eye' style={{color:'white'}} />              
+              <Input style={styles.inputText} ref={(cv) => this.cv = cv} onChangeText={(cv)=> {this.setState({cv});}} secureTextEntry={this.state.secure} placeholder='CV' placeholderTextColor='white' maxLength={3}/>
+              <Icon active name={this.state.eyeIcon} style={{color:'white'}} onPress={this.showCV.bind(this)} />              
             </Item>                                                     
             <Item style={styles.inputB}>                                          
               <Input style={styles.inputText} ref={(cp) => this.cp = cp} onChangeText={(cp)=> {this.setState({cp});}} placeholder='Código Postal' placeholderTextColor='white' keyboardType="phone-pad" maxLength={5}/>               

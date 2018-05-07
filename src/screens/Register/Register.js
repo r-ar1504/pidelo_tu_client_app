@@ -61,17 +61,15 @@ export default class Register extends ValidationComponent {
       this.checkNumber(phoneNumber).then((response) => {        
         if (response.length == 0) {
             /* Send phone number to display in the next screen */ 
-            firebase.auth().languageCode = 'es';             
+            firebase.auth().languageCode = 'es-419';             
             firebase.auth().verifyPhoneNumber(phoneNumber)
             .on('state_changed', (phoneAuthSnapshot) => {    
             switch (phoneAuthSnapshot.state) {
               // ------------------------
               //  IOS AND ANDROID EVENTS
               // ------------------------
-              case firebase.auth.PhoneAuthState.CODE_SENT: // or 'sent'
-                const { verificationId, code } = phoneAuthSnapshot;
-                this.setState({ loading: false });       
-                alert(code);                   
+              case firebase.auth.PhoneAuthState.CODE_SENT: // or 'sent'                
+                this.setState({ loading: false });                                          
                 this.props.navigation.navigate('Modal',{        
                   text: 'Se ha enviado un código de verificación vía SMS a tu móvil',
                   button:'Continuar',
@@ -82,6 +80,7 @@ export default class Register extends ValidationComponent {
               break;
               case firebase.auth.PhoneAuthState.ERROR: // or 'error'
                 this.setState({ loading: false });
+                this.props.navigation.navigate('Register');
                 alert(phoneAuthSnapshot.error);                
               break;
 
@@ -105,8 +104,8 @@ export default class Register extends ValidationComponent {
         }
         else {
           try {            
-            AsyncStorage.getItem(response[0].email, (err, item) => {
-              const emailCredential = firebase.auth.EmailAuthProvider.credential(response[0].email, item);
+            AsyncStorage.getItem(response[0].firebase_id, (err, item) => {
+              const emailCredential = firebase.auth.EmailAuthProvider.credential(response[0].email, JSON.parse(item.password));
               if (emailCredential !== null){
                 firebase.auth().signInWithCredential(emailCredential);              
               }
@@ -123,7 +122,7 @@ export default class Register extends ValidationComponent {
   }
 
   checkNumber(phoneNumber){
-    const url = 'http://192.168.0.26:8000/checkNumber/'+phoneNumber;
+    const url = 'http://pidelotu.azurewebsites.net/checkNumber/'+phoneNumber;
     return fetch(url)      
       .then((response) => {              
         return response.json();
@@ -135,7 +134,7 @@ export default class Register extends ValidationComponent {
         return(    
           <View style={styles.body}>
             <Image source={require('src/assets/images/bg.png')} style={styles.image} />
-            <ActivityIndicator size={50} color="white"/>
+            <Image style={styles.logo} source={require('src/assets/images/ic.gif')} style={{width: 105, height: 105}}/>
           </View>
         )
       } 

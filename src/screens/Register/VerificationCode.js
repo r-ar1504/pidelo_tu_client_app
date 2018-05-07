@@ -38,7 +38,7 @@ export default class VerificationCode extends React.Component {
     else {
       /* Pass credential through the next forms until the register finish*/
       this.setState({ loading: true });
-      const { verificationId, code } = phoneAuthSnapshot;
+      const { verificationId } = phoneAuthSnapshot;
       
       //if (code == codeInput){
         const credential = firebase.auth.PhoneAuthProvider.credential(verificationId, codeInput);          

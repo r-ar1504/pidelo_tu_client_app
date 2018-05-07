@@ -49,8 +49,7 @@ export default class Splash extends Component<{}> {
 		return(
 			<View style={styles.container} >
           <Image source={require('src/assets/images/bg.png')} style={styles.image} />
-				  {/*<Image style={styles.logo} source={require('src/assets/images/icon.gif')} style={{width: 75, height: 75}}/>*/}
-          <ActivityIndicator size={50} color="white" />
+				  <Image style={styles.logo} source={require('src/assets/images/ic.png')} style={{width: 105, height: 105}}/>          
   		</View>
 			)
 	}

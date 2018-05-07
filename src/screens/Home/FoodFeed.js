@@ -21,8 +21,8 @@ export default class FoodFeed extends Component{
 						<Image source={require('src/assets/images/fresas.jpeg')} style={styles.big_food}/>
 					</View>
 					<View style={styles.food_mini}>
-					<Image source={require('src/assets/images/salad-plate.jpeg')} style={styles.food_img1}/>
-					<Image source={require('src/assets/images/food2.jpeg')} style={styles.food_img2}/>
+						<Image source={require('src/assets/images/salad-plate.jpeg')} style={styles.food_img1}/>
+						<Image source={require('src/assets/images/food2.jpeg')} style={styles.food_img2}/>
 					</View>
 				</View>
 		);

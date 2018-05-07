@@ -28,6 +28,10 @@ export default class Search extends Component{
 
   openDiscounts(){
     this.props.navigation.navigate('Discounts')
+  }
+
+  openMeal(id){
+    this.props.navigation.navigate('MealSelected');
   }  
   
   render(){
@@ -78,10 +82,12 @@ export default class Search extends Component{
         <View style={styles.titleCont}>
           <Text style={styles.titleText}>Pizzas</Text>
         </View>
-          <Swiper style={styles.wrapper} height={210} activeDotColor={'#11c0f6'} autoplay>
+          <Swiper style={styles.wrapper} height={210} activeDotColor={'#11c0f6'}>
             <View style={styles.slide}>
               <View style={styles.mealCont}>
-                <Image source={require('src/assets/images/pizza.png')} style={styles.mealImg}/>
+                <TouchableWithoutFeedback onPress={this.openMeal.bind(this,1)}>
+                  <Image source={require('src/assets/images/pizza.png')} style={styles.mealImg}/>
+                </TouchableWithoutFeedback>
                 <View style={styles.infoCont}>
                   <Text style={styles.description}>Pizza Grande con Jamón</Text><Text style={styles.price}>$120</Text>
                 </View>              

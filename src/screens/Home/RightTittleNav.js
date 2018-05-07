@@ -17,7 +17,7 @@ export default class SearchButton extends Component {
   render(){
     return(
       <View style={style.rightHead}>
-        <Image source={require('src/assets/images/icon3.png')} style={{width: 30,  height: 30 }}/>
+        <Image source={require('src/assets/images/ic.png')} style={{width: 30,  height: 30 }}/>
       </View>
     );
   }

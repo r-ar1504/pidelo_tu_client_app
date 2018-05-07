@@ -44,9 +44,9 @@ export default class Signup extends Component<{}> {
     firebase.auth().createUserWithEmailAndPassword(email, password)
     .then((user) => {               
       this.setState({ user });
-      user.updateProfile({ displayName: name }); 
-      this.saveData();          
-      this.sendData().then((response) => {         
+      user.updateProfile({ displayName: name });                 
+      this.sendData().then((response) => {                 
+          this.saveData();  
           this.setState({loading: false})
         }); 
     })
@@ -56,7 +56,7 @@ export default class Signup extends Component<{}> {
     });
   }
   sendData(){
-    return fetch('http://192.168.0.16:8000/signup', {
+    return fetch('http://192.168.0.26:8000/signup', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -76,12 +76,20 @@ export default class Signup extends Component<{}> {
     });
   }
 
-  saveData(){
+  saveData(){    
       try {
+        const name = this.state.name;
         const email = this.state.email;
         const password = this.state.password;
-        
-        AsyncStorage.setItem(email.toLowerCase(), password.toString());
+        const firebaseId = this.state.user.uid;
+
+        let user = {
+          name: name.toString(),
+          email: email.toLowerCase(),
+          password: password.toString()
+        }
+                
+        AsyncStorage.setItem(firebaseId,JSON.stringify(user));
       } catch (error) {
         alert(error);
       }

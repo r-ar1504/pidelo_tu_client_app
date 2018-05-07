@@ -19,6 +19,7 @@ import SideMenu from './components/SideMenu/SideMenu';
 import Maps from './components/Maps/Maps';
 import Modal from './components/Modal';
 import Orders from './screens/Orders/Orders';
+import MealSelected from './screens/Meal/MealSelected';
 
 const HomeDrawer = DrawerNavigator({
   Home:{
@@ -49,8 +50,12 @@ const HomeDrawer = DrawerNavigator({
   Orders: {
     screen: Orders
   },
+  MealSelected: {
+    screen: MealSelected
+  },
 },{
-    contentComponent: SideMenu
+    contentComponent: SideMenu,
+    drawerBackgroundColor: 'rgba(0, 0, 0, 0)'
   }
 );
 
