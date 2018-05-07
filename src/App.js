@@ -89,7 +89,7 @@ export default StackNavigator({
   },
   RegisterForm: {
     screen: RegisterForm
-  },   
+  },
 },
   {
   initialRouteName: 'Splash'
