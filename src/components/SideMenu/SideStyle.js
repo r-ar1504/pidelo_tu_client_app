@@ -5,7 +5,7 @@ const side_width = Dimensions.get('window').width*.60;
 const screen_height = Dimensions.get('window').height;
 export default StyleSheet.create({
   sidebar_container: {
-    backgroundColor: '#4267b2',
+    backgroundColor: 'rgba(66, 103, 178, .6)',
     zIndex: 999,
     position: 'relative',
     height: screen_height,

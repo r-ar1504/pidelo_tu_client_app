@@ -44,6 +44,9 @@ const HomeDrawer = DrawerNavigator({
   Maps:{
    screen: Maps,
   },
+  AllowLocation:{
+    screen: AllowLocation
+  },
   Restaurant:{
     screen: Restaurant
   },
@@ -74,9 +77,6 @@ export default StackNavigator({
   },
   Register:{
     screen: Register
-  },
-  AllowLocation:{
-    screen: AllowLocation
   },
   VerificationCode:{
     screen: VerificationCode

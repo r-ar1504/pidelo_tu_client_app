@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
-import {  StyleSheet,  Text, View, Image, TouchableWithoutFeedback,} from 'react-native';
+import {  StyleSheet,  Text, View, Image, TouchableWithoutFeedback, AsyncStorage} from 'react-native';
 import style from './SideStyle';
 import { DrawerNavigator, NavigationActions } from 'react-navigation';
 import {  Item, Footer, Icon } from 'native-base';
@@ -14,7 +14,7 @@ export default class SideMenu extends Component{
   }
   constructor(props){
     super(props);
-
+    this.state = { name: '' }
     /*
     * Binded Functions:
     */
@@ -25,6 +25,15 @@ export default class SideMenu extends Component{
     this.paymentMethod = this.paymentMethod.bind(this)
     this.logOut = this.logOut.bind(this)
     this.openHelp = this.openHelp.bind(this)
+  }
+
+  componentDidMount() {        
+    const { params } = this.props.navigation.state.routes[0];;
+    const user = params ? params.user : null;    
+    
+    AsyncStorage.getItem(user.uid, (err, item) => {
+      this.setState({name: JSON.parse(item).name});
+    });                        
   }
 
   /* Close side menu. */
@@ -44,7 +53,7 @@ export default class SideMenu extends Component{
 
   /* Search by current location. */
   currentLocation(){
-    this.props.navigation.navigate('Maps',{ address: null });
+    this.props.navigation.navigate('Maps', { address: null });
   }
 
   /* User order history. */
@@ -84,7 +93,7 @@ export default class SideMenu extends Component{
           <Image source={require('src/assets/images/ic.png')} style={style.side_profile}/>
           </View>
           <View style={style.sidebar_section}>
-            <Text style={{fontSize: 15, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>{user.displayName}</Text>
+            <Text style={{fontSize: 15, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>{this.state.name}</Text>
           </View>
           <View style={style.sidebar_section} >
           <TouchableWithoutFeedback>

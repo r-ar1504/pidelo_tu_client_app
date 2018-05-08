@@ -56,7 +56,7 @@ export default class Signup extends Component<{}> {
     });
   }
   sendData(){
-    return fetch('http://192.168.0.26:8000/signup', {
+    return fetch('http://pidelotu.azurewebsites.net/signup', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

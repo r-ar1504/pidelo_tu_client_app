@@ -1,10 +1,11 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { COLOR_PRIMARY, FONT_NORMAL }from 'src/assets/GlobalStyleSheet';
+let { width, height } = Dimensions.get('window');
 
 export default StyleSheet.create({
 image:{
-    flexGrow:1,
-    resizeMode:'cover',
+    display: 'flex',
+    flex:1,    
     position: 'absolute',
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'center'
@@ -56,18 +57,34 @@ image:{
   slide: {
     flex: 1,
     alignSelf: 'center',
-    width: '90%',
+    width: width,
     flexDirection: 'row',
     flexWrap: 'wrap',            
     justifyContent: 'center',
     alignItems: 'center',            
   },
   grid: {
-    width:  150,
+    width:  width / 2.5,
     height: 150,    
     margin: 10,
-    backgroundColor: '#dbdbdb',
+    backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems:'center'
-  }
+  },
+  mealImg:{
+    width:100, 
+    height:100, 
+    resizeMode: 'contain'
+  },
+  infoCont:{
+    flexDirection:'row',    
+  },
+  description:{
+    fontFamily: FONT_NORMAL,
+    fontSize:14,
+    color:'#000', 
+    textAlign:'center',
+    flex: 1, 
+    flexWrap: 'wrap'      
+  },
 })

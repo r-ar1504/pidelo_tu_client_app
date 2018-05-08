@@ -58,7 +58,8 @@ export default class Register extends ValidationComponent {
 
     if(this.isFormValid()){
       this.setState({ loading: true }); 
-      this.checkNumber(phoneNumber).then((response) => {        
+      this.checkNumber(phoneNumber).then((response) => {
+        alert(JSON.stringify(response));        
         if (response.length == 0) {
             /* Send phone number to display in the next screen */ 
             firebase.auth().languageCode = 'es-419';             
@@ -104,8 +105,8 @@ export default class Register extends ValidationComponent {
         }
         else {
           try {            
-            AsyncStorage.getItem(response[0].firebase_id, (err, item) => {
-              const emailCredential = firebase.auth.EmailAuthProvider.credential(response[0].email, JSON.parse(item.password));
+            AsyncStorage.getItem(response[0].firebase_id.toString(), (err, item) => {
+              const emailCredential = firebase.auth.EmailAuthProvider.credential(response[0].email, JSON.parse(item).password);
               if (emailCredential !== null){
                 firebase.auth().signInWithCredential(emailCredential);              
               }
@@ -134,7 +135,7 @@ export default class Register extends ValidationComponent {
         return(    
           <View style={styles.body}>
             <Image source={require('src/assets/images/bg.png')} style={styles.image} />
-            <Image style={styles.logo} source={require('src/assets/images/ic.gif')} style={{width: 105, height: 105}}/>
+            <Image style={styles.logo} source={require('src/assets/images/ic.png')} style={{width: 105, height: 105}}/>
           </View>
         )
       } 

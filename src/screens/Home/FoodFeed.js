@@ -29,16 +29,17 @@ export default class FoodFeed extends Component{
 	}
 }
 
-const window = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
 	feed_container:{
 		marginTop:15,
-		width: window.width*.90,
+		width: width,
 		height: 400,
 		alignSelf: 'center',
 		flexDirection: 'row',
-		flexWrap: 'nowrap'
+		flexWrap: 'nowrap',
+		padding: 10
 	},
 	food_banner:{
 		height: 400,

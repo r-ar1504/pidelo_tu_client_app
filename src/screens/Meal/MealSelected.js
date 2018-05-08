@@ -28,7 +28,7 @@ export default class Profile extends Component{
   }  
 
   onBackButtonPressAndroid = () => {
-    this.props.navigation.goBack();
+    this.props.navigation.navigate('Restaurant');
   }
 
   IncrementItem = () => {    

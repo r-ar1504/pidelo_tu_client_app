@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { DrawerNavigator, NavigationActions } from 'react-navigation';
-import { Container, Header, Content, Body, Right, Left, Radio } from 'native-base';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import{ StyleSheet, Text, View, Image, TextInput, BackHandler } from 'react-native';
+import { Container, Header, Content, Body, Right, Left, Radio, Icon } from 'native-base';
+import FontIcon from 'react-native-vector-icons/FontAwesome';
+import{ StyleSheet, Text, View, Image, TextInput, BackHandler, TouchableWithoutFeedback, ImageBackground } from 'react-native';
 import SwipeableParallaxCarousel from 'react-native-swipeable-parallax-carousel';
 import {RadioGroup, RadioButton} from 'react-native-flexi-radio-button';
 import Swiper from 'react-native-swiper';
@@ -87,10 +87,10 @@ export default class Search extends Component{
   render(){
     return(
       <Container>
-        <Image source={require('src/assets/images/background.png')} style={style.image}/>
+        <ImageBackground source={require('src/assets/images/background.png')} style={style.image}/>
         <Header span={true} style={{ backgroundColor: 'transparent', elevation: 0}}>
           <View style={style.searchCont}>
-            <Icon name="search" size={20} color="#999999" style={{ paddingLeft:10, paddingRight: 10}} />
+            <FontIcon name="search" size={20} color="#999999" style={{ paddingLeft:40, paddingRight: 10}} />
             <TextInput maxLength={150} underlineColorAndroid={'transparent'} placeholder={"Busqueda"} style={style.searchInput}/>
           </View>
         </Header>        
@@ -123,30 +123,94 @@ export default class Search extends Component{
             <Swiper style={style.wrapper} height={390}>
             <View style={style.slide}>
               <View style={style.grid}>
-                <Image  style={{resizeMode:'cover', width: 40, height:40}} source={require("src/assets/images/restaurants.png")} />
+                <TouchableWithoutFeedback onPress={() => {this.props.navigation.navigate('Restaurant');}}>
+                  <Image source={require('src/assets/images/pizza.png')} style={style.mealImg}/>
+                </TouchableWithoutFeedback>
+                <View style={style.infoCont}>
+                  <Image  style={{resizeMode:'center', width: 35, height:35, marginLeft: 10}} source={require("src/assets/images/download.png")} /><Text style={style.description}>Pizza Grande con Jamón</Text>
+                </View>
+                <View style={{flexDirection: 'row', alignItems:'flex-end', alignSelf: 'flex-end'}}>
+                  <Icon active name='time' style={{color:'black', fontSize: 15}} /><Text style={{fontFamily: 'Lato-Light', color:'#000'}}>30MIN</Text>
+                </View>                
               </View>
               <View style={style.grid}>
-                <Image  style={{resizeMode:'cover', width: 40, height:40}} source={require("src/assets/images/food.png")} />                
+                  <TouchableWithoutFeedback onPress={() => {this.props.navigation.navigate('Restaurant');}}>
+                  <Image source={require('src/assets/images/pizza.png')} style={style.mealImg}/>
+                </TouchableWithoutFeedback>
+                <View style={style.infoCont}>
+                  <Image  style={{resizeMode:'center', width: 35, height:35, marginLeft: 10}} source={require("src/assets/images/download.png")} /><Text style={style.description}>Pizza Grande con Jamón</Text>
+                </View>
+                <View style={{flexDirection: 'row', alignItems:'flex-end', alignSelf: 'flex-end'}}>
+                  <Icon active name='time' style={{color:'black', fontSize: 15}} /><Text style={{fontFamily: 'Lato-Light', color:'#000'}}>30MIN</Text>
+                </View>              
               </View>
               <View style={style.grid}>
-                <Image  style={{resizeMode:'cover', width: 40, height:40}} source={require("src/assets/images/location.png")} />                
+                <TouchableWithoutFeedback onPress={() => {this.props.navigation.navigate('Restaurant');}}>
+                  <Image source={require('src/assets/images/pizza.png')} style={style.mealImg}/>
+                </TouchableWithoutFeedback>
+                <View style={style.infoCont}>
+                  <Image  style={{resizeMode:'center', width: 35, height:35, marginLeft: 10}} source={require("src/assets/images/download.png")} /><Text style={style.description}>Pizza Grande con Jamón</Text>
+                </View>
+                <View style={{flexDirection: 'row', alignItems:'flex-end', alignSelf: 'flex-end'}}>
+                  <Icon active name='time' style={{color:'black', fontSize: 15}} /><Text style={{fontFamily: 'Lato-Light', color:'#000'}}>30MIN</Text>
+                </View>
               </View>
               <View style={style.grid}>
-                <Image  style={{resizeMode:'cover', width: 40, height:40}} source={require("src/assets/images/world.png")} />
+                <TouchableWithoutFeedback onPress={() => {this.props.navigation.navigate('Restaurant');}}>
+                  <Image source={require('src/assets/images/pizza.png')} style={style.mealImg}/>
+                </TouchableWithoutFeedback>
+                <View style={style.infoCont}>
+                  <Image  style={{resizeMode:'center', width: 35, height:35, marginLeft: 10}} source={require("src/assets/images/download.png")} /><Text style={style.description}>Pizza Grande con Jamón</Text>
+                </View>
+                <View style={{flexDirection: 'row', alignItems:'flex-end', alignSelf: 'flex-end'}}>
+                  <Icon active name='time' style={{color:'black', fontSize: 15}} /><Text style={{fontFamily: 'Lato-Light', color:'#000'}}>30MIN</Text>
+                </View>
               </View>
             </View>
             <View style={style.slide}>
               <View style={style.grid}>
-                <Image  style={{resizeMode:'cover', width: 40, height:40}} source={require("src/assets/images/world.png")} />
+                <TouchableWithoutFeedback onPress={() => {this.props.navigation.navigate('Restaurant');}}>
+                  <Image source={require('src/assets/images/pizza.png')} style={style.mealImg}/>
+                </TouchableWithoutFeedback>
+                <View style={style.infoCont}>
+                  <Image  style={{resizeMode:'center', width: 35, height:35, marginLeft: 10}} source={require("src/assets/images/download.png")} /><Text style={style.description}>Pizza Grande con Jamón</Text>
+                </View>
+                <View style={{flexDirection: 'row', alignItems:'flex-end', alignSelf: 'flex-end'}}>
+                  <Icon active name='time' style={{color:'black', fontSize: 15}} /><Text style={{fontFamily: 'Lato-Light', color:'#000'}}>30MIN</Text>
+                </View>
               </View>
               <View style={style.grid}>
-                <Image  style={{resizeMode:'cover', width: 40, height:40}} source={require("src/assets/images/location.png")} />                
+                <TouchableWithoutFeedback onPress={() => {this.props.navigation.navigate('Restaurant');}}>
+                  <Image source={require('src/assets/images/pizza.png')} style={style.mealImg}/>
+                </TouchableWithoutFeedback>
+                <View style={style.infoCont}>
+                  <Image  style={{resizeMode:'center', width: 35, height:35, marginLeft: 10}} source={require("src/assets/images/download.png")} /><Text style={style.description}>Pizza Grande con Jamón</Text>
+                </View>
+                <View style={{flexDirection: 'row', alignItems:'flex-end', alignSelf: 'flex-end'}}>
+                  <Icon active name='time' style={{color:'black', fontSize: 15}} /><Text style={{fontFamily: 'Lato-Light', color:'#000'}}>30MIN</Text>
+                </View>
               </View>
               <View style={style.grid}>
-                <Image  style={{resizeMode:'cover', width: 40, height:40}} source={require("src/assets/images/food.png")} />                
+                <TouchableWithoutFeedback onPress={() => {this.props.navigation.navigate('Restaurant');}}>
+                  <Image source={require('src/assets/images/pizza.png')} style={style.mealImg}/>
+                </TouchableWithoutFeedback>
+                <View style={style.infoCont}>
+                  <Image  style={{resizeMode:'center', width: 35, height:35, marginLeft: 10}} source={require("src/assets/images/download.png")} /><Text style={style.description}>Pizza Grande con Jamón</Text>
+                </View>
+                <View style={{flexDirection: 'row', alignItems:'flex-end', alignSelf: 'flex-end'}}>
+                  <Icon active name='time' style={{color:'black', fontSize: 15}} /><Text style={{fontFamily: 'Lato-Light', color:'#000'}}>30MIN</Text>
+                </View>
               </View>
               <View style={style.grid}>
-                <Image  style={{resizeMode:'cover', width: 40, height:40}} source={require("src/assets/images/restaurants.png")} />
+                <TouchableWithoutFeedback onPress={() => {this.props.navigation.navigate('Restaurant');}}>
+                  <Image source={require('src/assets/images/pizza.png')} style={style.mealImg}/>
+                </TouchableWithoutFeedback>
+                <View style={style.infoCont}>
+                  <Image  style={{resizeMode:'center', width: 35, height:35, marginLeft: 10}} source={require("src/assets/images/download.png")} /><Text style={style.description}>Pizza Grande con Jamón</Text>
+                </View>
+                <View style={{flexDirection: 'row', alignItems:'flex-end', alignSelf: 'flex-end'}}>
+                  <Icon active name='time' style={{color:'black', fontSize: 15}} /><Text style={{fontFamily: 'Lato-Light', color:'#000'}}>30MIN</Text>
+                </View>
               </View>
             </View>
             <View style={style.slide}>
