@@ -1,17 +1,7 @@
 import React, { Component } from 'react';
 import { DrawerNavigator, NavigationActions } from 'react-navigation';
 import {Container, Header, Content, Body, Right, Left} from 'native-base';
-import{
-StyleSheet,
-Text,
-View,
-StatusBar ,
-TouchableOpacity,
-TouchableWithoutFeedback,
-ScrollView,
-BackHandler,
-Image,
-YellowBox } from 'react-native';
+import{ StyleSheet, Text, View, StatusBar , TouchableOpacity, TouchableWithoutFeedback, ScrollView, BackHandler, Image, YellowBox } from 'react-native';
 import style from './HomeStyle';
 import FoodFeed from './FoodFeed';
 import SearchButton from './SearchButton';
@@ -19,6 +9,7 @@ import LeftTittleNav from './LeftTittleNav';
 import RightTittleNav from './RightTittleNav';
 import SideMenu from '../../components/SideMenu/SideMenu';
 import Profile from '../Profile/Profile';
+import OneSignal from 'react-native-onesignal';
 
 export default class Home extends Component{
   static navigationOptions = {
@@ -38,6 +29,12 @@ export default class Home extends Component{
      'Warning: componentWillUpdate is deprecated',
      'Warning: TouchableWithoutFeedback does not work well with Text children'
     ]);
+  }
+
+   componentWillMount(){
+      OneSignal.sendTags({delivery_code: 'U10', user_type: 'client'});//Register tags for specific user.
+      OneSignal.addEventListener('received', this.pushHandler);//If app is open will call this handler.
+      OneSignal.addEventListener('opened', this.pushOpened);//If app is closed and user clicks, this handler will be called.
   }
      
   openDrawer(user){      
@@ -77,7 +74,7 @@ export default class Home extends Component{
             <FoodFeed />
 
             <TouchableWithoutFeedback onPress={this.openRestaurant.bind(this)}>
-            <Image source={require('src/assets/images/offer.jpg')} style={{ alignSelf: 'center', width: '90%',  height: 180 , marginTop: 10, resizeMode: 'stretch',}}/>
+              <Image source={require('src/assets/images/promo.jpg')} style={style.promo}/>
             </TouchableWithoutFeedback>
           </Content>
         </Container>

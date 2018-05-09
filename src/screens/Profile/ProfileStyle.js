@@ -4,11 +4,11 @@ import { COLOR_PRIMARY }from 'src/assets/GlobalStyleSheet';
 
 export default StyleSheet.create({
   image:{
-    flex:1,
-    resizeMode:'stretch',
+    display: 'flex',
+    flex:1,    
     position: 'absolute',
     ...StyleSheet.absoluteFillObject,
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   header: {
     flexDirection: 'row',    

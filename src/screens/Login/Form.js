@@ -35,7 +35,7 @@ export default class Form extends ValidationComponent {
     const email = this.state.email; 
     const password = this.state.password;    
 		return(		    
-          <Content>            
+          <Content scrollEnabled={false}>            
             <Item floatingLabel style={styles.inputBox}>              
               <Label style={{marginLeft: 15, marginTop: 5, color: 'white', fontFamily: 'Lato-Regular'}}>Correo Electrónico</Label>              
               <Input style={styles.input} ref={(email) => this.correo = email} onChangeText={(email)=> {this.setState({email});}} onSubmitEditing={()=> this.password.focus()} keyboardType="email-address"/>

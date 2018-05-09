@@ -34,38 +34,40 @@ const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
 	feed_container:{
 		marginTop:15,
-		width: width,
+		width: width*.90,
 		height: 400,
 		alignSelf: 'center',
 		flexDirection: 'row',
-		flexWrap: 'nowrap',
-		padding: 10
+		flexWrap: 'nowrap'
 	},
 	food_banner:{
 		height: 400,
 		width: '50%',
 	},
 	big_food:{
-		width: 172,
+		width: (width*.90) / 2,
 		resizeMode: 'stretch',
-		height: 400
+		height: 400,
+		paddingBottom: 10
 	},
 	food_mini:{
 		flexDirection: 'column',
 		height: 400,
-		width: '50%',
+		width: (width*.90) / 2,
+		paddingLeft: 10,
+		paddingBottom: 10
 	},
 	food_img1:{
 		width: '100%',
 		resizeMode: 'stretch',
-		height: 100,		
-		marginBottom: 5
+		height: 95,
+		marginBottom: 5				
 	},
 	food_img2: {
 		width: '100%',
-		resizeMode: 'center',
-		height: 300,
-		marginTop: 5,
+		resizeMode: 'stretch',
+		height: 295,	
+		marginTop: 5			
 	}
 
 });

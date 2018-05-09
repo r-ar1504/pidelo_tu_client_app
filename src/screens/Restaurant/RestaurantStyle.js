@@ -11,6 +11,30 @@ export default StyleSheet.create({
     height: 140,
     justifyContent: 'center'
   },
+  header: {
+    backgroundColor: 'transparent',
+    elevation: 0,
+    flexWrap: 'nowrap',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    height: 50,
+  },
+  restaurantTitleCont: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    marginRight: 15,
+    height:90
+  },
+  restaurantTitle: {
+    color: '#fff',
+    opacity: 0.8,
+    fontSize: 40,
+    letterSpacing: 20,
+    fontWeight: 'bold',
+    marginRight: 10
+  },
   titleCont:{
     marginTop: 20,
     width: '85%',

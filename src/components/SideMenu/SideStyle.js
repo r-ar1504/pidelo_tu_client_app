@@ -30,7 +30,7 @@ export default StyleSheet.create({
   	flex:1,
   },
   sidebar_links:{
-    width: 150,
+    width: 170,
     flexDirection: "column",
     justifyContent: "flex-start",
     paddingLeft: 10

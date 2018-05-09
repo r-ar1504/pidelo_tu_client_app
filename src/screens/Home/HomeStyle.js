@@ -1,7 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { COLOR_PRIMARY }from 'src/assets/GlobalStyleSheet';
 
-
+const { height, width } = Dimensions.get('window');
 export default StyleSheet.create({
   container: {
   	flex:1,
@@ -21,6 +21,12 @@ export default StyleSheet.create({
   },
   rightHead:{
     paddingRight: 20
+  },
+  promo: {
+    alignSelf: 'center', 
+    width: width*.90,  
+    height: 180 , 
+    marginTop: 10, 
+    resizeMode: 'stretch',
   }
-
 });

@@ -58,8 +58,7 @@ export default class Register extends ValidationComponent {
 
     if(this.isFormValid()){
       this.setState({ loading: true }); 
-      this.checkNumber(phoneNumber).then((response) => {
-        alert(JSON.stringify(response));        
+      this.checkNumber(phoneNumber).then((response) => {            
         if (response.length == 0) {
             /* Send phone number to display in the next screen */ 
             firebase.auth().languageCode = 'es-419';             

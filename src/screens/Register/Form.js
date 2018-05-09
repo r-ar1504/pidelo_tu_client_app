@@ -39,8 +39,7 @@ export default class Form extends React.Component {
   confirm(credential, phoneNumber){
     this.setState({ loading: true, phoneNumber: phoneNumber }); 
     /* SignIn with phone credential, then link with 
-    email credential and finally save data to local storage and server */
-    /**** fix issue to signIn with EmailAuthProvider credentials and then link the PhoneAuthCredential ***/    
+    email credential and finally save data to local storage and server */    
     firebase.auth().signInWithCredential(credential)
       .then((user) => {
         user.updateProfile({ displayName: this.state.name });
@@ -67,7 +66,7 @@ export default class Form extends React.Component {
         const firebaseId = this.state.user.uid;
 
         let user = {
-          name: name.toString(),
+          name: name,
           email: email.toLowerCase(),
           password: password.toString()
         }
@@ -79,7 +78,7 @@ export default class Form extends React.Component {
   }
 
   sendData(){
-    return fetch('http://192.168.0.26:8000/register', {
+    return fetch('http://pidelotu.azurewebsites.net/register', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

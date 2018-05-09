@@ -72,7 +72,7 @@ export default StyleSheet.create({
   },
   signupTextCont : {
     paddingVertical:16,
-    marginTop:100,
+    marginTop:70,
     flexDirection:'row',
   },
   signupButton: {

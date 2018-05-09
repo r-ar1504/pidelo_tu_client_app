@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
-import {  Text, View, Image, BackHandler, AsyncStorage, TextInput, TouchableOpacity} from 'react-native';
+import {  Text, View, Image, BackHandler, AsyncStorage, TextInput, TouchableOpacity, ImageBackground} from 'react-native';
 import { Icon, Container, Content, Header, Left, Body, Right, Button } from 'native-base';
 import style from './ProfileStyle';
 
@@ -61,7 +61,7 @@ export default class Profile extends Component{
 
     return(
 			<Container>        
-        <Image source={require('src/assets/images/background.png')} style={style.image}/>
+        <ImageBackground source={require('src/assets/images/background.png')} style={style.image}/>
         <Header style={{ backgroundColor: 'transparent', elevation: 0}}>
           <Left>
             <TouchableOpacity onPress={() => {
@@ -84,7 +84,7 @@ export default class Profile extends Component{
             </TouchableOpacity>
           </Left>
           <Body>
-            <Text style={{fontSize:12, color: '#fff', padding: 10, fontFamily: 'Lato-Light', alignSelf:'center', marginLeft: 60}}>{this.state.title}</Text>
+            <Text style={{fontSize:12, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light', alignSelf:'center', marginLeft: 70}}>{this.state.title}</Text>
           </Body>
           <Right>
             <TouchableOpacity onPress={() => {
@@ -113,7 +113,7 @@ export default class Profile extends Component{
             <Text style={{fontSize:20, color: '#fff', alignSelf: 'flex-start', paddingLeft: 30, fontFamily: 'Lato-Light'}}>Correo Electronico</Text>
             <View style={style.profile_input}>
               <FontIcon name="envelope-open" size={25} color="#fff" style={{ paddingRight:10, paddingTop: 8}} />
-              <TextInput style={{fontSize: 15, color: '#11c0f6', fontFamily: 'Lato-Light'}} underlineColorAndroid={'transparent'} editable={this.state.editable} value={this.state.email}/>
+              <TextInput style={{fontSize: 15, color: '#11c0f6', fontFamily: 'Lato-Light'}} underlineColorAndroid={'transparent'} editable={this.state.editable} value={this.state.email} onChangeText={(email) => this.setState({email})}/>
             </View>
           </View>
           <View style={style.profile_element}>
@@ -127,7 +127,7 @@ export default class Profile extends Component{
             <Text style={{fontSize:20, color: '#fff', alignSelf: 'flex-start', paddingLeft: 30, fontFamily: 'Lato-Light'}}>Contraseña Actual</Text>
             <View style={style.profile_input}>
               <FontIcon name="lock" size={25} color="#fff" style={{ marginRight:10, paddingTop: 8 }} />              
-              <TextInput style={{fontSize: 15, color: '#11c0f6', fontFamily: 'Lato-Light' }} underlineColorAndroid={'transparent'} editable={this.state.editable} secureTextEntry={this.state.showPassword} value={this.state.password}/>
+              <TextInput style={{fontSize: 15, color: '#11c0f6', fontFamily: 'Lato-Light' }} underlineColorAndroid={'transparent'} editable={this.state.editable} secureTextEntry={this.state.showPassword} value={this.state.password} onChangeText={(password) => this.setState({password})}/>
               <Icon name={this.state.eyeIcon} style={{color:'white', fontSize: 25, paddingTop: 8, marginLeft: 100}} onPress={this.showPassword.bind(this)} />              
             </View>
           </View>

@@ -32,6 +32,7 @@ export default class SideMenu extends Component{
     const user = params ? params.user : null;    
     
     AsyncStorage.getItem(user.uid, (err, item) => {
+      alert(JSON.stringify(item));
       this.setState({name: JSON.parse(item).name});
     });                        
   }
@@ -103,35 +104,34 @@ export default class SideMenu extends Component{
           <View style={style.sidebar_links}>
             <TouchableWithoutFeedback onPress={this.openPromos}>
               <View style={style.sidebar_link}>
-                <FontIcon name="ticket" size={15} color="#fff" style={{marginTop: 5, paddingRight:4}} />
+                <FontIcon name="ticket" size={15} color="#fff" style={{marginTop: 8, paddingRight:4}} />
                 <Text style={{fontSize: 15, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>Promociones</Text>
               </View>
             </TouchableWithoutFeedback>
 
             <TouchableWithoutFeedback onPress={this.accountSettings.bind(this,user)}>
               <View style={style.sidebar_link}>
-                <FontIcon name="cogs" size={15} color="#fff"  style={{marginTop: 5, paddingRight:3}} />
+                <FontIcon name="cogs" size={15} color="#fff"  style={{marginTop: 8, paddingRight:3}} />
                 <Text style={{fontSize: 15, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>Ajustes de perfil</Text>
               </View>
             </TouchableWithoutFeedback>
             <TouchableWithoutFeedback onPress={this.currentLocation}>
               <View style={style.sidebar_link}>
-                <FontIcon name="map-marker" size={15} color="#fff"  style={{marginTop: 5, paddingRight:6, paddingLeft: 3}}/>
+                <FontIcon name="map-marker" size={15} color="#fff"  style={{marginTop: 8, paddingRight:6, paddingLeft: 3}}/>
                 <Text style={{fontSize: 15, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>Ubicación Actual</Text>
               </View>
             </TouchableWithoutFeedback>
 
             <TouchableWithoutFeedback onPress={this.orderHistory}>
               <View style={style.sidebar_link}>
-                <FontIcon name="list-ol" size={15} color="#fff" style={{marginTop: 5, paddingRight:4}} />
+                <FontIcon name="list-ol" size={15} color="#fff" style={{marginTop: 8, paddingRight:4}} />
                 <Text style={{fontSize: 15, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>Historial de pedidos</Text>
-
               </View>
             </TouchableWithoutFeedback>
 
             <TouchableWithoutFeedback onPress={this.paymentMethod}>
               <View style={style.sidebar_link}>
-                <Icon active name="cash" style={{marginTop: 5, paddingRight:4, fontSize: 15, color: '#fff'}} />
+                <Icon active name="cash" style={{marginTop: 8, paddingRight:4, fontSize: 15, color: '#fff'}} />
                 <Text style={{fontSize: 15, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>Agregar método pago</Text>
               </View>
             </TouchableWithoutFeedback>
