@@ -31,10 +31,8 @@ export default class Home extends Component{
     ]);
   }
 
-   componentWillMount(){
-      OneSignal.sendTags({delivery_code: 'U10', user_type: 'client'});//Register tags for specific user.
-      OneSignal.addEventListener('received', this.pushHandler);//If app is open will call this handler.
-      OneSignal.addEventListener('opened', this.pushOpened);//If app is closed and user clicks, this handler will be called.
+  componentWillMount(){
+    OneSignal.sendTags({delivery_code: 'U10', user_type: 'client'});//Register tags for specific user.      
   }
      
   openDrawer(user){      

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
-import {  Text, View, Image, BackHandler, AsyncStorage, TextInput, TouchableOpacity, YellowBox} from 'react-native';
+import {  Text, View, Image, BackHandler, AsyncStorage, TextInput, TouchableOpacity, YellowBox, ActivityIndicator, ImageBackground} from 'react-native';
 import { Icon, Container, Content, Header, Left, Body, Right, Button } from 'native-base';
 import style from './MealStyle';
+import firebase from 'react-native-firebase';
 
 export default class Profile extends Component{
   static navigationOptions ={
@@ -11,7 +12,7 @@ export default class Profile extends Component{
   constructor(props){
     super(props);
 
-    this.state = { number: 1 }    
+    this.state = { number: 1, user: null, price: 97, coords: {}, loading: false, total: 97 }    
 
     YellowBox.ignoreWarnings([
      'Warning: componentWillMount is deprecated',
@@ -20,7 +21,23 @@ export default class Profile extends Component{
   }
 
   componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);                              
+    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid); 
+
+    this.setState({user: firebase.auth().currentUser});
+
+     navigator.geolocation.getCurrentPosition(
+        position => {
+          this.setState({
+            coords: {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,                      
+            },          
+          });                
+        },
+      (error) => {    
+        alert(error.message);        
+      },
+    { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 });                             
   }
 
   componentWillUnmount() {
@@ -31,25 +48,69 @@ export default class Profile extends Component{
     this.props.navigation.navigate('Restaurant');
   }
 
-  IncrementItem = () => {    
+  IncrementItem = () => { 
+    const price = this.state.price * (this.state.number + 1); 
     this.setState({ number: this.state.number + 1 });
+    this.setState({ total: price});
   }
   DecreaseItem = () => {  
-    if (this.state.number > 0) {
+    if (this.state.number > 1) {      
+      const price = this.state.price * (this.state.number - 1);
       this.setState({ number: this.state.number - 1 });
+      this.setState({ total: price});
     }
+  }
+
+  accept(meal){
+    this.setState({loading: true});    
+    this.sendData(meal).then((response) => {      
+      this.setState({loading: false});
+    })      
+  }
+  
+
+  sendData(meal){
+    return fetch('http://pidelotu.azurewebsites.net/order', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        restaurant_id:meal.id_restaurant,
+        meal_id:meal.id_meal,
+        meal_category_id:meal.id_category,
+        user_id:this.state.user.uid,
+        total:this.state.total,
+        latitude:this.state.coords.latitude,
+        longitude:this.state.coords.longitude
+      })
+    }).then(response => response.json())
+      .then(json => {
+        return json;    
+    }).catch((error) => {
+      return error;
+    });
   }
 
   render(){ 
     const { params } = this.props.navigation.state;
-    const meal = params ? params.user : null; 
+    const meal = params ? params.meal : null;     
+
+    if(this.state.loading) {
+        return(    
+          <View style={style.body}>
+            <ActivityIndicator size={50} color="#11c0f6"/>
+          </View>
+        )
+      }  
 
     return(
 			<Container>        
-        <Image source={require('src/assets/images/background.png')} style={style.background}/>
+        <ImageBackground source={require('src/assets/images/background.png')} style={style.background}/>
         <Header style={{ backgroundColor: 'transparent', elevation: 0}}>
           <Left>
-            <TouchableOpacity onPress={() => { this.props.navigation.goBack(); }}>                            
+            <TouchableOpacity onPress={() => { this.props.navigation.navigate('Restaurant'); }}>                            
               <Icon name="arrow-back" style={{color:'white', fontSize: 25}} />
             </TouchableOpacity>
           </Left>
@@ -57,22 +118,22 @@ export default class Profile extends Component{
             
           </Body>
           <Right>
-            <Icon active name='time' style={{color:'white', fontSize: 15}} /><Text style={{marginLeft: 5, fontFamily: 'Lato-Light', color:'#fff'}}>00:20:56</Text>           
+            <Icon active name='time' style={{color:'white', fontSize: 15}} /><Text style={{marginLeft: 5, fontFamily: 'Lato-Light', color:'#fff'}}>00:{meal.preparation_time}:00</Text>           
           </Right>                       
         </Header> 
 
         <View style={style.meal} >
-          <Image source={require('src/assets/images/meal-selected.png')} style={style.image}/>          
+          <Image source={{uri:'http://pidelotu.azurewebsites.net/images/meals/'+meal.image}} style={style.image}/>          
         </View>
 
         <Content padder>
           <View>
             <View style={{flexDirection: 'row', paddingLeft: 10, paddingTop: 10}}>              
-              <Text style={{fontFamily: 'Lato-Bold', color:'#11c0f6'}}>Pizza Grande de Jamón</Text>                            
+              <Text style={{fontFamily: 'Lato-Bold', color:'#11c0f6'}}>{meal.description}</Text>                            
             </View>
             <View style={{flexDirection: 'row', paddingLeft: 10, paddingTop: 10}}>
-              <Text style={{fontFamily: 'Lato-Light', color:'#fff', flex:1, flexWrap: 'wrap'}}>Pizza Grande de Jamón de Pierna y queso a elegir</Text>              
-              <Text style={{marginLeft: 180, fontFamily: 'Lato-Bold', color:'#fff', flex: 1}}>$97</Text>              
+              <Text style={{fontFamily: 'Lato-Light', color:'#fff', flex:1, flexWrap: 'wrap'}}>{meal.description}</Text>              
+              <Text style={{marginLeft: 180, fontFamily: 'Lato-Bold', color:'#fff', flex: 1}}>${this.state.total}</Text>              
             </View>                    
           </View>
           <View style={{width: "100%", backgroundColor: '#11c0f6', marginTop: 10}}>
@@ -84,7 +145,7 @@ export default class Profile extends Component{
             </View>
           </View>
           <View style={{flexDirection: 'column', alignItems:'center', marginTop:80}}>
-            <TouchableOpacity style={style.confirm}><Text style={style.text}>ORDENAR</Text></TouchableOpacity>    
+            <TouchableOpacity style={style.confirm} onPress={this.accept.bind(this,meal)}><Text style={style.text}>ORDENAR</Text></TouchableOpacity>    
           </View>
         </Content>
 			</Container>

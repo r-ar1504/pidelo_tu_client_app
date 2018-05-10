@@ -27,6 +27,16 @@ export default StyleSheet.create({
     marginRight: 15,
     height:90
   },
+  body: {
+    backgroundColor: 'rgba(66, 103, 178, 0.5)',
+    opacity:0.5,
+    zIndex: 999,
+    position: 'relative',
+    flex: 9,
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'center',      
+  },
   restaurantTitle: {
     color: '#fff',
     opacity: 0.8,

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, BackHandler, Image, YellowBox } from 'react-native';
+import { View, BackHandler, Image, YellowBox, ImageBackground } from 'react-native';
 
 import styles from './PaymentStyle';
 import Form from './Form';
@@ -43,7 +43,7 @@ import Form from './Form';
    render() {
 		return(      
 			<View style={styles.container}>
-        <Image source={require('src/assets/images/background.png')} style={styles.image}/>
+        <ImageBackground source={require('src/assets/images/background.png')} style={style.background}/>
 				<Form confirm={this.confirm}/>
 			</View>      
 		)

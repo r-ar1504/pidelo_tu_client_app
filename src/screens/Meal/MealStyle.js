@@ -4,10 +4,18 @@ import { COLOR_PRIMARY, FONT_NORMAL }from 'src/assets/GlobalStyleSheet';
 
 export default StyleSheet.create({
   background:{    
-    resizeMode:'stretch',
-    position: 'center',
-    ...StyleSheet.absoluteFillObject,    
+    display: 'flex',
+    flex:1,    
+    position: 'absolute',
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center' 
   },  
+  body: {
+    flex: 9,
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'center',    
+  },
   meal:{
     paddingTop:10,
     flexDirection: 'column',
@@ -17,7 +25,8 @@ export default StyleSheet.create({
   },
   image:{
     width: 250,
-    height: 250,    
+    height: 250,
+    resizeMode:'contain'    
   },
   input: {
     fontSize: 14, 

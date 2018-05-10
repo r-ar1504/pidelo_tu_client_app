@@ -9,11 +9,11 @@ export default StyleSheet.create({
     flexDirection:'column'
   },
   image:{
-    flex:1,
-    resizeMode:'stretch',
+    display: 'flex',
+    flex:1,    
     position: 'absolute',
     ...StyleSheet.absoluteFillObject,
-    justifyContent: 'center',
+    justifyContent: 'center' 
   },
   inputBox: {
     width:300,          

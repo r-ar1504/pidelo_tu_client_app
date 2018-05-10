@@ -67,7 +67,7 @@ export default class VerificationCode extends React.Component {
         return(    
           <View style={styles.body}>
             <Image source={require('src/assets/images/bg.png')} style={styles.image} />
-            <ActivityIndicator size={50} color="white"/>
+            <Image style={styles.logo} source={require('src/assets/images/ic.png')} style={{width: 105, height: 105}}/>
           </View>
         )
       }     

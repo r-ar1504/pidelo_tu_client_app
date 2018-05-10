@@ -68,7 +68,7 @@ export default class Maps extends React.Component {
         },
       (error) => {    
         alert(error.message);
-        this.props.navigation.goBack();
+        this.props.navigation.navigate('AllowLocation');
       },
       { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 });    
     }

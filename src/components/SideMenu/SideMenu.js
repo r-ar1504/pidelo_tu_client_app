@@ -32,7 +32,7 @@ export default class SideMenu extends Component{
     const user = params ? params.user : null;    
     
     AsyncStorage.getItem(user.uid, (err, item) => {
-      alert(JSON.stringify(item));
+      //alert(JSON.stringify(item));
       this.setState({name: JSON.parse(item).name});
     });                        
   }

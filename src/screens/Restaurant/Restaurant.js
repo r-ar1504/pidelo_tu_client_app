@@ -4,23 +4,25 @@ import { Container, Header, Content, Body, Right, Left } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from './RestaurantStyle';
 import Swiper from 'react-native-swiper';
-import{ Text, View, TouchableWithoutFeedback, BackHandler, Image } from 'react-native';
+import{ Text, View, TouchableWithoutFeedback, BackHandler, Image, ActivityIndicator, Modal } from 'react-native';
 
 
 export default class Search extends Component{
   constructor(props){
     super(props);  
 
-    this.state = { items: [] }
+    this.state = { items: [], loading: true }
+    
     this.getMeals().then((response) => {
-      this.setState({items: response});
+      this.setState({items: response}); 
+      this.setState({loading: false})     
     });
 
     this.openDiscounts = this.openDiscounts.bind(this);
-  }
+  }  
 
   componentDidMount(){
-    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);       
+    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);           
   }
 
   componentWillUnmount() {
@@ -35,38 +37,58 @@ export default class Search extends Component{
     this.props.navigation.navigate('Discounts')
   }
 
-  openMeal(id){
-    this.props.navigation.navigate('MealSelected');
+  openMeal(meal){    
+    this.props.navigation.navigate('MealSelected', { meal: meal });
   }
 
   renderMeals(){    
-    return this.state.items.map((item, i) => {
+    return this.state.items.map((item, i) => {      
       return (
-        <View style={styles.slide} key={item.id_meal}> 
-          <View style={styles.mealCont}>
-                <TouchableWithoutFeedback onPress={this.openMeal.bind(this,item.id_meal)}>
-                  <Image source={{uri:'http:192.168.0.26:8000/images/'+item.image}} style={styles.mealImg}/>
+      <View key={item.id}>
+        <View style={styles.titleCont}>
+          <Text style={styles.titleText}>{item.name}</Text>
+        </View>
+          <Swiper style={styles.wrapper} height={210} activeDotColor={'#11c0f6'} key={this.state.items.length}> 
+            {item.meals.map((item,i) => {
+              return (
+            <View style={styles.slide} key={item.id}>          
+              <View style={styles.mealCont}>
+                <TouchableWithoutFeedback onPress={this.openMeal.bind(this,item)}>
+                  <Image source={{uri:'http://pidelotu.azurewebsites.net/images/meals/'+item.image}} style={styles.mealImg}/>
                 </TouchableWithoutFeedback>
                 <View style={styles.infoCont}>
-                  <Text style={styles.description}>{item.description}</Text><Text style={styles.price}>{item.preparation_time}</Text>
+                  <Text style={styles.description}>{item.description}</Text><Text style={styles.price}>${item.price}</Text>
                 </View>              
-          </View>  
-        </View>
-        )
-    })
+              </View>  
+            </View>  
+              )
+            })}                                           
+          </Swiper>        
+      </View>
+      )
+    })        
   }
 
   getMeals(){
-    return fetch('http://192.168.0.26:8000/getMeals')
-        .then((response) => {              
+    return fetch('http://pidelotu.azurewebsites.net/getMeals')
+        .then((response) => {                      
         return response.json();
       }); 
   }  
   
-  render(){    
+  render(){  
+    if(this.state.loading) {
+        return(  
+          <Modal animationType="slide" transparent={true} visible={this.state.loading}>
+            <View style={styles.body}>            
+              <ActivityIndicator size={50} color="#11c0f6"/>
+            </View>
+          </Modal>            
+        )
+      }   
     return(
       <Container>
-        <Image source={require('src/assets/images/pizzaBack.jpg')} style={styles.image}/>
+        <Image source={{uri:'http://pidelotu.azurewebsites.net/images/restaurants/categories/res-24-cat-5.jpeg'}} style={styles.image}/>
         <Header style={styles.header}>
           <Left style={{flex: 1}}>
             <Icon name="arrow-left" size={20} color="#fff" onPress={ () => {this.props.navigation.goBack()}} />
@@ -82,16 +104,11 @@ export default class Search extends Component{
         </Header>
         <Content>
         <View style={styles.restaurantTitleCont}>
-          <Text style={styles.restaurantTitle}>PIZZA HUT</Text>
-          <Image source={require('src/assets/images/pizzah.png')} style={{width:50, height:50, margin: 10}}/>
+          <Text style={styles.restaurantTitle}>P & G</Text>
+          <Image source={{uri:'http://pidelotu.azurewebsites.net/images/logos/e5a8ab717c327e2fcd1d78471aae3da0.png'}} style={{width:50, height:50, margin: 10}}/>
         </View>
-        <View style={styles.titleCont}>
-          <Text style={styles.titleText}>Pizzas</Text>
-        </View>
-          <Swiper style={styles.wrapper} height={210} activeDotColor={'#11c0f6'} key={this.state.items.length}>                        
-            {this.renderMeals()}           
-          </Swiper>
-                
+        {this.renderMeals()}
+        {/*       
         <View style={styles.titleCont}>
           <Text style={styles.titleText}>Appetizers</Text>
         </View>
@@ -138,7 +155,7 @@ export default class Search extends Component{
                 </View>   
               </View>
             </View>
-          </Swiper>
+          </Swiper>*/}
         </Content>
       </Container>
     );
