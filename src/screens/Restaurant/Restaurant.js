@@ -37,23 +37,24 @@ export default class Search extends Component{
     this.props.navigation.navigate('Discounts')
   }
 
-  openMeal(meal){    
-    this.props.navigation.navigate('MealSelected', { meal: meal });
+  openMeal(meal, restaurant){    
+    alert(restaurant);
+    this.props.navigation.navigate('MealSelected', { meal: meal, restaurant_id: restaurant});
   }
 
   renderMeals(){    
-    return this.state.items.map((item, i) => {      
+    return this.state.items.map((categories, i) => {      
       return (
-      <View key={item.id}>
+      <View key={categories.id}>
         <View style={styles.titleCont}>
-          <Text style={styles.titleText}>{item.name}</Text>
+          <Text style={styles.titleText}>{categories.name}</Text>
         </View>
           <Swiper style={styles.wrapper} height={210} activeDotColor={'#11c0f6'} key={this.state.items.length}> 
-            {item.meals.map((item,i) => {
+            {categories.meals.map((item,i) => {
               return (
             <View style={styles.slide} key={item.id}>          
               <View style={styles.mealCont}>
-                <TouchableWithoutFeedback onPress={this.openMeal.bind(this,item)}>
+                <TouchableWithoutFeedback onPress={this.openMeal.bind(this,item,categories.restaurant_id)}>
                   <Image source={{uri:'http://pidelotu.azurewebsites.net/images/meals/'+item.image}} style={styles.mealImg}/>
                 </TouchableWithoutFeedback>
                 <View style={styles.infoCont}>
