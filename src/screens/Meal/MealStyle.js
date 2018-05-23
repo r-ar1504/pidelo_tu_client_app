@@ -57,12 +57,12 @@ export default StyleSheet.create({
     textAlign:'center',
     fontFamily: FONT_NORMAL, 
     alignSelf: 'center'
-  },  
+  },       
   confirm: {
     width:300,
     backgroundColor:COLOR_PRIMARY,           
     paddingVertical: 13,
     marginTop: 8,    
     borderRadius:20, 
-  } 
+  }
 })

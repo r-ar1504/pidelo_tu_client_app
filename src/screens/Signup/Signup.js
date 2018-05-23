@@ -1,29 +1,35 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { StackNavigator } from 'react-navigation';
-import { View, BackHandler, Alert, AsyncStorage, ActivityIndicator, YellowBox, Image } from 'react-native';
-import { Container } from 'native-base';
+import { BackHandler, AsyncStorage, ActivityIndicator, YellowBox, TouchableWithoutFeedback, ImageBackground } from 'react-native';
+import { Container, Header, Icon, Left, Body, Right } from 'native-base';
+import firebase from 'react-native-firebase';
 
 import Logo from 'src/components/Logo';
 import Form from './Form';
 import styles from './SignupStyle';
-import firebase from 'react-native-firebase';
 
+const messages = {
+    en: {
+      numbers: "Ingresa un número valido.",
+      email: "Ingresa una dirección de correo valida.",
+      required: "El campo es requerido.",
+      minlength: "La longitud del campo debe ser más grande"
+    },    
+  };
 
-export default class Signup extends Component<{}> {
+export default class Signup extends React.Component {
   static navigationOptions = {
      headerStyle:{
        display: 'none'
      }
    }
 
-   constructor(props){
+  constructor(props){
     super(props);
     this.signup = this.signup.bind(this);
-    this.state = { loading:false, user: null, email: '', password: '' };  
+    this.state = { loading: false };  
 
-    YellowBox.ignoreWarnings([
-     'Warning: componentWillMount is deprecated',
-     'Warning: componentWillReceiveProps is deprecated',
+    YellowBox.ignoreWarnings([     
      'Warning: Failed prop type'
     ]);     
   }
@@ -40,13 +46,13 @@ export default class Signup extends Component<{}> {
   };  
 
   signup(name,email,password){
-    this.setState({ loading: true, name: name, email: email, password: password  });         
+    this.setState({ loading: true });         
     firebase.auth().createUserWithEmailAndPassword(email, password)
     .then((user) => {               
-      this.setState({ user });
-      user.updateProfile({ displayName: name });                 
-      this.sendData().then((response) => {                 
-          this.saveData();  
+      user.updateProfile({ displayName: name });           
+      let data = { firebaseId: user.uid, name: name, email: email.toLowerCase(), password: password }         
+      this.saveData(user.uid,data);                  
+      this.sendData(data).then((response) => {                           
           this.setState({loading: false})
         }); 
     })
@@ -55,18 +61,15 @@ export default class Signup extends Component<{}> {
         alert(error)
     });
   }
-  sendData(){
+
+  sendData(data){
     return fetch('http://pidelotu.azurewebsites.net/signup', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        firebaseId: this.state.user.uid,
-        name: this.state.name,
-        email: this.state.email,
-      })
+      body: JSON.stringify(data)
     }).then(response => response.json())
       .then(json => {
         return json;    
@@ -76,40 +79,41 @@ export default class Signup extends Component<{}> {
     });
   }
 
-  saveData(){    
-      try {
-        const name = this.state.name;
-        const email = this.state.email;
-        const password = this.state.password;
-        const firebaseId = this.state.user.uid;
-
-        let user = {
-          name: name.toString(),
-          email: email.toLowerCase(),
-          password: password.toString()
-        }
-                
-        AsyncStorage.setItem(firebaseId,JSON.stringify(user));
+  async saveData(key,data){    
+      try {                                
+        await AsyncStorage.setItem(key,JSON.stringify(data));
       } catch (error) {
-        alert(error);
+        alert(error.message);
       }
   }
 
 	render() {
     if(this.state.loading) {
         return(    
-          <View style={styles.body}>
-            <Image source={require('src/assets/images/bg.png')} style={styles.image} />
-            <ActivityIndicator size={50} color="white" animating={true}/>
-          </View>
+         <ImageBackground source={require('src/assets/images/bg.png')} style={styles.body}>
+            <ActivityIndicator size={50} color="#11c0f6" animating={true}/>
+          </ImageBackground>
         )
       }  
-		return(
-     <View style={styles.container}>                
-        <Container>          
-          <Form signup={this.signup} deviceLocale="es"/>       
-        </Container>                                   
-      </View>   
+		return(                  
+        <Container style={styles.container}> 
+          <Header backgroundColor={'#fff'} style={{flexDirection: 'row', justifyContent: 'space-around', backgroundColor: 'transparent', elevation: 0, width: '100%'}}>
+            <Left style={{ flex: 1 }} >
+              <TouchableWithoutFeedback onPress={() => {this.props.navigation.goBack()}}>
+                <Icon name='arrow-back' />
+              </TouchableWithoutFeedback>
+            </Left>
+            <TouchableWithoutFeedback>
+            <Body style={{ flex: 1,  justifyContent: 'center', alignItems: 'center' }}>
+              
+            </Body>
+            </TouchableWithoutFeedback>
+            <Right style={{ flex: 1 }}>
+              
+            </Right>
+          </Header>                     
+          <Form signup={this.signup} messages={messages}/>       
+        </Container>                                         
 		)
 	}
 }

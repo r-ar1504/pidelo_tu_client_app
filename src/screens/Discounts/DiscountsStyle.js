@@ -11,8 +11,7 @@ export default StyleSheet.create({
   food:{
     alignItems:'center', 
     justifyContent:'center',       
-    alignSelf: 'center',        
-    resizeMode:'cover',    
+    alignSelf: 'center',            
     width: 380,
     height: 200,
   },

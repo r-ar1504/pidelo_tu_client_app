@@ -27,6 +27,13 @@ export default StyleSheet.create({
     width: width*.90,  
     height: 180 , 
     marginTop: 10, 
+    marginBottom:10,
     resizeMode: 'stretch',
+  },
+  body: {
+    flexGrow: 1,
+    backgroundColor: '#00000000',
+    justifyContent:'center',
+    alignItems: 'center',
   }
 });

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { DrawerNavigator, NavigationActions } from 'react-navigation';
-import {Container, Header, Content, Body, Right, Left} from 'native-base';
-import{ StyleSheet, Text, View, StatusBar , TouchableOpacity, TouchableWithoutFeedback, ScrollView, BackHandler, Image, YellowBox } from 'react-native';
+import { Container, Header, Content, Body, Right, Left} from 'native-base';
+import { Text, View, TouchableOpacity, TouchableWithoutFeedback, ScrollView, BackHandler, Image, YellowBox, AsyncStorage, ActivityIndicator } from 'react-native';
 import style from './HomeStyle';
 import FoodFeed from './FoodFeed';
 import SearchButton from './SearchButton';
@@ -24,39 +24,25 @@ export default class Home extends Component{
     }
   }
   constructor(props){
-    super(props);
-
+    super(props);      
+    
     this.searchScreen = this.searchScreen.bind(this);
     this.getRestaurants = this.getRestaurants.bind(this);
-    YellowBox.ignoreWarnings([
-     'Warning: componentWillMount is deprecated',
-     'Warning: componentWillReceiveProps is deprecated',
-     'Warning: componentWillUpdate is deprecated',
-     'Warning: TouchableWithoutFeedback does not work well with Text children'
-    ]);
+    this.renderRestaurants = this.renderRestaurants.bind(this);
+    this.openRestaurant = this.openRestaurant.bind(this); 
 
     this.state = {
-      restaurants: null
-    }
+      restaurants: null, loading: true
+    }    
 
-    this.renderRestaurants = this.renderRestaurants.bind(this);
-    this.openRestaurant = this.openRestaurant.bind(this);
-  }
-
-  getRestaurants(){
-    fetch('http://pidelotu.azurewebsites.net/get_restaurants')
-    .then( (response) => response.json() )
-    .then( (response) =>{
-        let resp = response;
-        this.setState({
-          restaurants: resp.restaurants
-        });
-    });
-  }
+     YellowBox.ignoreWarnings([
+     'Warning: TouchableWithoutFeedback does not work well with Text children'
+    ]);   
+  }  
 
   componentWillMount(){
-    OneSignal.sendTags({delivery_code: 'U10', user_type: 'client'});//Register tags for specific user.
-    this.getRestaurants();
+    OneSignal.sendTags({delivery_code: 'U10', user_type: 'client'});//Register tags for specific user. 
+    this.getRestaurants();     
   }
 
   openDrawer(user){
@@ -67,34 +53,53 @@ export default class Home extends Component{
     this.props.navigation.navigate('Restaurant', {restaurant_data: rest_data});
   }
 
+  openDisc(){
+    this.props.navigation.navigate('Discounts');
+  }
+
   searchScreen(){
     this.props.navigation.navigate('Search');
   }
 
+  getRestaurants(){
+    fetch('http://pidelotu.azurewebsites.net/get_restaurants')
+    .then( (response) => response.json() )
+    .then( (response) =>{
+        let resp = response;
+        this.setState({
+          restaurants: resp.restaurants
+        });
+        this.setState({loading: false});
+    });
+  }
+
   renderRestaurants(){
-
     if(this.state.restaurants != null) {
-
       return(
         this.state.restaurants.map((restaurant, i) =>{
-          return(
-            <RestaurantContainer restaurant={JSON.stringify(restaurant)} openRest={this.openRestaurant}/>
+          return(            
+            <View key={restaurant.id}>
+              <FoodFeed restaurant={JSON.stringify(restaurant)} openRest={this.openRestaurant}/>
+              <TouchableWithoutFeedback onPress={this.openDisc.bind(this)}>         
+                <Image source={require('src/assets/images/promo.jpg')} style={style.promo}/>             
+              </TouchableWithoutFeedback>
+            </View>
           )
         })
       )
-    }else{
-      return(
-        <View>
-          <Text>
-            No hay elementos
-          </Text>
-        </View>
-      )
-    }
+    }    
   }
+
   render(){
     const { params } = this.props.navigation.state;
     const user = params ? params.user : null;
+    if (this.state.loading){
+      return (
+        <View style={style.body}>
+          <ActivityIndicator size={50} color="#11c0f6" animating={true}/>
+        </View>
+      )
+    }
     return(
         <Container>
           <Header style={{flexDirection: 'row', justifyContent: 'space-around', backgroundColor: '#fff', width: '100%'}}>
@@ -113,12 +118,7 @@ export default class Home extends Component{
             </Right>
           </Header>
           <Content>
-            <SlidingPaneWrapper>
-              {this.renderRestaurants()}
-              <TouchableWithoutFeedback onPress={this.openRestaurant.bind(this)}>
-                <Image source={require('src/assets/images/promo.jpg')} style={style.promo}/>
-              </TouchableWithoutFeedback>
-            </SlidingPaneWrapper>
+            {this.renderRestaurants()}            
           </Content>
         </Container>
     );

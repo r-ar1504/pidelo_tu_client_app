@@ -9,6 +9,12 @@ export default StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     justifyContent: 'center',   
   },  
+   body: {
+    flexGrow: 1,
+    backgroundColor: 'rgba(0,0,0,0)',
+    justifyContent:'center',
+    alignItems: 'center',
+  },  
   container : {    
     flex: 1,
     alignItems:'center',
@@ -20,8 +26,7 @@ export default StyleSheet.create({
   food:{
     alignItems:'center', 
     justifyContent:'center',       
-    alignSelf: 'center',        
-    resizeMode:'cover',    
+    alignSelf: 'center',                
     width: 380,
     height: 100,
   },
@@ -73,7 +78,7 @@ export default StyleSheet.create({
   },
   button: {
     backgroundColor:COLOR_PRIMARY,                   
-    marginLeft: 5,    
+    marginLeft: 50,    
   },
   buttonText: {    
     color:'#ffffff',

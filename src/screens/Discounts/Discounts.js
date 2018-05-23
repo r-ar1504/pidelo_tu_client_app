@@ -50,8 +50,7 @@ export default class Discounts extends React.Component {
             <Text style={{
               color: '#fff',
               opacity: 0.8,
-              fontSize: 40,
-              letterSpacing: 20,
+              fontSize: 40,              
               fontWeight: 'bold',
               marginRight: 10
             }}>CUPONES & {"\n"} PROMOCIONES</Text>          

@@ -4,20 +4,20 @@ import { Container, Header, Content, Body, Right, Left } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import styles from './RestaurantStyle';
 import Swiper from 'react-native-swiper';
-import{ Text, View, TouchableWithoutFeedback, BackHandler, Image, ActivityIndicator, Modal } from 'react-native';
+import{ Text, View, TouchableWithoutFeedback, BackHandler, Image, ActivityIndicator, Modal, ImageBackground } from 'react-native';
 
 
 export default class Search extends Component{
   constructor(props){
     super(props);
 
-    this.state = {
-      items: [],
-      loading: true,
-      restaurant_data:this.props.navigation.getParam("restaurant_data"),//Datos del restaurante
-
-     }
-
+    this.state = { items: [], loading: true, restaurant_data:this.props.navigation.getParam("restaurant_data") }
+    
+    this.getMeals().then((response) => {
+      this.setState({items: response}); 
+      this.setState({loading: false})     
+    });
+    
     this.openDiscounts = this.openDiscounts.bind(this);
   }
 
@@ -41,18 +41,18 @@ export default class Search extends Component{
     this.props.navigation.navigate('Discounts')
   }
 
-  openMeal(meal, restaurant){
+  openMeal(meal, restaurant){        
     this.props.navigation.navigate('MealSelected', { meal: meal, restaurant_id: restaurant});
   }
 
-  renderMeals(){
-    return this.state.items.map((categories, i) => {
+  renderMeals(){    
+    return this.state.items.map((categories, index) => {      
       return (
-      <View key={categories.id}>
-        <View style={styles.titleCont}>
-          <Text style={styles.titleText}>{categories.name}</Text>
-        </View>
-          <Swiper style={styles.wrapper} height={210} activeDotColor={'#11c0f6'} key={this.state.items.length}>
+        <View key={categories.id}>
+          <View style={styles.titleCont}>
+            <Text style={styles.titleText}>{categories.name}</Text>
+          </View>
+          <Swiper style={styles.wrapper} height={210} activeDotColor={'#11c0f6'} key={this.state.items.length}> 
             {categories.meals.map((item,i) => {
               return (
             <View style={styles.slide} key={item.id}>
@@ -66,28 +66,28 @@ export default class Search extends Component{
               </View>
             </View>
               )
-            })}
-          </Swiper>
-      </View>
+            })}                                           
+          </Swiper>        
+        </View>
       )
     })
   }//Render
 
   getMeals(){
     return fetch('http://pidelotu.azurewebsites.net/restaurant_meals/' + this.state.restaurant_data.id)
-        .then((response) => {
+        .then((response) => {                      
         return response.json();
       });
   }
 
   render(){
     if(this.state.loading) {
-        return(
-          <Modal animationType="slide" transparent={true} visible={this.state.loading}>
-            <View style={styles.body}>
-              <ActivityIndicator size={50} color="#11c0f6"/>
-            </View>
-          </Modal>
+        return(  
+          <Modal animationType="slide" transparent={true} visible={this.state.loading} onRequestClose={() => {console.log('close modal')}}>
+            <ImageBackground source={require('src/assets/images/bg.png')} style={styles.body}>
+              <ActivityIndicator size={50} color="#11c0f6" animating={true}/>
+            </ImageBackground>
+          </Modal>            
         )
       }
     return(
@@ -110,58 +110,3 @@ export default class Search extends Component{
         <View style={styles.restaurantTitleCont}>
           <Text style={styles.restaurantTitle}>{this.state.restaurant_data.name}</Text>
           <Image source={{uri:'http://pidelotu.azurewebsites.net/images/logos/'+ this.state.restaurant_data.logo}} style={{width:50, height:50, margin: 10}}/>
-        </View>
-        {this.renderMeals()}
-        {/*
-        <View style={styles.titleCont}>
-          <Text style={styles.titleText}>Appetizers</Text>
-        </View>
-          <Swiper style={styles.wrapper} height={210} activeDotColor={'#11c0f6'}>
-            <View style={styles.slide}>
-              <View style={styles.mealCont}>
-                <Image source={require('src/assets/images/hotwings.png')} style={styles.mealImg}/>
-                <View style={styles.infoCont}>
-                  <Text style={styles.description}>Hot Wings 5 Pieces</Text><Text style={styles.price}>$69</Text>
-                </View>
-              </View>
-              <View style={styles.mealCont}>
-                <Image source={require('src/assets/images/breadsticks.png')} style={styles.mealImg}/>
-                <View style={styles.infoCont}>
-                  <Text style={styles.description}>BreadSticks 12 Pieces</Text><Text style={styles.price}>$40</Text>
-                </View>
-              </View>
-            </View>
-            <View style={styles.slide}>
-              <View style={styles.mealCont}>
-                <Image source={require('src/assets/images/hotwings.png')} style={styles.mealImg}/>
-                <View style={styles.infoCont}>
-                  <Text style={styles.description}>Hot Wings 5 Pieces</Text><Text style={styles.price}>$69</Text>
-                </View>
-              </View>
-              <View style={styles.mealCont}>
-                <Image source={require('src/assets/images/breadsticks.png')} style={styles.mealImg}/>
-                <View style={styles.infoCont}>
-                  <Text style={styles.description}>BreadSticks 12 Pieces</Text><Text style={styles.price}>$40</Text>
-                </View>
-              </View>
-            </View>
-            <View style={styles.slide}>
-              <View style={styles.mealCont}>
-                <Image source={require('src/assets/images/hotwings.png')} style={styles.mealImg}/>
-                <View style={styles.infoCont}>
-                  <Text style={styles.description}>Hot Wings 5 Pieces</Text><Text style={styles.price}>$69</Text>
-                </View>
-              </View>
-              <View style={styles.mealCont}>
-                <Image source={require('src/assets/images/breadsticks.png')} style={styles.mealImg}/>
-                <View style={styles.infoCont}>
-                  <Text style={styles.description}>BreadSticks 12 Pieces</Text><Text style={styles.price}>$40</Text>
-                </View>
-              </View>
-            </View>
-          </Swiper>*/}
-        </Content>
-      </Container>
-    );
-  }
-}

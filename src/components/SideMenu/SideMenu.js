@@ -13,8 +13,7 @@ export default class SideMenu extends Component{
     }
   }
   constructor(props){
-    super(props);
-    this.state = { name: '' }
+    super(props);    
     /*
     * Binded Functions:
     */
@@ -25,11 +24,7 @@ export default class SideMenu extends Component{
     this.paymentMethod = this.paymentMethod.bind(this)
     this.logOut = this.logOut.bind(this)
     this.openHelp = this.openHelp.bind(this)
-  }
-
-  componentDidMount() {
-
-  }
+  }  
 
   /* Close side menu. */
   dissmisSideMenu(){
@@ -76,6 +71,7 @@ export default class SideMenu extends Component{
   render(){
     const { params } = this.props.navigation.state.routes[0];
     const user = params ? params.user : null;
+
     return(
       <View style={style.sidebar_container}>
 
@@ -88,7 +84,7 @@ export default class SideMenu extends Component{
           <Image source={require('src/assets/images/ic.png')} style={style.side_profile}/>
           </View>
           <View style={style.sidebar_section}>
-            <Text style={{fontSize: 15, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>{this.state.name}</Text>
+            <Text style={{fontSize: 15, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>{(user.displayName != null) ? user.displayName : user.email}</Text>
           </View>
           <View style={style.sidebar_section} >
           <TouchableWithoutFeedback>

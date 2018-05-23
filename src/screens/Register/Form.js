@@ -139,7 +139,7 @@ export default class Form extends React.Component {
               label={'CONTRASEÑA'}              
               secureTextEntry={true}                
               ref={(input) => this.password = input}
-              onSubmitEditing={()=> this.confirm.focus()}
+              //onSubmitEditing={()=> this.confirm.focus()}
               borderColor={'#00000000'}
               value={this.state.password}
               onChangeText={(password) => this.setState({password})}

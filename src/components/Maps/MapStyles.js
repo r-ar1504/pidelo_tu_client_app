@@ -1,13 +1,19 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { COLOR_PRIMARY }from 'src/assets/GlobalStyleSheet';
-
+const { width, height } = Dimensions.get('window'); 
 export default StyleSheet.create({
-  container: {
-    ...StyleSheet.absoluteFillObject,    
+  container: {        
+    position:'absolute',
+    height: height,
+    width: width,    
     flexDirection: 'column',    
   },
-  map: {
-    ...StyleSheet.absoluteFillObject,
+  map: {    
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   bubble: {
     backgroundColor: COLOR_PRIMARY,
@@ -19,7 +25,7 @@ export default StyleSheet.create({
     width: 200,
     alignItems: 'stretch',
   },
-  button: {
+  bt: {
     width: 80,
     paddingHorizontal: 12,
     alignItems: 'center',
@@ -31,10 +37,10 @@ export default StyleSheet.create({
     marginTop: 480,    
     backgroundColor: 'transparent',
   },
-  input: {
+  in: {
     alignSelf: 'center',
-    backgroundColor: '#dbdbdb',
-    width: '90%',
+    backgroundColor: 'white',
+    width: width,
     height: 40,
     flexDirection: 'row',
     justifyContent: 'center',

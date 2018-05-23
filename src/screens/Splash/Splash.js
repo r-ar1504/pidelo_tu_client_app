@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StackNavigator } from 'react-navigation';
-import { StyleSheet, View, Image, YellowBox, ActivityIndicator, Alert, BackHandler } from 'react-native';
+import { StyleSheet, View, Image, YellowBox, ActivityIndicator, Alert, BackHandler, AsyncStorage } from 'react-native';
 import firebase from 'react-native-firebase';
 
 export default class Splash extends Component<{}> {
@@ -16,10 +16,7 @@ export default class Splash extends Component<{}> {
     this. state = { authSubscription: null }
 
     YellowBox.ignoreWarnings([
-     'Warning: componentWillMount is deprecated',
-     'Warning: componentWillReceiveProps is deprecated',
-     'Warning: componentWillUpdate is deprecated',
-     'Warning: Failed prop type'
+     'Warning: isMounted(...) is deprecated', 'Module RCTImageLoader',      
     ]);
   }  
 
@@ -31,18 +28,19 @@ export default class Splash extends Component<{}> {
     BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
     setTimeout(()=>{
       this.authSubscription = firebase.auth().onAuthStateChanged((user) => {        
-        if (user) {       
-          this.props.navigation.navigate('Home', { user: user });
+        if (user) {                                                               
+          this.props.navigation.navigate('Home', { user: user });                                        
         }
         else {
           this.props.navigation.navigate('Login');
         }
       });
     },3000);
-  }
+  }  
+
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
-    this.setState({authSubscription: null});
+    this.setState({ authSubscription: null });
   }
 
 	render(){    

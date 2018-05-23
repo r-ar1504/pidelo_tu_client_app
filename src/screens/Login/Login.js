@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
-import { YellowBox } from 'react-native';
+import React from 'react';
 import { StackNavigator } from 'react-navigation';
-import { View, BackHandler, Alert, ActivityIndicator, Image } from 'react-native';
+import { View, BackHandler, Alert, ActivityIndicator, Image, YellowBox, ImageBackground } from 'react-native';
 
 import Logo from '../../components/Logo';
 import Form from './Form';
@@ -10,7 +9,7 @@ import { Container } from 'native-base';
 import styles from './LoginStyle';
 import firebase from 'react-native-firebase';
 
- export default class Login extends Component {
+ export default class Login extends React.Component {
    static navigationOptions = {
      headerStyle:{
        display: 'none'
@@ -28,10 +27,7 @@ import firebase from 'react-native-firebase';
     this.state = { email: "", password: "", loading:false, user: null }; 
 
     YellowBox.ignoreWarnings([
-     'Warning: componentWillMount is deprecated',
-     'Warning: componentWillReceiveProps is deprecated',
-     'Warning: componentWillUpdate is deprecated',
-     'Warning: Failed prop type'
+     'Warning: isMounted(...) is deprecated', 'Module RCTImageLoader',         
     ]);
   }
   componentDidMount() {
@@ -72,24 +68,15 @@ import firebase from 'react-native-firebase';
     
   render() {    
     if(this.state.loading) {
-        return(    
-          <View style={styles.body}>
-            <Image source={require('src/assets/images/bg.png')} style={styles.image} />
-            <ActivityIndicator size={50} color="white"/>
-          </View>
+        return(              
+            <ImageBackground source={require('src/assets/images/bg.png')} style={styles.body}>
+              <ActivityIndicator size={50} color="#11c0f6"/>
+            </ImageBackground>          
         )
       }    
 		return(      			  
       <View style={styles.container}>        
-        <Video
-          source={require('src/video/video.mp4')}
-                rate={1.0}
-                volume={1.0}
-                muted={true}
-                resizeMode={"cover"}
-               repeat
-                style={styles.video}
-            />
+        <Video source={require('src/video/video.mp4')} rate={1.0} resizeMode={"cover"} muted={true} repeat style={styles.video}/>
         <Logo/>                                           
         <Container>          
           <Form signIn={this.signIn} register={this.register} signup={this.signup} deviceLocale="es"/>       
