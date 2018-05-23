@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StackNavigator } from 'react-navigation';
-import { Text,View, TouchableOpacity, Alert  } from 'react-native';
-import { Content, Item, Footer } from 'native-base';
+import { Text, View, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import { Content, Item, Footer, Header, Icon, Left, Body, Right  } from 'native-base';
 import { Hoshi } from 'react-native-textinput-effects';
 
 import ValidationComponent from 'react-native-form-validator';
@@ -42,7 +42,7 @@ export default class Form extends ValidationComponent {
     const password = this.state.password; 
     const confirmpass = this.state.confirmpass;    
 		return(		    
-          <Content scrollEnabled={false} disableKBDismissScroll={false} bounces={false}>            
+          <Content scrollEnabled={false} disableKBDismissScroll={true}>                             
             <Text style={styles.signupText}>REGISTRATE</Text>
             <Hoshi
               style={styles.inputBox}

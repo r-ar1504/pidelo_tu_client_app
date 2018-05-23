@@ -27,11 +27,7 @@ export default StyleSheet.create({
     marginRight: 15,
     height:90
   },
-  body: {
-    backgroundColor: 'rgba(66, 103, 178, 0.5)',
-    opacity:0.5,
-    zIndex: 999,
-    position: 'relative',
+  body: {    
     flex: 9,
     flexDirection:'row',
     alignItems:'center',
@@ -40,8 +36,7 @@ export default StyleSheet.create({
   restaurantTitle: {
     color: '#fff',
     opacity: 0.8,
-    fontSize: 40,
-    letterSpacing: 20,
+    fontSize: 40,    
     fontWeight: 'bold',
     marginRight: 10
   },
@@ -53,8 +48,7 @@ export default StyleSheet.create({
   },
   titleText:{
     color: '#000',
-    fontSize: 20,
-    letterSpacing: 20,
+    fontSize: 20,   
     fontFamily: 'Lato-Light'
   },
   wrapper: {        

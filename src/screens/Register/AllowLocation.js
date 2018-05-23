@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity, BackHandler } from 'react-native';
+import { Text, TouchableOpacity, BackHandler, TouchableWithoutFeedback } from 'react-native';
 import { Hoshi } from 'react-native-textinput-effects';
+import { Container, Content, Header, Icon, Left, Body, Right } from 'native-base';
 import ValidationComponent from 'react-native-form-validator';
 import styles from './RegisterStyle';
 
@@ -15,7 +16,7 @@ export default class Form extends ValidationComponent {
   constructor(props){
     super(props);  
 
-    this.state = { address: '', dept: ''}  
+    this.state = { address: '', dept: '' }  
   }
 
   componentDidMount() {
@@ -31,9 +32,9 @@ export default class Form extends ValidationComponent {
   };
 
   confirm(){
-    this.validate({ address: {required: true}, dept: {required: true} });
+    this.validate({ address: { required: true }, dept:  {required: true } });
     if(this.isFormValid()){
-      this.props.navigation.navigate('Maps', { address: this.state.address });
+      this.props.navigation.navigate('Maps', { address: this.state.address + this.state.dept });
     }
     else {
       alert(this.getErrorMessages());
@@ -42,29 +43,47 @@ export default class Form extends ValidationComponent {
 
   render(){
     return(
-        <View style={styles.container}>
-            <Hoshi
-              style={styles.input}
-              label={'INGRESA TU DIRECCION'}
-              onSubmitEditing={()=> this.dep.focus()}
-              borderColor={'#00000000'}
-              ref="dirección"
-              value={this.state.address} 
-              onChangeText={(address) => {this.setState({address})}}
-            />
-            <Hoshi
-              style={styles.input}
-              label={'DEPT/APT'}
-              ref={(input) => this.dep = input}
-              borderColor={'#00000000'}
-              value={this.state.dept} 
-              onChangeText={(dept) => {this.setState({dept})}}
-            />
+        <Container style={{backgroundColor:'#ffffff',
+    flex: 1,
+    alignItems:'center',
+    justifyContent :'flex-start',}}>
+            <Header backgroundColor={'#fff'} style={{flexDirection: 'row', justifyContent: 'space-around', backgroundColor: 'transparent', elevation: 0, width: '100%'}}>
+              <Left style={{ flex: 1 }} >
+                <TouchableWithoutFeedback onPress={() => {this.props.navigation.goBack()}}>
+                  <Icon name='arrow-back' />
+                </TouchableWithoutFeedback>
+              </Left>        
+              <Body style={{ flex: 1 }}>
+              
+              </Body>              
+              <Right style={{ flex: 1 }}>
+                
+              </Right>
+            </Header> 
+            <Content padder>
+              <Hoshi
+                style={styles.input}
+                label={'INGRESA TU DIRECCION'}
+                onSubmitEditing={()=> this.dep.focus()}
+                borderColor={'#00000000'}
+                ref="dirección"
+                value={this.state.address} 
+                onChangeText={(address) => {this.setState({address})}}
+              />
+              <Hoshi
+                style={styles.input}
+                label={'DEPT/APT'}
+                ref={(input) => this.dep = input}
+                borderColor={'#00000000'}
+                value={this.state.dept} 
+                onChangeText={(dept) => {this.setState({dept})}}
+              />
 
-           <TouchableOpacity style={styles.button} onPress={this.confirm.bind(this)}>
-             <Text style={styles.buttonText}>CONTINUAR</Text>
-           </TouchableOpacity>
-      </View>
+              <TouchableOpacity style={styles.button} onPress={this.confirm.bind(this)}>
+                <Text style={styles.buttonText}>CONTINUAR</Text>
+              </TouchableOpacity>
+            </Content>
+      </Container>
       )
   }
 }

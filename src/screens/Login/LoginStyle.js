@@ -19,18 +19,21 @@ export default StyleSheet.create({
     flexGrow: 1,
   },
   video: {
+    display: 'flex',
+    flex:1,    
+    position: 'absolute',
     ...StyleSheet.absoluteFillObject,
-    position: 'absolute',    
+    justifyContent: 'center'     
   },   
   inputBox: {
     width:300,
     paddingHorizontal:13,
-    marginVertical: 10,        
+    marginVertical: 8,        
   },
   input: {
     width:300,
     paddingHorizontal:13,
-    marginVertical: 10,        
+    marginVertical: 8,        
     color:'white'
   },
   button: {

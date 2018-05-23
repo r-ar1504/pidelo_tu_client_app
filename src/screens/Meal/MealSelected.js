@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
-import {  Text, View, Image, BackHandler, AsyncStorage, TextInput, TouchableOpacity, YellowBox, ActivityIndicator, ImageBackground} from 'react-native';
+import { Alert, Text, View, Image, BackHandler, AsyncStorage, TextInput, TouchableOpacity, YellowBox, ActivityIndicator, ImageBackground, Modal, Dimensions} from 'react-native';
 import { Icon, Container, Content, Header, Left, Body, Right, Button } from 'native-base';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import style from './MealStyle';
 import firebase from 'react-native-firebase';
+import moment from 'moment';
+
+import Mapa from '../../components/Maps/Maps';
+
+let { width, height } = Dimensions.get('window');
+
+const ASPECT_RATIO = width / height;
+const LATITUDE_DELTA = 0.0122;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 export default class MealSelected extends Component{
   static navigationOptions ={
@@ -21,41 +31,22 @@ export default class MealSelected extends Component{
       user: null, 
       meal_id: meal.id,
       category_id: meal.category_id,
-      price: meal.price, 
-      coords: {}, 
+      price: meal.price,       
       loading: false, 
+      allowLocation: false,
       total: meal.price, 
       preparation_time: meal.preparation_time, 
       image: meal.image, 
       name: meal.name, 
       description: meal.description,
-      restaurant: restaurant
-    }    
-
-    YellowBox.ignoreWarnings([
-     'Warning: componentWillMount is deprecated',
-     'Warning: componentWillReceiveProps is deprecated',
-    ]);
+      restaurant: restaurant,     
+    }        
   }
 
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid); 
 
-    this.setState({user: firebase.auth().currentUser});
-
-     navigator.geolocation.getCurrentPosition(
-        position => {
-          this.setState({
-            coords: {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,                      
-            },          
-          });                
-        },
-      (error) => {    
-        alert(error.message);        
-      },
-    { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 });                             
+    this.setState({ user: firebase.auth().currentUser });                               
   }
 
   componentWillUnmount() {
@@ -63,7 +54,7 @@ export default class MealSelected extends Component{
   }  
 
   onBackButtonPressAndroid = () => {
-    this.props.navigation.navigate('Restaurant');
+    this.props.navigation.goBack();
   }
 
   IncrementItem = () => { 
@@ -79,29 +70,30 @@ export default class MealSelected extends Component{
     }
   }
 
-  accept(meal){
-    this.setState({loading: true});    
-    this.sendData(meal).then((response) => {      
-      this.setState({loading: false});
-    })      
+  accept(region){            
+    this.sendData(region).then((response) => {                  
+      Alert.alert("Pídelo Tú","Tú pedido se a procesado con éxito, espera a que el restaurante tome tu orden" + moment().format());       
+      this.props.navigation.navigate('Home', { user: this.state.user});
+    });                 
   }
-  
 
-  sendData(){    
-    return fetch('http://pidelotu.azurewebsites.net/order', {
+  
+  sendData(region){    
+    return fetch('http://10.33.216.46:8000/order', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        created_at: moment(),
         restaurant_id:this.state.restaurant,
         meal_id:this.state.meal_id,
         meal_category_id:this.state.category_id,
         user_id:this.state.user.uid,
         total:this.state.total,
-        latitude:this.state.coords.latitude,
-        longitude:this.state.coords.longitude
+        latitude:region.latitude,
+        longitude:region.longitude
       })
     }).then(response => response.json())
       .then(json => {
@@ -113,16 +105,24 @@ export default class MealSelected extends Component{
 
   render(){ 
     const { params } = this.props.navigation.state;
-    const meal = params ? params.meal : null;
-         
-
+    const meal = params ? params.meal : null;         
     if(this.state.loading) {
+      return(
+        <Modal animationType="slide" transparent={true} visible={this.state.loading} onRequestClose={() => {console.log('close modal')}}>          
+          <ImageBackground source={require('src/assets/images/bg.png')} style={style.body}>
+            <Image source={require('src/assets/images/ic.png')} style={{width: 105, height: 105}}/>          
+          </ImageBackground>          
+        </Modal>
+      )
+    }  
+
+    if(this.state.allowLocation) {
         return(    
-          <View style={style.body}>
-            <ActivityIndicator size={50} color="#11c0f6"/>
-          </View>
+          <Modal animationType="slide" transparent={true} visible={this.state.allowLocation} onRequestClose={() => {console.log('close modal')}}>
+            <Mapa confirm={this.accept.bind(this)}/>
+          </Modal> 
         )
-      }  
+      }    
 
     return(
 			<Container>        
@@ -164,7 +164,7 @@ export default class MealSelected extends Component{
             </View>
           </View>
           <View style={{flexDirection: 'column', alignItems:'center', marginTop:80}}>
-            <TouchableOpacity style={style.confirm} onPress={this.accept.bind(this)}><Text style={style.text}>ORDENAR</Text></TouchableOpacity>    
+            <TouchableOpacity style={style.confirm} onPress={()=>this.setState({allowLocation: true})}><Text style={style.text}>ORDENAR</Text></TouchableOpacity>    
           </View>
         </Content>
 			</Container>

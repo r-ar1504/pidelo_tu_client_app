@@ -9,7 +9,7 @@ export default StyleSheet.create({
     justifyContent :'center',          
   },
   signupText: {        
-    marginTop:86,
+    marginTop:16,
     fontSize:25,
     marginBottom:16,
     textAlign:'center',
@@ -23,7 +23,7 @@ export default StyleSheet.create({
   inputBox: {
     width:300,
     paddingHorizontal:13,
-    marginVertical: 10,        
+    marginVertical: 5,        
   },
    button: {
     width:300,
@@ -48,11 +48,10 @@ export default StyleSheet.create({
     fontFamily:FONT_NORMAL  
   },
   image:{
-    flex:1,
-    resizeMode:'cover',
+    display: 'flex',
+    flex:1,    
     position: 'absolute',
-    width: '100%',
-    height: '100%',
-    justifyContent: 'center',
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center' 
   }, 
 });

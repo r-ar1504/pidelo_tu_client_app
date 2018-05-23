@@ -10,7 +10,7 @@
     "firebase": "^4.12.0",
     "native-base": "^2.3.10",
     "react": "16.3.0-alpha.1",
-    "react-native": "0.54.0-rc.3",
+    "react-native": "0.55.3",
     "react-native-firebase": "git+https://github.com/invertase/react-native-firebase.git#v3.0.x",
     "react-native-flexi-radio-button": "^0.2.2",
     "react-native-form-validator": "^0.2.0",

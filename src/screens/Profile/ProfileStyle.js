@@ -8,13 +8,18 @@ export default StyleSheet.create({
     flex:1,    
     position: 'absolute',
     ...StyleSheet.absoluteFillObject,
-    justifyContent: 'center'
-  },
+    justifyContent: 'center',
+    alignSelf: 'center'
+  },  
   header: {
     flexDirection: 'row',    
   },
-  avatar_section:{
-    paddingTop:10,
+  body: {
+    flexGrow: 1,
+    justifyContent:'center',
+    alignItems: 'center',
+  },
+  avatar_section:{    
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
@@ -32,15 +37,15 @@ export default StyleSheet.create({
     borderColor: '#fff'
   },
   profile_data:{
-    paddingTop: 10,
     alignSelf: 'center',
     flexDirection: 'column',    
   },
-  profile_element:{
-    paddingTop: 10,
-    alignSelf: 'flex-start'
+  profile_element:{    
+    alignSelf: 'flex-start',
+    width: 280
   },
   profile_input:{
     flexDirection: 'row',
+    width: 280
   }
 })
