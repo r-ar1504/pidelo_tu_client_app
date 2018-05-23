@@ -25,34 +25,34 @@ export default class Maps extends React.Component {
           latitudeDelta: LATITUDE_DELTA,
           longitudeDelta: LONGITUDE_DELTA,
         },
-        address: address               
-      };    
+        address: address
+      };
 
     YellowBox.ignoreWarnings([
      'Warning: componentWillMount is deprecated',
      'Warning: componentWillReceiveProps is deprecated',
      'Warning: componentWillUpdate is deprecated'
-    ]);   
+    ]);
   }
 
-  
+
   componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);     
+    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
     if (this.state.address != null) {
       this.getLongLat(this.state.address)
-        .then(response => {          
+        .then(response => {
           this.setState({
             region: {
               latitude: response.geometry.location.lat,
               longitude: response.geometry.location.lng,
               latitudeDelta: LATITUDE_DELTA,
-              longitudeDelta: LONGITUDE_DELTA,            
+              longitudeDelta: LONGITUDE_DELTA,
             },
-            title: response.formatted_address,          
+            title: response.formatted_address,
           });
         });
       }
-    else {          
+    else {
       navigator.geolocation.getCurrentPosition(
         position => {
           this.setState({
@@ -60,17 +60,17 @@ export default class Maps extends React.Component {
               latitude: position.coords.latitude,
               longitude: position.coords.longitude,
               latitudeDelta: LATITUDE_DELTA,
-              longitudeDelta: LONGITUDE_DELTA,            
-            },          
+              longitudeDelta: LONGITUDE_DELTA,
+            },
           });
           this.getAddress(position.coords.latitude,position.coords.longitude)
-              .then(response => this.setState({title: response}));           
+              .then(response => this.setState({title: response}));
         },
-      (error) => {    
+      (error) => {
         alert(error.message);
         this.props.navigation.navigate('AllowLocation');
       },
-      { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 });    
+      { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 });
     }
   }
 
@@ -81,7 +81,7 @@ export default class Maps extends React.Component {
   onBackButtonPressAndroid = () => {
     this.props.navigation.goBack();
   };
-  
+
 
   getAddress(lat,long){
     return fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+long+'&key=AIzaSyCYIhiPOMgLbwZrN9vT8ChwNtPKqKkOrs0')
@@ -91,7 +91,7 @@ export default class Maps extends React.Component {
           throw new Error(`Geocode error: ${json.status}`);
         }
         return json.results[0].formatted_address;
-      }); 
+      });
   }
 
   getLongLat(address){
@@ -102,49 +102,49 @@ export default class Maps extends React.Component {
           throw new Error(`Geocode error: ${json.status}`);
         }
         return json.results[0];
-      }); 
+      });
   }
 
-  confirm(screen) {    
-    this.props.navigation.navigate('Home');  
+  confirm(screen) {
+    this.props.navigation.navigate('Home');
   }
 
   openAllowLocation(){
     this.props.navigation.navigate('AllowLocation');
   }
 
-  onMapPress(e){    
-    this.setState({ 
-      region: { 
+  onMapPress(e){
+    this.setState({
+      region: {
         latitude: e.nativeEvent.coordinate.latitude,
         longitude: e.nativeEvent.coordinate.longitude,
         latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,        
-      }, 
-      title: null     
+        longitudeDelta: LONGITUDE_DELTA,
+      },
+      title: null
     });
     this.getAddress(e.nativeEvent.coordinate.latitude,e.nativeEvent.coordinate.longitude)
-        .then(response => this.setState({title: response}));           
+        .then(response => this.setState({title: response}));
   }
 
   render() {
     const { params } = this.props.navigation.state;
     const screen = params ? params.screen : null;
     return (
-      <View style={styles.container}>        
+      <View style={styles.container}>
         <MapView
           provider={PROVIDER_GOOGLE}
           style={styles.map}                    
-          region={ this.state.region }          
-          zoomEnabled = {false} 
-          onPress={(e) => this.onMapPress(e)}                     
-        >      
+          region={ this.state.region }
+          zoomEnabled = {true}
+          onPress={(e) => this.onMapPress(e)}
+        >
         <MapView.Marker
-          draggable                        
-          coordinate={this.state.region}                      
+          draggable
+          coordinate={this.state.region}
           onDragEnd={(e) => this.onMapPress(e)}
           description={this.state.title}
-        />          
+        />
         </MapView>
         <View style={styles.input}>
             <Icon name="search" size={20} color="#999999" style={{ paddingLeft:10}} onPress={this.openAllowLocation.bind(this)} />
@@ -159,4 +159,3 @@ export default class Maps extends React.Component {
     );
   }
 }
-

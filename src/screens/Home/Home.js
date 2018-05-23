@@ -8,8 +8,13 @@ import SearchButton from './SearchButton';
 import LeftTittleNav from './LeftTittleNav';
 import RightTittleNav from './RightTittleNav';
 import SideMenu from '../../components/SideMenu/SideMenu';
+import RestaurantContainer from '../../components/RestaurantContainer';
 import Profile from '../Profile/Profile';
 import OneSignal from 'react-native-onesignal';
+import { SlidingPane, SlidingPaneWrapper } from 'react-native-sliding-panes';
+
+
+
 
 export default class Home extends Component{
   static navigationOptions = {
@@ -19,34 +24,74 @@ export default class Home extends Component{
     }
   }
   constructor(props){
-    super(props);   
-    
-    this.searchScreen = this.searchScreen.bind(this);
+    super(props);
 
+    this.searchScreen = this.searchScreen.bind(this);
+    this.getRestaurants = this.getRestaurants.bind(this);
     YellowBox.ignoreWarnings([
      'Warning: componentWillMount is deprecated',
      'Warning: componentWillReceiveProps is deprecated',
      'Warning: componentWillUpdate is deprecated',
      'Warning: TouchableWithoutFeedback does not work well with Text children'
     ]);
+
+    this.state = {
+      restaurants: null
+    }
+
+    this.renderRestaurants = this.renderRestaurants.bind(this);
+    this.openRestaurant = this.openRestaurant.bind(this);
+  }
+
+  getRestaurants(){
+    fetch('http://pidelotu.azurewebsites.net/get_restaurants')
+    .then( (response) => response.json() )
+    .then( (response) =>{
+        let resp = response;
+        this.setState({
+          restaurants: resp.restaurants
+        });
+    });
   }
 
   componentWillMount(){
-    OneSignal.sendTags({delivery_code: 'U10', user_type: 'client'});//Register tags for specific user.      
+    OneSignal.sendTags({delivery_code: 'U10', user_type: 'client'});//Register tags for specific user.
+    this.getRestaurants();
   }
-     
-  openDrawer(user){      
+
+  openDrawer(user){
     this.props.navigation.navigate('DrawerOpen', { user: user });
   }
 
-  openRestaurant(){
-    this.props.navigation.navigate('Restaurant');
+  openRestaurant(rest_data){
+    this.props.navigation.navigate('Restaurant', {restaurant_data: rest_data});
   }
 
   searchScreen(){
     this.props.navigation.navigate('Search');
   }
 
+  renderRestaurants(){
+
+    if(this.state.restaurants != null) {
+
+      return(
+        this.state.restaurants.map((restaurant, i) =>{
+          return(
+            <RestaurantContainer restaurant={JSON.stringify(restaurant)} openRest={this.openRestaurant}/>
+          )
+        })
+      )
+    }else{
+      return(
+        <View>
+          <Text>
+            No hay elementos
+          </Text>
+        </View>
+      )
+    }
+  }
   render(){
     const { params } = this.props.navigation.state;
     const user = params ? params.user : null;
@@ -66,14 +111,14 @@ export default class Home extends Component{
             <Right style={{ flex: 1 }}>
               <RightTittleNav />
             </Right>
-
           </Header>
           <Content>
-            <FoodFeed />
-
-            <TouchableWithoutFeedback onPress={this.openRestaurant.bind(this)}>
-              <Image source={require('src/assets/images/promo.jpg')} style={style.promo}/>
-            </TouchableWithoutFeedback>
+            <SlidingPaneWrapper>
+              {this.renderRestaurants()}
+              <TouchableWithoutFeedback onPress={this.openRestaurant.bind(this)}>
+                <Image source={require('src/assets/images/promo.jpg')} style={style.promo}/>
+              </TouchableWithoutFeedback>
+            </SlidingPaneWrapper>
           </Content>
         </Container>
     );

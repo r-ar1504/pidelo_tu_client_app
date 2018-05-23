@@ -19,7 +19,7 @@ export default class SideMenu extends Component{
     * Binded Functions:
     */
     this.dissmisSideMenu = this.dissmisSideMenu.bind(this)
-    this.openPromos = this.openPromos.bind(this)    
+    this.openPromos = this.openPromos.bind(this)
     this.currentLocation = this.currentLocation.bind(this)
     this.orderHistory = this.orderHistory.bind(this)
     this.paymentMethod = this.paymentMethod.bind(this)
@@ -27,14 +27,8 @@ export default class SideMenu extends Component{
     this.openHelp = this.openHelp.bind(this)
   }
 
-  componentDidMount() {        
-    const { params } = this.props.navigation.state.routes[0];;
-    const user = params ? params.user : null;    
-    
-    AsyncStorage.getItem(user.uid, (err, item) => {
-      //alert(JSON.stringify(item));
-      this.setState({name: JSON.parse(item).name});
-    });                        
+  componentDidMount() {
+
   }
 
   /* Close side menu. */
@@ -68,13 +62,13 @@ export default class SideMenu extends Component{
 
   /* Sign Out. */
   logOut(){
-    firebase.auth().signOut(); 
+    firebase.auth().signOut();
   }
 
   /* Help Section. */
   openHelp(){
 
-  }  
+  }
 
   /*
   * Render Function.
@@ -135,10 +129,10 @@ export default class SideMenu extends Component{
                 <Text style={{fontSize: 15, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>Agregar método pago</Text>
               </View>
             </TouchableWithoutFeedback>
-            <Footer style={{backgroundColor: 'transparent'}}>              
-                <Text style={{fontSize: 15, color: '#fff', textAlign: 'left', borderBottomWidth: 1, borderBottomColor: '#fff', paddingTop: 20,  paddingBottom: 10, fontFamily: 'Lato-Light'}}onPress={this.logOut}>Cerrar Sesión</Text>                
+            <Footer style={{backgroundColor: 'transparent'}}>
+                <Text style={{fontSize: 15, color: '#fff', textAlign: 'left', borderBottomWidth: 1, borderBottomColor: '#fff', paddingTop: 20,  paddingBottom: 10, fontFamily: 'Lato-Light'}}onPress={this.logOut}>Cerrar Sesión</Text>
             </Footer>
-          </View>          
+          </View>
       </View>
     );
   }
