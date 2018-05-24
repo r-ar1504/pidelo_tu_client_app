@@ -17,33 +17,26 @@ export default StyleSheet.create({
   },
   bubble: {
     backgroundColor: COLOR_PRIMARY,
+    width: 150,
     paddingHorizontal: 18,
     paddingVertical: 12,
     borderRadius: 20,
-  },
-  latlng: {
-    width: 200,
-    alignItems: 'stretch',
-  },
-  bt: {
-    width: 80,
-    paddingHorizontal: 12,
-    alignItems: 'center',
-    marginHorizontal: 10,
-  },
-  buttonContainer: {    
-    justifyContent: 'flex-end',
+  }, 
+  buttonContainer: {   
+    flexDirection:'row', 
+    justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 480,    
+    padding:15,
     backgroundColor: 'transparent',
   },
   in: {
     alignSelf: 'center',
     backgroundColor: 'white',
-    width: width,
+    width: width*.90,
     height: 40,
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     borderRadius: 50,
     marginTop: 15

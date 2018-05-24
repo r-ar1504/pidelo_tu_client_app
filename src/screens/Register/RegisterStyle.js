@@ -6,10 +6,16 @@ export default StyleSheet.create({
     backgroundColor:'#ffffff',
     flex: 1,
     alignItems:'center',
+    justifyContent :'center',
+  }, 
+  verficationContainer: {
+    backgroundColor:'#ffffff',
+    flex: 1,
+    alignItems:'center',
     justifyContent :'flex-start',
     padding: 20,
     paddingTop: 60,
-  },  
+  }, 
   signupText: {
     textAlign:'center',
     marginTop:16,
@@ -18,11 +24,9 @@ export default StyleSheet.create({
     fontFamily: FONT_NORMAL
   },
   body: {
-    flex: 9,
-    flexDirection:'row',
+    flex: 9,    
     alignItems:'center',
-    justifyContent:'center',
-    backgroundColor: '#F5FCFF',
+    justifyContent:'center',    
   },
   button: {    
     width:300,
@@ -70,5 +74,26 @@ export default StyleSheet.create({
     width: '100%',
     height: '100%',
     justifyContent: 'center',
-  },     
+  },  
+  check: {
+    alignItems: 'flex-start',
+    justifyContent:'center',
+    resizeMode:'center',
+    height: 80,
+    width: 80
+  },
+   text: {    
+    fontSize:18,
+    color:'white',
+    padding:20, 
+    fontFamily: 'Lato-Light'  
+  },  
+  circle: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    borderWidth: 10,
+    borderColor: '#11c0f6',
+    backgroundColor: 'rgba(17,191,245,.9)'
+  } 
 });

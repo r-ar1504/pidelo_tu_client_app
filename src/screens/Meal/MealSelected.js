@@ -70,30 +70,35 @@ export default class MealSelected extends Component{
     }
   }
 
-  accept(region){            
-    this.sendData(region).then((response) => {                  
-      Alert.alert("Pídelo Tú","Tú pedido se a procesado con éxito, espera a que el restaurante tome tu orden" + moment().format());       
-      this.props.navigation.navigate('Home', { user: this.state.user});
+  async accept(region){
+    this.setState({loading: true});            
+    await this.sendData(region).then((response) => {                  
+      Alert.alert("Pídelo Tú","Tú pedido se a procesado con éxito, espera a que el restaurante tome tu orden");       
+      this.setState({loading: false});
+      this.props.navigation.navigate('Home', { user: this.state.user});      
+    }).catch(error => {
+      this.setState({loading: false});
+      Alert.alert("Pídelo Tú",error.message);
     });                 
   }
 
   
   sendData(region){    
-    return fetch('http://10.33.216.46:8000/order', {
+    return fetch('http://pidelotu.azurewebsites.net/order', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        created_at: moment(),
+      body: JSON.stringify({        
         restaurant_id:this.state.restaurant,
         meal_id:this.state.meal_id,
         meal_category_id:this.state.category_id,
         user_id:this.state.user.uid,
         total:this.state.total,
         latitude:region.latitude,
-        longitude:region.longitude
+        longitude:region.longitude,
+        created_at:moment().format("YYYY-MM-DD H:mm:ss")
       })
     }).then(response => response.json())
       .then(json => {
@@ -119,7 +124,7 @@ export default class MealSelected extends Component{
     if(this.state.allowLocation) {
         return(    
           <Modal animationType="slide" transparent={true} visible={this.state.allowLocation} onRequestClose={() => {console.log('close modal')}}>
-            <Mapa confirm={this.accept.bind(this)}/>
+            <Mapa confirm={this.accept.bind(this)} goBack={() => {this.setState({allowLocation: false})}}/>
           </Modal> 
         )
       }    

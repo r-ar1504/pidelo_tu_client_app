@@ -33,13 +33,12 @@ export default class VerificationCode extends React.Component {
   confirm(phoneAuthSnapshot, phoneNumber){
     const codeInput  = this.state.codeInput1+this.state.codeInput2+this.state.codeInput3;
     if (codeInput.length < 6){
-      alert("Escribe un código válido");
+      Alert.alert("Pídelo Tú","Escribe un código válido");
     }
     else {
       /* Pass credential through the next forms until the register finish*/
       this.setState({ loading: true });
-      const { verificationId, code } = phoneAuthSnapshot;      
-      
+      const { verificationId, code } = phoneAuthSnapshot;          
       //if (code == codeInput){
         const credential = firebase.auth.PhoneAuthProvider.credential(verificationId, codeInput);          
           this.setState({ loading: false });
@@ -73,21 +72,21 @@ export default class VerificationCode extends React.Component {
       }     
 
     return (
-      <View style={styles.container}>
+      <View style={styles.verficationContainer}>
         <Text style={styles.signupText}>INGRESA CODIGO DE VERIFICACIÓN</Text>
           <View style={styles.inputBox}>
             <Item regular style={{borderColor: 'gray', borderWidth: 1, width:35,  height:40, marginLeft: 20 }}>
-              <Input                
-                keyboardType="phone-pad" value={this.state.codeInput1} onChangeText={codeInput1 => this.setState({codeInput1})} maxLength={2}
+              <TextInput               
+                keyboardType="phone-pad" value={this.state.codeInput1} onChangeText={(codeInput1) => {if(codeInput1.length == 2) {this.secondInput.focus() } this.setState({codeInput1})}} maxLength={2}
               />
             </Item>
-            <Item regular style={{borderColor: 'gray', borderWidth: 1, width: 35, height:40,  marginLeft: 20 }}>
-              <Input
-                keyboardType="phone-pad" value={this.state.codeInput2} onChangeText={codeInput2 => this.setState({codeInput2})} maxLength={2}
+            <Item regular style={{borderColor: 'gray', borderWidth: 1, width: 35, height:40,  marginLeft: 20, justifyContent:'center', alignItems:'center' }}>
+              <TextInput ref={(input) => this.secondInput = input}
+                keyboardType="phone-pad" value={this.state.codeInput2} onChangeText={(codeInput2) => {if(codeInput2.length == 2) {this.thirdInput.focus() } this.setState({codeInput2})}} maxLength={2}
               />
             </Item>
-            <Item regular style={{borderColor: 'gray', borderWidth: 1, width: 35, height:40,  marginLeft: 20 }}>
-              <Input              
+            <Item regular style={{borderColor: 'gray', borderWidth: 1, width: 35, height:40,  marginLeft: 20, justifyContent:'center' }}>
+              <TextInput ref={(input) => this.thirdInput = input}           
                 keyboardType="phone-pad" value={this.state.codeInput3} onChangeText={codeInput3 => this.setState({codeInput3})} maxLength={2}
               />
             </Item>

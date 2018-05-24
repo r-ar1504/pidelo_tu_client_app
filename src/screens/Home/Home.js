@@ -31,7 +31,8 @@ export default class Home extends Component{
     }    
 
      YellowBox.ignoreWarnings([
-     'Warning: TouchableWithoutFeedback does not work well with Text children'
+     'Warning: TouchableWithoutFeedback does not work well with Text children',
+     'Warning: Cant call setState (or forceUpdate) on an unmounted component'
     ]);   
   }  
 

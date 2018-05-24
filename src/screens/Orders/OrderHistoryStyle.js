@@ -78,7 +78,7 @@ export default StyleSheet.create({
   },
   button: {
     backgroundColor:COLOR_PRIMARY,                   
-    marginLeft: 50,    
+    marginLeft: 30,    
   },
   buttonText: {    
     color:'#ffffff',

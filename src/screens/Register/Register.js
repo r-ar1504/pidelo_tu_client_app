@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StackNavigator } from 'react-navigation';
-import { Text, View, TouchableOpacity, YellowBox, Alert, ActivityIndicator, Image, BackHandler, AsyncStorage } from 'react-native';
-import { Container, Content, Footer, Input, Item } from 'native-base';
+import { Text, View, TouchableOpacity, Alert, Image, AsyncStorage, TouchableWithoutFeedback, ImageBackground, Modal, BackHandler } from 'react-native';
+import { Container, Content, Footer, Input, Item, Header, Body, Right, Left, Icon  } from 'native-base';
 import PhoneInput from 'react-native-phone-input';
 import ValidationComponent from 'react-native-form-validator';
 
@@ -17,50 +17,31 @@ export default class Register extends ValidationComponent {
 
   constructor(props) {
     super(props);
-    
-    this.selectCountry = this.selectCountry.bind(this);
-    this.state = { cca2: 'MX', number: '', loading: false };
-
-    YellowBox.ignoreWarnings([
-     'Warning: componentWillMount is deprecated',
-     'Warning: componentWillReceiveProps is deprecated',
-     'Warning: componentWillUpdate is deprecated',
-     'Warning: Failed prop type'
-    ]);
+        
+    this.state = { phoneAuthSnapshot: null, phoneNumber: '', loading: false, showModal: false };    
   }
 
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
-  }  
+  }
 
-  componentWillUnmount() {    
-    BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid);   
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
   }
 
   onBackButtonPressAndroid = () => {
-    if (this.state.loading) {
-      return true;
-    }
-    else {    
-      this.props.navigation.goBack();
-    }
+    return true;
   };
- 
-  selectCountry(country) {
-    this.phone.selectCountry(country.cca2.toLowerCase());
-    this.setState({ cca2: country.cca2 });
-  }
-
+   
   confirm(){    
-    this.validate({ number: {required: true} });
+    this.validate({ phoneNumber: {required: true} });
 
-    const phoneNumber = this.phone.getCountryCode()+this.state.number;
+    const phoneNumber = this.phone.getCountryCode()+this.state.phoneNumber;
 
     if(this.isFormValid()){
       this.setState({ loading: true }); 
       this.checkNumber(phoneNumber).then((response) => {            
-        if (response.length == 0) {
-            /* Send phone number to display in the next screen */ 
+        if (response.length == 0) {             
             firebase.auth().languageCode = 'es-419';             
             firebase.auth().verifyPhoneNumber(phoneNumber)
             .on('state_changed', (phoneAuthSnapshot) => {    
@@ -69,19 +50,11 @@ export default class Register extends ValidationComponent {
               //  IOS AND ANDROID EVENTS
               // ------------------------
               case firebase.auth.PhoneAuthState.CODE_SENT: // or 'sent'                
-                this.setState({ loading: false });                                          
-                this.props.navigation.navigate('Modal',{        
-                  text: 'Se ha enviado un código de verificación vía SMS a tu móvil',
-                  button:'Continuar',
-                  action: 'Verification',
-                  phoneAuthSnapshot: phoneAuthSnapshot,
-                  phoneNumber: phoneNumber        
-                }); 
+                this.setState({ loading: false, phoneAuthSnapshot: phoneAuthSnapshot, phoneNumber: phoneNumber, showModal: true});
               break;
               case firebase.auth.PhoneAuthState.ERROR: // or 'error'
-                this.setState({ loading: false });
-                this.props.navigation.navigate('Register');
-                alert(phoneAuthSnapshot.error);                
+                this.setState({ loading: false });                                
+                Alert.alert("Pídelo Tú",phoneAuthSnapshot.error.toString());                
               break;
 
               // ---------------------
@@ -91,7 +64,7 @@ export default class Register extends ValidationComponent {
                 
               break;
               case firebase.auth.PhoneAuthState.AUTO_VERIFIED: // or 'verified'                 
-                 
+                 //alert("AUTO_VERIFIED");
               break;
             }
           }, (error) => {
@@ -117,44 +90,77 @@ export default class Register extends ValidationComponent {
       });      
     }
     else {
-      alert(this.getErrorMessages());
+      Alert.alert("Pídelo Tú",this.getErrorMessages());
     }           
   }
 
   checkNumber(phoneNumber){
     const url = 'http://pidelotu.azurewebsites.net/checkNumber/'+phoneNumber;
     return fetch(url)      
-      .then((response) => {              
-        return response.json();
+      .then(response => {              
+        if (response.ok) {
+          return response.json();
+        }
+        else {
+          throw new Error("Algo salió mal");
+        }
       }); 
   }
 
   render() {
-    if(this.state.loading) {
-        return(    
-          <View style={styles.body}>
-            <Image source={require('src/assets/images/bg.png')} style={styles.image} />
-            <Image style={styles.logo} source={require('src/assets/images/ic.png')} style={{width: 105, height: 105}}/>
-          </View>
+    const { loading, showModal, phoneAuthSnapshot, phoneNumber } = this.state;
+    if(loading) {
+        return(              
+            <ImageBackground source={require('src/assets/images/bg.png')} style={styles.body}>
+              <Image source={require('src/assets/images/ic.png')} style={{width: 105, height: 105}}/>
+            </ImageBackground>          
         )
-      } 
+      }
+    if (showModal) {
+      return (     
+        <Modal animationType="slide" transparent={true} style={styles.container} visible={showModal} onRequestClose={() => {console.log('close modal')}}>
+          <ImageBackground source={require('src/assets/images/gb-trans.png')} style={styles.body}>
+            <View style={styles.circle}>
+              <Image source={require('src/assets/images/check.png')} style={styles.check}/>
+            </View>
+            <Text style={styles.text}>Se ha enviado un código de verificación vía SMS a tu móvil</Text>
+            <TouchableOpacity style={styles.button} onPress={() => {this.setState({showModal: false}); this.props.navigation.navigate('VerificationCode', { phoneAuthSnapshot: phoneAuthSnapshot, phoneNumber: phoneNumber })}}>
+              <Text style={styles.buttonText}>Continuar</Text>
+            </TouchableOpacity>     
+          </ImageBackground>
+        </Modal>      
+      )
+    } 
     return (
       <Container style={styles.container}>
+        <Header backgroundColor={'#fff'} style={{flexDirection: 'row', justifyContent: 'space-around', backgroundColor: 'transparent', elevation: 0, width: '100%'}}>
+              <Left style={{ flex: 1 }} >
+                <TouchableWithoutFeedback onPress={() => {this.props.navigation.goBack()}}>
+                  <Icon name='arrow-back' />
+                </TouchableWithoutFeedback>
+              </Left>        
+              <Body style={{ flex: 1 }}>
+              
+              </Body>              
+              <Right style={{ flex: 1 }}>
+                
+              </Right>
+            </Header>
         <Content>
           <Text style={styles.signupText}>INGRESA TU MÓVIL</Text>
           <View style={styles.inputBox}>
-            <PhoneInput ref={(ref) => { this.phone = ref; }}           
-            initialCountry='mx'
-            pickerItemStyle={{fontSize:18, height:30}}
-            textProps={{borderWidth:0.7, borderColor:'black', editable:false}}
-            textStyle={{fontSize:18, height:30, textAlign:'center'}}
-            style={{padding:20,marginTop:16,marginBottom:16, width:125}}
-            diabled={true}
-            cancelText="Cancelar"
-            confirmText="Confirmar"            
+            <PhoneInput ref={(ref) => { this.phone = ref; }} 
+              initialCountry='mx'
+              pickerItemStyle={{fontSize:18, height:30}}
+              textProps={{borderWidth:0.7, borderColor:'black', editable:false}}
+              textStyle={{fontSize:18, height:30, textAlign:'center'}}
+              style={{marginTop:16,marginBottom:16, width:100}}
+              diabled={true}
+              cancelText="Cancelar"
+              confirmText="Confirmar"            
             />
-            <Item regular style={{flex:1, borderColor: 'black', borderWidth: 0.7, width:100, height:30, fontSize:8 }}>
-              <Input keyboardType="phone-pad" ref="number" value={this.state.number} onChangeText={(number) => {this.setState({number})}} maxLength={10}/>
+            <Item regular style={{flex:1, borderColor: 'black', borderWidth: 0.7, width:100, height:30 }}>
+              <Input keyboardType="phone-pad" ref="number" value={this.state.phoneNumber} onChangeText={(phoneNumber) => {this.setState({phoneNumber})}} maxLength={10}/>
             </Item>
           </View>
           <Text style={styles.info}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam porta ex arcu, et scelerisque felis faucibus at. Aenean sit amet viverra mauris. Phasellus quis metus ac lectus ultrices lacinia sed ut tortor. Donec non dignissim metus, ac ornare augue. Aenean euismod velit nisl. Donec ullamcorper sagittis condimentum. Nullam pharetra lorem iaculis pharetra gravida. Nulla non pharetra ante. Aenean et libero dui. Nulla lacinia vestibulum ex sit amet elementum.</Text>

@@ -50,13 +50,13 @@ export default class Form extends ValidationComponent {
               <Text style={styles.buttonText} onPress={this.signIn.bind(this,email,password)}>INGRESAR</Text>
             </TouchableOpacity>
             <Item style={styles.signupTextCont}>
-              <TouchableOpacity onPress={this.fblogin}><Text style={styles.fb}><Icon size={30} active name={'logo-facebook'} style={{color:'white'}} /></Text></TouchableOpacity>
+              {/*<TouchableOpacity onPress={this.fblogin}><Text style={styles.fb}><Icon size={30} active name={'logo-facebook'} style={{color:'white'}} /></Text></TouchableOpacity>*/}
               <TouchableOpacity onPress={this.props.register}><Text style={styles.movil}><Icon size={30} active name={'phone-portrait'} style={{color:'white'}} /></Text></TouchableOpacity>
             </Item>
-            <Footer style={{backgroundColor:'#00000000', flexDirection:'row', justifyContent:'space-between'}}>            
+        {/*<Footer style={{backgroundColor:'#00000000', flexDirection:'row', justifyContent:'space-between'}}>            
               <TouchableOpacity onPress={this.props.signup}><Text style={styles.signupButton}> Crear cuenta</Text></TouchableOpacity>                        
               <TouchableOpacity onPress={this.forgotpass}><Text style={styles.forgotpassButton}> ¿Olvidaste tu contraseña?</Text></TouchableOpacity>                                
-            </Footer>            
+            </Footer>*/}            
           </Content>               		  
 			)
 	}

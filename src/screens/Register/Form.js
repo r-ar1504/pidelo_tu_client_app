@@ -114,7 +114,7 @@ export default class Form extends React.Component {
       }  
 
     return(
-        <View style={styles.container}>
+        <View style={styles.verficationContainer}>
             <Text style={styles.signupText}>REGISTRATE</Text>
             <Hoshi
               style={styles.input}

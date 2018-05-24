@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, Dimensions, TouchableOpacity, Alert, YellowBox, TextInput, BackHandler } from 'react-native';
+import { View, Text, Dimensions, TouchableOpacity, Alert, TextInput, BackHandler } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import MapView, { PROVIDER_GOOGLE, ProviderPropType } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import styles from './MapStyles';
 import { customStyle } from '../../assets/LocationNightSection';
 
@@ -16,7 +16,6 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 export default class Maps extends React.Component {
   constructor(props) {
     super(props);    
-
     this.state = {
         region: {
           latitude: LATITUDE,
@@ -48,8 +47,8 @@ export default class Maps extends React.Component {
               });           
         },
       (error) => {    
-        alert(error.message);  
-        //When request address failed, get the last address storaged      
+        Alert.alert("Pídelo Tú",error.message);  
+        //When request address failed, get the last address storaged or a default location      
       },
       { enableHighAccuracy: false, timeout: 20000, maximumAge: 1000 });    
   }  
@@ -93,14 +92,20 @@ export default class Maps extends React.Component {
         });           
   }
 
+  onRegionChange(region) {
+    this.setState({ region });
+    LATITUDE_DELTA = region.latitudeDelta;
+    LONGITUDE_DELTA = region.longitudeDelta;
+  }
+
   render() {    
     return (
       <View style={styles.container}>        
-        <MapView provider={this.props.provider} customMapStyle={this.state.mapStyle} style={styles.map} region={ this.state.region } zoomEnabled={true}  onPress={(e) => this.onMapPress(e)}>      
+        <MapView provider={PROVIDER_GOOGLE} customMapStyle={this.state.mapStyle} style={styles.map} region={ this.state.region } onRegionChangeComplete={this.onRegionChange.bind(this)} onPress={(e) => this.onMapPress(e)}>      
           <MapView.Marker draggable coordinate={this.state.region} onDragEnd={(e) => this.onMapPress(e)} title={this.state.title} description={this.state.title}/>          
         </MapView>
         <View style={styles.in}>
-          <Icon name="search" size={20} color="#999999" style={{ paddingLeft:5, paddingRight:5}}/>
+          <Icon name="search" size={20} color="#999999" style={{ paddingLeft:10}}/>
           <TextInput ref={(ref) => this.input = ref} onSubmitEditing={(event) => {this.getLongLat(event.nativeEvent.text).then((response) => {
             let address = response.formatted_address.split(',');
             this.setState({
@@ -115,15 +120,16 @@ export default class Maps extends React.Component {
             this.input.clear();
             })}} underlineColorAndroid = {'transparent'} placeholder={this.state.title} style={{ width: 300, color:'grey', fontFamily: 'Lato-Light'}} />
         </View>
-        <View style={styles.buttonContainer}>
+        <View style={styles.buttonContainer}>          
+          <TouchableOpacity onPress={() => {this.props.goBack()}} style={styles.bubble}>
+            <Text style={{color: 'white', textAlign:'center'}}>REGRESAR</Text>
+          </TouchableOpacity>
           <TouchableOpacity onPress={() => {this.props.confirm(this.state.region)}} style={styles.bubble}>
-            <Text style={{color: 'white'}}>CONFIRMAR UBICACIÓN</Text>
+            <Text style={{color: 'white', textAlign:'center'}}>CONFIRMAR</Text>
           </TouchableOpacity>
         </View>
       </View>
     );
   }
 }
-Maps.propTypes = {
-  provider: ProviderPropType,
-};
+

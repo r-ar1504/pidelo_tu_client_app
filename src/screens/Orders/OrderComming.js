@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { Container, Header, Left, Body, Right, Button, Icon, Title, Segment, Content, Text } from 'native-base';
-import { View, BackHandler, Image, ImageBackground } from 'react-native';
+import { View, BackHandler, Image, ImageBackground, Alert } from 'react-native';
 import styles from './OrderHistoryStyle'
 
 export default class OrderComming extends Component {  
   constructor(props){
     super(props);
+  }
+  getOrderLocation(){
+    Alert.alert("Pídelo Tú","Tú pedido está por venir, espéralo");
   }
   renderOrders() {
     return this.props.orders.map((order,i) => {
@@ -35,6 +38,7 @@ export default class OrderComming extends Component {
             <View style={{flexDirection: 'row', paddingLeft: 10, paddingTop: 10}}>              
               <Icon active name='person' style={{color:'white', fontSize: 15}} /> 
               <Text style={{marginLeft: 5, fontFamily: 'Lato-Light', color:'#fff'}}>Tu entrega por Jose Fernando</Text>                            
+              <Button rounded small style={styles.button} onPress={this.getOrderLocation.bind(this)}><Text style={styles.buttonText}>Rastrear pedido</Text></Button>    
             </View>
           </View>             
         </View>  

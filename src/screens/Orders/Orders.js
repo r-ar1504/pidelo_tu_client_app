@@ -26,7 +26,7 @@ export default class Orders extends Component {
         const historyOrders = [];
         const nextOrders = [];     
         for (let i = response.length - 1; i >= 0; i--) {
-          if(response[i].status == 1) {
+          if(response[i].status == 4) {
             historyOrders.push(response[i]);
           }
           else {
@@ -49,6 +49,7 @@ export default class Orders extends Component {
   };
 
   getOrders(){ 
+    //const url = 'http://pidelotu.azurewebsites.net/orders' + firebaseID
      return fetch('http://pidelotu.azurewebsites.net/orders')
         .then((response) => {
           return response.json();

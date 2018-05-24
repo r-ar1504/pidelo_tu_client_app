@@ -1,9 +1,11 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { COLOR_PRIMARY, COLOR_SECONDARY, FONT_NORMAL } from 'src/assets/GlobalStyleSheet';
-
+const { width, height } = Dimensions.get('window');
 export default StyleSheet.create({ 
   container : {
-    flex: 1,
+    position:'absolute',
+    height: height,
+    width: width,
     backgroundColor:'#455a64',
     alignItems:'center',
     justifyContent :'center',
@@ -14,16 +16,13 @@ export default StyleSheet.create({
     alignItems:'center',
     justifyContent:'center',
     backgroundColor: '#F5FCFF',
-  },
-  contentContainer: {
-    flexGrow: 1,
-  },
+  },  
   video: {
-    display: 'flex',
-    flex:1,    
     position: 'absolute',
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: 'center'     
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },   
   inputBox: {
     width:300,
@@ -63,11 +62,10 @@ export default StyleSheet.create({
   },
   movil: {
     backgroundColor:COLOR_PRIMARY,
-    borderBottomRightRadius:25,
-    borderTopRightRadius:25,
+    borderRadius:20,    
     color:'#ffffff',
     padding:10,
-    width:150,
+    width:300,
     textAlign:'center',
     borderWidth:1,
     borderColor:'white',
