@@ -149,6 +149,18 @@ android {
     }
 }
 
+/*
+dependencies {
+    compile project(':react-native-video')
+    compile project(':react-native-vector-icons')
+    compile project(':react-native-onesignal')
+    compile project(':react-native-maps')
+    compile(project(':react-native-firebase')) {
+        transitive = false
+    }
+    compile project(':react-native-vector-icons')
+    compile project(':react-native-video')
+ */
 dependencies {    
     compile fileTree(dir: "libs", include: ["*.jar"])
     compile "com.android.support:appcompat-v7:23.0.1"

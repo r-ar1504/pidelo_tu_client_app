@@ -8,8 +8,13 @@ import SearchButton from './SearchButton';
 import LeftTittleNav from './LeftTittleNav';
 import RightTittleNav from './RightTittleNav';
 import SideMenu from '../../components/SideMenu/SideMenu';
+import RestaurantContainer from '../../components/RestaurantContainer';
 import Profile from '../Profile/Profile';
 import OneSignal from 'react-native-onesignal';
+import { SlidingPane, SlidingPaneWrapper } from 'react-native-sliding-panes';
+
+
+
 
 export default class Home extends Component{
   static navigationOptions = {
@@ -40,8 +45,8 @@ export default class Home extends Component{
     OneSignal.sendTags({delivery_code: 'U10', user_type: 'client'});//Register tags for specific user. 
     this.getRestaurants();     
   }
-     
-  openDrawer(user){      
+
+  openDrawer(user){
     this.props.navigation.navigate('DrawerOpen', { user: user });
   }
 
@@ -112,7 +117,6 @@ export default class Home extends Component{
             <Right style={{ flex: 1 }}>
               <RightTittleNav />
             </Right>
-
           </Header>
           <Content>
             {this.renderRestaurants()}            

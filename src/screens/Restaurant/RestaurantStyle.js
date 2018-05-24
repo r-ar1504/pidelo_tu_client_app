@@ -31,7 +31,7 @@ export default StyleSheet.create({
     flex: 9,
     flexDirection:'row',
     alignItems:'center',
-    justifyContent:'center',      
+    justifyContent:'center',
   },
   restaurantTitle: {
     color: '#fff',
@@ -51,47 +51,48 @@ export default StyleSheet.create({
     fontSize: 20,   
     fontFamily: 'Lato-Light'
   },
-  wrapper: {        
-    
+  wrapper: {
+
   },
   slide: {
-    flex: 1,    
+    flex: 1,
     width: '100%',
-    flexDirection: 'row',              
+    flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'flex-start',  
+    alignItems: 'flex-start',
   },
   mealCont:{
     borderWidth:1,
-    borderColor:'grey',                
+    borderColor:'grey',
     height: 150,
-    width:150,
+    width:250,
     margin:10,
     justifyContent:'flex-start',
     alignItems:'center',
-    padding:5
+    padding:10,
+    marginBottom:  10
   },
   mealImg:{
-    width:100, 
-    height:100, 
+    width:100,
+    height:100,
     resizeMode: 'contain'
   },
   infoCont:{
     flexDirection:'row',
-    flexWrap: 'wrap'
+    flexWrap: 'nowrap'
   },
   description:{
-    fontFamily: FONT_NORMAL,
-    fontSize:14,
-    color:'#000', 
+    fontFamily: 'Lato-Regular',
+    fontSize:20,
+    color:'#000',
     textAlign:'center',
-    flex: 1, 
-    flexWrap: 'wrap'      
+    flex: 1,
+    flexWrap: 'wrap'
   },
   price: {
-    fontFamily: FONT_NORMAL,
-    fontSize: 16,
+    fontFamily: 'Lato-Regular',
+    fontSize: 20,
     textAlign:'center',
-    color:'#000',      
+    color:'#000',
   }
 });

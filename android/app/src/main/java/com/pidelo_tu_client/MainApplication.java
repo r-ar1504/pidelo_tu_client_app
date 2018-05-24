@@ -10,9 +10,14 @@ import com.oblador.vectoricons.VectorIconsPackage;
 import com.brentvatne.react.ReactVideoPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.facebook.react.ReactApplication;
+import com.brentvatne.react.ReactVideoPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
+import com.airbnb.android.react.maps.MapsPackage;
+import io.invertase.firebase.RNFirebasePackage;
 import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
 import io.invertase.firebase.RNFirebasePackage;
-import io.invertase.firebase.auth.RNFirebaseAuthPackage; 
+import io.invertase.firebase.auth.RNFirebaseAuthPackage;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,12 +33,17 @@ public class MainApplication extends Application implements ReactApplication{
       protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
-            new ReactNativeOneSignalPackage(),            
-            new RNFirebasePackage(),           
+            new ReactVideoPackage(),
+            new VectorIconsPackage(),
+            new ReactNativeOneSignalPackage(),
+            new MapsPackage(),
+            new RNFirebasePackage(),
+            new VectorIconsPackage(),
+            new ReactNativeOneSignalPackage(),
+            new RNFirebasePackage(),
             new ReactVideoPackage(),
             new RNFirebaseAuthPackage(),
-            new VectorIconsPackage(),
-            new MapsPackage()            
+            new MapsPackage()
         );
       }
 

@@ -58,13 +58,13 @@ const styles = StyleSheet.create({
 		width: '100%',
 		resizeMode: 'stretch',
 		height: 95,
-		marginBottom: 5				
+		marginBottom: 5
 	},
 	food_img2: {
 		width: '100%',
 		resizeMode: 'stretch',
-		height: 295,	
-		marginTop: 5			
+		height: 295,
+		marginTop: 5
 	}
 
 });

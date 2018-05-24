@@ -23,6 +23,36 @@ export default class Maps extends React.Component {
           latitudeDelta: LATITUDE_DELTA,
           longitudeDelta: LONGITUDE_DELTA,
         },
+<<<<<<< HEAD
+        address: address
+      };
+
+    YellowBox.ignoreWarnings([
+     'Warning: componentWillMount is deprecated',
+     'Warning: componentWillReceiveProps is deprecated',
+     'Warning: componentWillUpdate is deprecated'
+    ]);
+  }
+
+
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
+    if (this.state.address != null) {
+      this.getLongLat(this.state.address)
+        .then(response => {
+          this.setState({
+            region: {
+              latitude: response.geometry.location.lat,
+              longitude: response.geometry.location.lng,
+              latitudeDelta: LATITUDE_DELTA,
+              longitudeDelta: LONGITUDE_DELTA,
+            },
+            title: response.formatted_address,
+          });
+        });
+      }
+    else {
+=======
         address: null,
         mapStyle: customStyle              
       };        
@@ -30,6 +60,7 @@ export default class Maps extends React.Component {
 
   componentDidMount() {     
      //could change for address location saved in local storage            
+>>>>>>> cc443d9e0ab08bb583b8e79c6d36e8e0923bfb33
       navigator.geolocation.getCurrentPosition(
         position => {
           this.setState({
@@ -37,8 +68,8 @@ export default class Maps extends React.Component {
               latitude: position.coords.latitude,
               longitude: position.coords.longitude,
               latitudeDelta: LATITUDE_DELTA,
-              longitudeDelta: LONGITUDE_DELTA,            
-            },          
+              longitudeDelta: LONGITUDE_DELTA,
+            },
           });
           this.getAddress(position.coords.latitude,position.coords.longitude)
               .then(response => { 
@@ -61,7 +92,7 @@ export default class Maps extends React.Component {
           throw new Error(`Geocode error: ${json.status}`);
         }
         return json.results[0].formatted_address;
-      }); 
+      });
   }
 
   getLongLat(address){
@@ -132,4 +163,10 @@ export default class Maps extends React.Component {
     );
   }
 }
+<<<<<<< HEAD
 
+=======
+Maps.propTypes = {
+  provider: ProviderPropType,
+}
+>>>>>>> 7c43765a9f4821dd307e933331def85d127d1440
