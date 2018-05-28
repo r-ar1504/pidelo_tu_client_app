@@ -1,0 +1,22 @@
+[1mdiff --cc src/App.js[m
+[1mindex cc2b189,3b553d0..0000000[m
+[1m--- a/src/App.js[m
+[1m+++ b/src/App.js[m
+[1mdiff --cc yarn.lock[m
+[1mindex 7f5da4c,88a4a1d..0000000[m
+[1m--- a/yarn.lock[m
+[1m+++ b/yarn.lock[m
+[36m@@@ -4180,6 -4176,10 +4176,13 @@@[m [mreact-native-easy-grid@0.1.17[m
+      bows "^1.6.0"[m
+      prop-types "^15.6.0"[m
+  [m
+[32m++<<<<<<< HEAD[m
+[32m++=======[m
+[32m+ react-native-flexi-radio-button@^0.2.2:[m
+[32m+   version "0.2.2"[m
+[32m+   resolved "https://registry.yarnpkg.com/react-native-flexi-radio-button/-/react-native-flexi-radio-button-0.2.2.tgz#a0180393c531ba3477722c6e42a31ceb1c11623b"[m
+[32m+ [m
+[32m++>>>>>>> 56d0c4a3a33db5b220ec211559bae1d0b1303996[m
+  react-native-form-validator@^0.2.0:[m
+    version "0.2.0"[m
+    resolved "https://registry.yarnpkg.com/react-native-form-validator/-/react-native-form-validator-0.2.0.tgz#773016d522412185475f0bbeb6191c8f90542272"[m

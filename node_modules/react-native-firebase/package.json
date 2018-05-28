@@ -1,0 +1,103 @@
+{
+  "name": "react-native-firebase",
+  "version": "3.0.6",
+  "author": "Invertase <contact@invertase.io> (http://invertase.io)",
+  "description": "A well tested, feature rich Firebase implementation for React Native, supporting iOS & Android. Individual module support for Admob, Analytics, Auth, Crash Reporting, Cloud Firestore, Database, Messaging (FCM), Remote Config, Storage and Performance.",
+  "main": "index",
+  "scripts": {
+    "flow": "flow",
+    "lint": "eslint ./src",
+    "dev": "npm run compile -- --watch",
+    "build": "./node_modules/.bin/babel --source-maps=true --out-dir=dist .",
+    "publish_pages": "gh-pages -d public/",
+    "docs-serve-local": "docsify serve docs",
+    "test-cli": "node ./bin/test.js",
+    "tests-packager": "cd tests && npm run start",
+    "tests-npm-install": "cd tests && npm install",
+    "tests-pod-install": "cd tests && npm run ios:pod:install",
+    "tests-watch-start": "npm run test-cli watch init start",
+    "tests-watch-stop": "npm run test-cli watch stop"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/invertase/react-native-firebase.git"
+  },
+  "jest": {
+    "preset": "jest-react-native",
+    "setupFiles": [],
+    "unmockedModulePathPatterns": [
+      "./node_modules/react",
+      "./node_modules/react-native",
+      "./node_modules/react-native-mock",
+      "./node_modules/react-addons-test-utils"
+    ]
+  },
+  "license": "APACHE-2.0",
+  "keywords": [
+    "react",
+    "admob",
+    "auth",
+    "config",
+    "digits",
+    "phone-auth",
+    "sms",
+    "firestore",
+    "cloud-firestore",
+    "datastore",
+    "remote-config",
+    "transactions",
+    "react-native",
+    "react-native-firebase",
+    "firebase",
+    "fcm",
+    "apn",
+    "gcm",
+    "analytics",
+    "messaging",
+    "database",
+    "android",
+    "ios",
+    "crash",
+    "firestack",
+    "performance",
+    "firestore"
+  ],
+  "peerDependencies": {
+    "react": "*",
+    "react-native": ">= 0.48.0",
+    "fbjs": "*"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.0.0",
+    "babel-jest": "^14.1.0",
+    "babel-preset-react-native": "^1.9.0",
+    "debug": "^2.2.0",
+    "enzyme": "^2.4.1",
+    "eslint": "^3.8.1",
+    "eslint-config-airbnb": "^12.0.0",
+    "eslint-plugin-flowtype": "^2.20.0",
+    "eslint-plugin-import": "^2.0.1",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.4.1",
+    "flow-bin": "^0.55.0",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-native": "^0.48.0",
+    "shelljs": "^0.7.8",
+    "wml": "0.0.82"
+  },
+  "dependencies": {
+    "bows": "^1.6.0",
+    "prop-types": "^15.6.0"
+  },
+  "rnpm": {
+    "android": {
+      "buildPatch": "    compile(project(':react-native-firebase')) {\n        transitive = false\n    }\n",
+      "packageImportPath": "import io.invertase.firebase.RNFirebasePackage;",
+      "packageInstance": "new RNFirebasePackage()"
+    },
+    "commands": {
+      "postlink": "node node_modules/react-native-firebase/scripts/rnpm-postlink"
+    }
+  }
+}
