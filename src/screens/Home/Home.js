@@ -91,12 +91,9 @@ export default class Home extends Component{
   noti(){
     alert("No hay notificiaciones nuevas");
   }
-  render(){
     const { params } = this.props.navigation.state;
     const user = params ? params.user : null;
     if (this.state.loading){
-      return (
-        <View style={style.body}>
           <ActivityIndicator size={50} color="#11c0f6" animating={true}/>
         </View>
       )

@@ -34,11 +34,11 @@ public class MainApplication extends Application implements ReactApplication{
         return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
             new ReactVideoPackage(),
-            new ReactNativeOneSignalPackage(),
-            new MapsPackage(),
             new VectorIconsPackage(),
+            new ReactNativeOneSignalPackage(),
             new RNFirebasePackage(),
-            new RNFirebaseAuthPackage()
+            new RNFirebaseAuthPackage(),
+            new MapsPackage()
         );
       }
 
