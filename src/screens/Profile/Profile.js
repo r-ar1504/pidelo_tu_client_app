@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
-import {  Text, View, Image, BackHandler, AsyncStorage, TextInput, TouchableOpacity, ImageBackground, ActivityIndicator} from 'react-native';
+import {  Text, View, Image, BackHandler, AsyncStorage, TextInput, TouchableOpacity, ImageBackground, ActivityIndicator, Alert} from 'react-native';
 import { Icon, Container, Content, Header, Left, Body, Right, Button } from 'native-base';
 import style from './ProfileStyle';
 import firebase from 'react-native-firebase';
@@ -17,21 +17,22 @@ export default class Profile extends Component{
     const { params } = this.props.navigation.state;
     const user = params ? params.user : null;
     this.state = { user: user, email: '', password: '', showPassword: true, eyeIcon: 'eye', action: '', text: 'Editar', return: 'Regresar', cancel: '', editable: false, title: '' }    
-    this.confirm = this.confirm.bind(this);
+    
     /*
     * Binded Functions:
     */
+    this.confirm = this.confirm.bind(this);
     YellowBox.ignoreWarnings([     
      'Warning: Failed prop type',
     ]);
   }
 
-  componentWillMount(){
-      
-
-    this.retriveItem(this.state.user.uid).then((item) => { 
+  componentWillMount(){      
+    this.setState({loading: true})
+    this.getCurrentUser(this.state.user.uid).then((item) => { 
       this.setState({ email: item.email });          
       this.setState({ password: item.password });
+      this.setState({loading: false})
     });
   }
 
@@ -47,16 +48,16 @@ export default class Profile extends Component{
     this.props.navigation.goBack();
   };
 
-  async retriveItem(key) {
-    try {
-      const retrivedItem = await AsyncStorage.getItem(key);     
-      const item = JSON.parse(retrivedItem);      
-
-      return item;
-    }
-    catch (error) {
-      
-    }
+  async getCurrentUser(id) {
+    let url = 'http://192.168.100.4:8000/getCurrentUser/'+id;
+    let data = await fetch(url)
+          .then(res => res.json())
+          .then(json => {
+            return json[0];
+          }).catch(error => {
+            throw new Error(error.messages);
+          }); 
+      return data;    
   }
 
   showPassword() {
@@ -75,12 +76,15 @@ export default class Profile extends Component{
     firebase.auth().currentUser.updateEmail(this.state.email)
     .then((user) => {               
       user.updatePassword(this.state.password);           
-      let data = { firebaseId: user.uid, email: this.state.email.toLowerCase(), password: this.state.password }         
-      this.updateData(user.uid,data);                  
+      let data = { firebaseId: user.uid, email: this.state.email.toLowerCase(), password: this.state.password }                              
       this.sendData(data).then((response) => {
+          alert(JSON.stringify({response}));
           if (response == 1){
-            alert("Se han actulizado tus datos");
+            Alert.alert("Pídelo Tú","Se han actulizado tus datos");
           }                           
+          this.setState({loading: false});
+        }).catch((error) => {
+          alert(error);
           this.setState({loading: false})
         }); 
     })
@@ -90,8 +94,8 @@ export default class Profile extends Component{
     });
   }
 
-  sendData(data){
-    return fetch('http://192.168.0.24:8000/update', {
+  sendData(data){    
+    return fetch('http://192.168.100.4:8000/update', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -99,21 +103,12 @@ export default class Profile extends Component{
       },
       body: JSON.stringify(data)
     }).then(response => response.json())
-      .then(json => {
+      .then(json => {        
         return json;    
     }).catch((error) => {
       alert(error);
       return error;
     });
-  }
-
-  async updateData(key,newData){
-    try {
-      await AsyncStorage.mergeItem(key,JSON.stringify(newData));
-    }
-    catch(error){
-      alert(error.message)
-    }
   }
 
   back(){
@@ -150,7 +145,7 @@ export default class Profile extends Component{
      if(this.state.loading) {
         return(    
          <ImageBackground source={require('src/assets/images/bg.png')} style={style.body}>
-            <ActivityIndicator size={50} color="#11c0f6" animating={true}/>
+            <Image style={style.logo} source={require('src/assets/images/ic.png')} style={{width: 105, height: 105}}/>          
           </ImageBackground>
         )
       }  

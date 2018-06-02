@@ -12,16 +12,14 @@ import Payment from './screens/Payment/Payment';
 import Discounts from './screens/Discounts/Discounts';
 import Register from './screens/Register/Register';
 import RegisterForm from './screens/Register/Form';
-import AllowLocation from './screens/Register/AllowLocation';
 import VerificationCode from './screens/Register/VerificationCode';
-import Signup from './screens/Signup/Signup';
 import SideMenu from './components/SideMenu/SideMenu';
 import Maps from './components/Maps/Maps';
 import Modal from './components/Modal';
 import Orders from './screens/Orders/Orders';
 import MealSelected from './screens/Meal/MealSelected';
 import ActiveOrder from './screens/ActiveOrder/ActiveOrder';
-import OrderComming from './screens/Orders/OrderComming';
+import CartShop from './screens/CartShop/CartShop';
 
 const HomeDrawer = DrawerNavigator({
   Home:{
@@ -45,24 +43,21 @@ const HomeDrawer = DrawerNavigator({
   },
   Maps:{
    screen: Maps,
-  },
-  AllowLocation:{
-    screen: AllowLocation
-  },
+  }, 
   Restaurant:{
     screen: Restaurant
   },
   ActiveOrder:{
     screen: ActiveOrder
-  },
-  OrderComming:{
-    screen: OrderComming
-  },
+  }, 
   Orders: {
     screen: Orders
   },
   MealSelected: {
     screen: MealSelected
+  },
+  CartShop: {
+    screen: CartShop
   },
 },{
     contentComponent: SideMenu,
@@ -79,8 +74,8 @@ export default StackNavigator({
   },
   Login: {
    screen: Login
- },
- Splash:{
+  },
+  Splash:{
      screen: Splash,
   },
   Register:{
@@ -88,10 +83,7 @@ export default StackNavigator({
   },
   VerificationCode:{
     screen: VerificationCode
-  },
-  Signup:{
-    screen: Signup
-  },
+  },  
   Modal: {
     screen: Modal
   },

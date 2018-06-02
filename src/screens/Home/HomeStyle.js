@@ -25,15 +25,26 @@ export default StyleSheet.create({
   promo: {
     alignSelf: 'center', 
     width: width*.90,  
-    height: 180 , 
+    height: height*.23 , 
     marginTop: 10, 
     marginBottom:10,
     resizeMode: 'stretch',
   },
   body: {
-    flexGrow: 1,
-    backgroundColor: '#00000000',
+    flexGrow: 1,    
     justifyContent:'center',
     alignItems: 'center',
-  }
+  },
+  logo: {
+    alignItems: 'flex-start',
+    justifyContent:'center',
+    resizeMode:'center',
+  },
+  image:{
+    flex:1,
+    resizeMode:'cover',
+    position: 'absolute',
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: 'center',
+  },
 });

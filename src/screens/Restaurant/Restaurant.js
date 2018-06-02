@@ -61,7 +61,7 @@ export default class Search extends Component{
                   <Image source={{uri:'http://pidelotu.azurewebsites.net/images/meals/'+item.image}} style={styles.mealImg}/>
                 </TouchableWithoutFeedback>
                 <View style={styles.infoCont}>
-                  <Text style={styles.description}>{item.name}</Text><Text style={styles.price}>${125.00}</Text>
+                  <Text style={styles.description}>{item.name}</Text><Text style={styles.price}>${item.price}</Text>
                 </View>
               </View>
             </View>

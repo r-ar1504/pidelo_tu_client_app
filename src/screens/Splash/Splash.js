@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { StackNavigator } from 'react-navigation';
-import { StyleSheet, View, Image, YellowBox, ActivityIndicator, Alert, BackHandler, AsyncStorage } from 'react-native';
+import { StyleSheet, Modal, ImageBackground, Image, YellowBox, BackHandler, AsyncStorage } from 'react-native';
 import firebase from 'react-native-firebase';
+import { View } from 'native-base';
 
-export default class Splash extends Component<{}> {
+export default class Splash extends Component {
   static navigationOptions = {
     headerStyle:{
       display: 'none'
@@ -13,7 +14,7 @@ export default class Splash extends Component<{}> {
   constructor(props){
     super(props);
 
-    this. state = { authSubscription: null }
+    this. state = { authSubscription: null }          
 
     YellowBox.ignoreWarnings([
      'Warning: isMounted(...) is deprecated', 'Module RCTImageLoader',      
@@ -25,31 +26,28 @@ export default class Splash extends Component<{}> {
   };
 
   componentDidMount(){
-    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
-    setTimeout(()=>{
+    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);    
       this.authSubscription = firebase.auth().onAuthStateChanged((user) => {        
-        if (user) {                                                               
-          this.props.navigation.navigate('Home', { user: user });                                        
+        if (user) {             
+            this.props.navigation.navigate('Home',{user:user});                                                                                                                  
         }
-        else {
+        else {          
           this.props.navigation.navigate('Login');
         }
-      });
-    },3000);
+      });    
   }  
 
   componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
-    this.setState({ authSubscription: null });
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid);    
   }
 
 	render(){    
 		return(
-			<View style={styles.container} >
+      <View style={styles.container} >
           <Image source={require('src/assets/images/bg.png')} style={styles.image} />
 				  <Image style={styles.logo} source={require('src/assets/images/ic.png')} style={{width: 105, height: 105}}/>          
-  		</View>
-			)
+  		</View>	
+		)
 	}
 }
 

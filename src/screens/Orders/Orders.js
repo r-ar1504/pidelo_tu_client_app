@@ -4,7 +4,7 @@ import { View, BackHandler, Image, ImageBackground, Modal, ActivityIndicator, Al
 import styles from './OrderHistoryStyle';
 import OrderHistory from './OrderHistory';
 import OrderComming from './OrderComming';
-//import firebase from 'react-native-firebase';
+import firebase from 'react-native-firebase';
 
 export default class Orders extends Component {
   constructor(props){
@@ -13,17 +13,54 @@ export default class Orders extends Component {
     this.state = {
       historyOrders: [],
       nextOrders: [],  
-      loading: true    
+      loading: true,
+      user:firebase.auth().currentUser  
     } 
 
     this.orderAgain = this.orderAgain.bind(this);        
   }
 
+  componentWillMount() {
+   
+  }
+
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);  
+    NetInfo.isConnected.addEventListener('connectionChange', this._handleConnectionChange);
+     this.getOrders();     
+  }
 
-     this.getOrders().then((response) => {                    
-        const historyOrders = [];
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
+    NetInfo.isConnected.removeEventListener('connectionChange', this._handleConnectionChange);
+  }
+
+  _handleConnectionChange = (isConnected) => {
+    NetInfo.isConnected.fetch().then(isConnected => {
+      if (!isConnected) {
+        Alert.alert("Pídelo Tú","Necesitas una conexión a internet para ver tus pedidos", [
+          {text: 'Regresar', onPress: () => {this.props.navigation.goBack()}}, 
+          {text: 'OK', onPress: () => console.log('OK')}                   
+        ],
+        {cancelable: false});
+      }
+      else {
+        this.getOrders();
+      }
+    });
+  };
+
+  onBackButtonPressAndroid = () => {
+    this.props.navigation.goBack();
+  };
+
+  getOrders(){ 
+    const url = 'http://192.168.100.4:8000/orders/' + this.state.user.uid;
+     return fetch(url)
+        .then((response) => {
+          return response.json();
+        }).then(response => {
+          const historyOrders = [];
         const nextOrders = [];     
         for (let i = response.length - 1; i >= 0; i--) {
           if(response[i].status == 4) {
@@ -33,26 +70,7 @@ export default class Orders extends Component {
             nextOrders.push(response[i]);
           }
         }
-        this.setState({historyOrders: historyOrders});
-        this.setState({nextOrders: nextOrders});
-        this.setState({loading: false});                      
-    });   
-
-  }
-
-  componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
-  }
-
-  onBackButtonPressAndroid = () => {
-    this.props.navigation.goBack();
-  };
-
-  getOrders(){ 
-    //const url = 'http://pidelotu.azurewebsites.net/orders' + firebaseID
-     return fetch('http://pidelotu.azurewebsites.net/orders')
-        .then((response) => {
-          return response.json();
+        this.setState({historyOrders: historyOrders, nextOrders: nextOrders, loading: false});
         }).catch((error) => {
           return error.message;        
         });     

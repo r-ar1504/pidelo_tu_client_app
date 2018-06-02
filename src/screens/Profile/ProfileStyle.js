@@ -36,6 +36,11 @@ export default StyleSheet.create({
     borderWidth: 1,
     borderColor: '#fff'
   },
+  logo: {
+    alignItems: 'flex-start',
+    justifyContent:'center',
+    resizeMode:'center',
+  },
   profile_data:{
     alignSelf: 'center',
     flexDirection: 'column',    

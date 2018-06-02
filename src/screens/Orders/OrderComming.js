@@ -61,8 +61,8 @@ export default class OrderComming extends Component {
             </View>
           </View>             
         </View>  
-      )
-    });
+        )
+      });    
   }
   render() {
     return (      

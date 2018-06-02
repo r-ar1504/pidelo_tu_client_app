@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StackNavigator } from 'react-navigation';
 import { Text, View, TouchableOpacity, Alert, Image, AsyncStorage, TouchableWithoutFeedback, ImageBackground, Modal, BackHandler } from 'react-native';
 import { Container, Content, Footer, Input, Item, Header, Body, Right, Left, Icon  } from 'native-base';
+import VerificationCode from "./VerificationCode";
 import PhoneInput from 'react-native-phone-input';
 import ValidationComponent from 'react-native-form-validator';
 
@@ -18,7 +19,8 @@ export default class Register extends ValidationComponent {
   constructor(props) {
     super(props);
         
-    this.state = { phoneAuthSnapshot: null, phoneNumber: '', loading: false, showModal: false };    
+    this.validCode = this.validCode.bind(this);
+    this.state = { phoneAuthSnapshot: null, phoneNumber: '', loading: false, showModal: false, verificationCode: false };    
   }
 
   componentDidMount() {
@@ -32,6 +34,32 @@ export default class Register extends ValidationComponent {
   onBackButtonPressAndroid = () => {
     return true;
   };
+
+  validCode(codeInput){    
+    if (codeInput.length < 6){
+      Alert.alert("Pídelo Tú","Escribe un código válido");
+    }
+    else {
+      /* Pass credential through the next forms until the register finish*/
+      this.setState({ loading: true });
+      const { verificationId, code } = this.state.phoneAuthSnapshot;          
+      //if (code == codeInput){
+        const credential = firebase.auth.PhoneAuthProvider.credential(verificationId, codeInput);          
+          this.setState({ loading: false });
+          this.props.navigation.navigate('Modal',{
+            text:'Tu código ha sido exitoso',
+            button:'Finalizar',
+            action: 'Form',
+            credential: credential,
+            phoneNumber: this.state.phoneNumber
+        });
+      //}
+      //else {
+        //this.setState({ loading: false });
+        //alert("El código no coincide, por favor intente de nuevo");
+      //}                
+    }       
+  }
    
   confirm(){    
     this.validate({ phoneNumber: {required: true} });
@@ -56,15 +84,17 @@ export default class Register extends ValidationComponent {
                 this.setState({ loading: false });                                
                 Alert.alert("Pídelo Tú",phoneAuthSnapshot.error.toString());                
               break;
-
               // ---------------------
               // ANDROID ONLY EVENTS
               // ---------------------
               case firebase.auth.PhoneAuthState.AUTO_VERIFY_TIMEOUT: // or 'timeout'
-                
+                this.setState({verificationCode: true, loading:false});
               break;
-              case firebase.auth.PhoneAuthState.AUTO_VERIFIED: // or 'verified'                 
-                 //alert("AUTO_VERIFIED");
+              case firebase.auth.PhoneAuthState.AUTO_VERIFIED: // or 'verified'  
+                const { verificationId, code } = phoneAuthSnapshot;
+                const credential = firebase.auth.PhoneAuthProvider.credential(verificationId, code);
+                this.setState({verificationCode: false, loading:false});
+                this.props.navigation.navigate('RegisterForm',{ credential: credential, phoneNumber: phoneNumber });                      
               break;
             }
           }, (error) => {
@@ -76,16 +106,8 @@ export default class Register extends ValidationComponent {
           });            
         }
         else {
-          try {            
-            AsyncStorage.getItem(response[0].firebase_id.toString(), (err, item) => {
-              const emailCredential = firebase.auth.EmailAuthProvider.credential(response[0].email, JSON.parse(item).password);
-              if (emailCredential !== null){
-                firebase.auth().signInWithCredential(emailCredential);              
-              }
-            });                        
-          } catch (error) {
-              alert(error);
-          }
+          const emailCredential = firebase.auth.EmailAuthProvider.credential(response[0].email, response[0].password);          
+          firebase.auth().signInWithCredential(emailCredential);                        
         }
       });      
     }
@@ -95,7 +117,7 @@ export default class Register extends ValidationComponent {
   }
 
   checkNumber(phoneNumber){
-    const url = 'http://pidelotu.azurewebsites.net/checkNumber/'+phoneNumber;
+    const url = 'http://192.168.100.4:8000/checkNumber/'+phoneNumber;
     return fetch(url)      
       .then(response => {              
         if (response.ok) {
@@ -108,7 +130,7 @@ export default class Register extends ValidationComponent {
   }
 
   render() {
-    const { loading, showModal, phoneAuthSnapshot, phoneNumber } = this.state;
+    const { loading, showModal, verificationCode, phoneAuthSnapshot, phoneNumber } = this.state;
     if(loading) {
         return(              
             <ImageBackground source={require('src/assets/images/bg.png')} style={styles.body}>
@@ -124,11 +146,16 @@ export default class Register extends ValidationComponent {
               <Image source={require('src/assets/images/check.png')} style={styles.check}/>
             </View>
             <Text style={styles.text}>Se ha enviado un código de verificación vía SMS a tu móvil</Text>
-            <TouchableOpacity style={styles.button} onPress={() => {this.setState({showModal: false}); this.props.navigation.navigate('VerificationCode', { phoneAuthSnapshot: phoneAuthSnapshot, phoneNumber: phoneNumber })}}>
+            <TouchableOpacity style={styles.button} onPress={() => {this.setState({showModal: false, loading:true})}}>
               <Text style={styles.buttonText}>Continuar</Text>
             </TouchableOpacity>     
           </ImageBackground>
         </Modal>      
+      )
+    }
+    if (verificationCode) {
+      return (
+        <VerificationCode validCode={this.validCode}/>
       )
     } 
     return (

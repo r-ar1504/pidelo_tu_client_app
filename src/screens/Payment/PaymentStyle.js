@@ -9,6 +9,12 @@ export default styles = StyleSheet.create({
     justifyContent :'flex-start',
     flexDirection:'column'
   },
+  body: {
+    flex: 9,
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'center',    
+  },
   image:{
     display: 'flex',
     flex:1,    

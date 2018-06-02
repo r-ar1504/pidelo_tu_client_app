@@ -11,12 +11,6 @@ import Mapa from '../../components/Maps/Maps';
 
 let { width, height } = Dimensions.get('window');
 
-const ASPECT_RATIO = width / height;
-const LATITUDE_DELTA = 0.0122;
-const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-
-const dat = new Date().toISOString().slice(0, 19).replace('T', ' ');
-
 export default class MealSelected extends Component{
   static navigationOptions ={
       headerTransparent: true
@@ -72,12 +66,16 @@ export default class MealSelected extends Component{
     }
   }
 
-  async accept(region){            
+  accept(region){      
+    this.setState({loading: true});      
     this.sendData(region).then((response) => {                  
-      Alert.alert("Pídelo Tú","Tú pedido se a procesado con éxito, espera a que el restaurante tome tu orden");       
-      this.props.navigation.navigate('Home', { user: this.state.user});
+      this.setState({allowLocation: false, loading:false});  
+      Alert.alert("Pídelo Tú","Se a agregado tu pedido al carrito, ¿Deseas seguir comprando?",[
+        {text: 'Sí', onPress: () => {this.props.navigation.goBack()}},
+        {text: 'Finalizar compra', onPress: () => {this.props.navigation.navigate('CartShop')}}
+      ],{cancelable: false});                       
     }).catch(error => {
-      this.setState({loading: false});
+      this.setState({loading: false, allowLocation:false});
       Alert.alert("Pídelo Tú",error.message);
     });                 
   }

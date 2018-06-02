@@ -20,6 +20,12 @@ image:{
     alignItems: 'center',
     borderRadius: 50
   },
+  body: {    
+    flex: 9,
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'center',
+  },
   searchInput: {
     width: 300,
     borderBottomWidth: 0,
@@ -64,24 +70,31 @@ image:{
     alignItems: 'center',            
   },
   grid: {
-    width:  width / 2.5,
-    height: 150,    
+    width:  width*.60,
+    height: height *.30,    
     margin: 10,
     backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems:'center'
   },
   mealImg:{
-    width:100, 
-    height:100, 
+    width: width*.25, 
+    height:height*.15, 
     resizeMode: 'contain'
   },
+  logo: {
+    resizeMode:'center', 
+    width: width*.12, 
+    height:height*.12, 
+    marginLeft: 10
+  },
   infoCont:{
-    flexDirection:'row',    
+    flexDirection:'row',
+    padding:10    
   },
   description:{
     fontFamily: FONT_NORMAL,
-    fontSize:14,
+    fontSize:18,
     color:'#000', 
     textAlign:'center',
     flex: 1, 

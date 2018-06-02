@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity, Alert } from 'react-native';
 import { Content, Item, Label, Input, Icon, Footer, Picker } from 'native-base';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import ValidationComponent from 'react-native-form-validator';
@@ -25,10 +25,10 @@ export default class Form extends ValidationComponent {
     });
 
     if(this.isFormValid()){
-      this.props.confirm(number,month,year,cv,cp);
+      this.props.confirm(number,year,month,cv);
     }
     else {
-      alert(this.getErrorMessages());
+      Alert.alert("Pídelo Tú",this.getErrorMessages());
     }  
   }
 

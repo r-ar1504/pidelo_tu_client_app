@@ -43,53 +43,28 @@ export default class Form extends React.Component {
     firebase.auth().signInWithCredential(credential)
       .then((user) => {
         user.updateProfile({ displayName: this.state.name });
-        this.setState({ user });         
+        let data = { firebaseId: user.uid, name: this.state.name, email: this.state.email.toLowerCase(), password: this.state.password, phone:phoneNumber }                
         const emailCredential = firebase.auth.EmailAuthProvider.credential(this.state.email, this.state.password);
          if (user) {              
-              user.linkWithCredential(emailCredential);
-              this.saveData();
-              this.sendData().then((response) => { this.setState({loading: false})});                                                       
+              user.linkWithCredential(emailCredential);              
+              this.sendData(data).then((response) => { this.setState({loading: false})});                                                       
           }
       })
       .catch((error) => {
         this.setState({ loading: false });
-        alert(error);
+        Alert.alert("Pídelo Tú",error.messages);
       });   
       /********/
   }
 
-  saveData(){
-      try {
-        const name = this.state.name;
-        const email = this.state.email;
-        const password = this.state.password;
-        const firebaseId = this.state.user.uid;
-
-        let user = {
-          name: name,
-          email: email.toLowerCase(),
-          password: password.toString()
-        }
-                
-        AsyncStorage.setItem(firebaseId,JSON.stringify(user));
-      } catch (error) {
-        alert(error);
-      }
-  }
-
-  sendData(){
-    return fetch('http://pidelotu.azurewebsites.net/register', {
+  sendData(data){
+    return fetch('http://192.168.100.4:8000/register', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        firebaseId: this.state.user.uid,
-        name: this.state.name,
-        email: this.state.email,
-        phone: this.state.phoneNumber
-      })
+      body: JSON.stringify(data)
     }).then(response => response.json())
       .then(json => {
         return json;    

@@ -18,12 +18,11 @@ export default class SideMenu extends Component{
     * Binded Functions:
     */
     this.dissmisSideMenu = this.dissmisSideMenu.bind(this)
-    this.openPromos = this.openPromos.bind(this)
     this.currentLocation = this.currentLocation.bind(this)
     this.orderHistory = this.orderHistory.bind(this)
     this.paymentMethod = this.paymentMethod.bind(this)
     this.logOut = this.logOut.bind(this)
-    this.openHelp = this.openHelp.bind(this)
+    this.openCart = this.openCart.bind(this)
   }  
 
   /* Close side menu. */
@@ -32,8 +31,8 @@ export default class SideMenu extends Component{
   }
 
   /* Open discounts and coupons. */
-  openPromos(){
-    this.props.navigation.navigate('Discounts');
+  home(user){
+    this.props.navigation.navigate('Home', { user: user });
   }
 
   /* Go to user settings. */
@@ -51,6 +50,7 @@ export default class SideMenu extends Component{
     this.props.navigation.navigate('Orders');
   }
 
+  /* Add Payment method */
   paymentMethod(){
     this.props.navigation.navigate('Payment');
   }
@@ -60,9 +60,9 @@ export default class SideMenu extends Component{
     firebase.auth().signOut();
   }
 
-  /* Help Section. */
-  openHelp(){
-
+  /* Cart Shop Section. */
+  openCart(){
+    this.props.navigation.navigate('CartShop')
   }
 
   /*
@@ -84,7 +84,7 @@ export default class SideMenu extends Component{
           <Image source={require('src/assets/images/ic.png')} style={style.side_profile}/>
           </View>
           <View style={style.sidebar_section}>
-            <Text style={{fontSize: 20, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>{(user.displayName != null) ? user.displayName : user.email}</Text>
+            <Text style={{fontSize: 20, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>{(user.displayName != null) ? user.displayName : user.providerData[0].phoneNumber}</Text>
           </View>
           <View style={style.sidebar_section} >
           <TouchableWithoutFeedback>
@@ -92,10 +92,10 @@ export default class SideMenu extends Component{
           </TouchableWithoutFeedback>
           </View>
           <View style={style.sidebar_links}>
-            <TouchableWithoutFeedback onPress={this.openPromos}>
+            <TouchableWithoutFeedback onPress={this.home.bind(this,user)}>
               <View style={style.sidebar_link}>
-                <FontIcon name="ticket" size={15} color="#fff" style={{marginTop: 8, paddingRight:4}} />
-                <Text style={{fontSize: 20, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>Promociones</Text>
+                <FontIcon name="home" size={15} color="#fff" style={{marginTop: 8, paddingRight:4}} />
+                <Text style={{fontSize: 20, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>Inicio</Text>
               </View>
             </TouchableWithoutFeedback>
 
@@ -117,6 +117,13 @@ export default class SideMenu extends Component{
               <View style={style.sidebar_link}>
                 <Icon active name="cash" style={{marginTop: 8, paddingRight:4, fontSize: 15, color: '#fff'}} />
                 <Text style={{fontSize: 20, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>Agregar método pago</Text>
+              </View>
+            </TouchableWithoutFeedback>
+
+              <TouchableWithoutFeedback onPress={this.openCart}>
+              <View style={style.sidebar_link}>
+                <Icon active name="cart" style={{marginTop: 8, paddingRight:4, fontSize: 15, color: '#fff'}} />
+                <Text style={{fontSize: 20, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>Carrito de compras</Text>
               </View>
             </TouchableWithoutFeedback>
             <Footer style={{backgroundColor: 'transparent'}}>

@@ -81,6 +81,9 @@ export default class Home extends Component{
           return(            
             <View key={restaurant.id}>
               <FoodFeed restaurant={JSON.stringify(restaurant)} openRest={this.openRestaurant}/>
+              <TouchableWithoutFeedback onPress={this.openDisc.bind(this)}>         
+                <Image source={require('src/assets/images/promo.jpg')} style={style.promo}/>             
+              </TouchableWithoutFeedback>
             </View>
           )
         })
@@ -88,14 +91,15 @@ export default class Home extends Component{
     }    
   }
 
-  noti(){
-    alert("No hay notificiaciones nuevas");
-  }
+  render(){
     const { params } = this.props.navigation.state;
     const user = params ? params.user : null;
     if (this.state.loading){
-          <ActivityIndicator size={50} color="#11c0f6" animating={true}/>
-        </View>
+      return (
+        <View style={styles.body} >
+          <Image source={require('src/assets/images/bg.png')} style={styles.image} />
+				  <Image style={styles.logo} source={require('src/assets/images/ic.png')} style={{width: 105, height: 105}}/>          
+  		  </View>	
       )
     }
     return(
@@ -103,9 +107,7 @@ export default class Home extends Component{
           <Header style={{flexDirection: 'row', justifyContent: 'space-around', backgroundColor: '#fff', width: '100%'}}>
             <Left style={{ flex: 1 }} >
               <TouchableWithoutFeedback onPress={this.openDrawer.bind(this,user)}>
-                <View style={{marginLeft:10, padding: 5}}>
                 <Image source={require('src/assets/images/menu.png')} style={{width: 30,  height: 30 }}  />
-                </View>
               </TouchableWithoutFeedback>
             </Left>
             <TouchableWithoutFeedback onPress={this.searchScreen}>
@@ -114,16 +116,11 @@ export default class Home extends Component{
             </Body>
             </TouchableWithoutFeedback>
             <Right style={{ flex: 1 }}>
-            <TouchableOpacity onPress={this.noti}>
               <RightTittleNav />
-            </TouchableOpacity>
             </Right>
           </Header>
           <Content>
-            {this.renderRestaurants()} 
-            <TouchableWithoutFeedback onPress={this.openDisc.bind(this)}>         
-                <Image source={require('src/assets/images/promo.jpg')} style={style.promo}/>             
-              </TouchableWithoutFeedback>           
+            {this.renderRestaurants()}            
           </Content>
         </Container>
     );

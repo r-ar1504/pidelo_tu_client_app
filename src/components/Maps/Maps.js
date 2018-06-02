@@ -23,43 +23,14 @@ export default class Maps extends React.Component {
           latitudeDelta: LATITUDE_DELTA,
           longitudeDelta: LONGITUDE_DELTA,
         },
-        address: address
-      };
-
-    YellowBox.ignoreWarnings([
-     'Warning: componentWillMount is deprecated',
-     'Warning: componentWillReceiveProps is deprecated',
-     'Warning: componentWillUpdate is deprecated'
-    ]);
-  }
-
-
-  componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
-    if (this.state.address != null) {
-      this.getLongLat(this.state.address)
-        .then(response => {
-          this.setState({
-            region: {
-              latitude: response.geometry.location.lat,
-              longitude: response.geometry.location.lng,
-              latitudeDelta: LATITUDE_DELTA,
-              longitudeDelta: LONGITUDE_DELTA,
-            },
-            title: response.formatted_address,
-          });
-        });
-      }
-    else {
-=======
->>>>>>> 49c2e93cde0c7596a4396d73d65f1e802475d766
         address: null,
-        mapStyle: customStyle              
+        mapStyle: customStyle,
+        disabled:true            
       };        
   }
 
-  componentWillMount() {     
-     //could change for address location saved in local storage    
+  componentDidMount() {     
+     //could change for address location saved in local storage            
       navigator.geolocation.getCurrentPosition(
         position => {
           this.setState({
@@ -73,16 +44,21 @@ export default class Maps extends React.Component {
           this.getAddress(position.coords.latitude,position.coords.longitude)
               .then(response => { 
                 let address = response.split(','); 
-                this.setState({title: address[0] + ' ' + address[1]})
+                this.setState({title: address[0] + ' ' + address[1], disabled: false})
               });           
         },
       (error) => {    
         Alert.alert("Pídelo Tú",error.message);  
         //When request address failed, get the last address storaged or a default location      
-      },
+      });    
   }  
-  
+
   getAddress(lat,long){
+    return fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+long+'&key=AIzaSyCYIhiPOMgLbwZrN9vT8ChwNtPKqKkOrs0')
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.status !== 'OK') {
+          throw new Error(`Geocode error: ${json.status}`);
         }
         return json.results[0].formatted_address;
       });
@@ -99,7 +75,7 @@ export default class Maps extends React.Component {
       }); 
   }  
 
-  onMapPress(e){          
+  async onMapPress(e){          
     this.setState({ 
       region: { 
         latitude: e.nativeEvent.coordinate.latitude,
@@ -109,7 +85,7 @@ export default class Maps extends React.Component {
       }, 
       title: null     
     });
-    this.getAddress(e.nativeEvent.coordinate.latitude,e.nativeEvent.coordinate.longitude)
+    await this.getAddress(e.nativeEvent.coordinate.latitude,e.nativeEvent.coordinate.longitude)
         .then(response => {
           let address = response.split(','); 
           this.setState({title: address[0] + ' ' + address[1]})
@@ -148,15 +124,11 @@ export default class Maps extends React.Component {
           <TouchableOpacity onPress={() => {this.props.goBack()}} style={styles.bubble}>
             <Text style={{color: 'white', textAlign:'center'}}>REGRESAR</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {this.props.confirm(this.state.region)}} style={styles.bubble}>
+          <TouchableOpacity onPress={() => {this.props.confirm(this.state.region)}} style={styles.bubble} disabled={this.state.disabled} >
             <Text style={{color: 'white', textAlign:'center'}}>CONFIRMAR</Text>
           </TouchableOpacity>
         </View>
       </View>
     );
   }
-}
-
-Maps.propTypes = {
-  provider: ProviderPropType,
 }
