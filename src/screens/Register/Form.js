@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
-import { StackNavigator } from 'react-navigation';
+import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Text, View, Image, TouchableOpacity, YellowBox, ActivityIndicator, Alert, BackHandler, AsyncStorage } from 'react-native';
+import { Text, View, Image, TouchableOpacity, YellowBox, Alert, BackHandler, } from 'react-native';
 import { Hoshi } from 'react-native-textinput-effects';
 import styles from './RegisterStyle';
 import firebase from 'react-native-firebase'; 
-
+import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 
 export default class Form extends React.Component {
   static navigationOptions = {
@@ -18,8 +17,7 @@ export default class Form extends React.Component {
 
     this.state = {name: '', email: '', password: '', loading: false, user: null, phoneNumber: '' }
     
-    YellowBox.ignoreWarnings([
-     'Warning: componentWillMount is deprecated',
+    YellowBox.ignoreWarnings([    
      'Warning: componentWillReceiveProps is deprecated',
     ]);
   }
@@ -37,28 +35,27 @@ export default class Form extends React.Component {
   };
 
   confirm(credential, phoneNumber){
-    this.setState({ loading: true, phoneNumber: phoneNumber }); 
-    /* SignIn with phone credential, then link with 
-    email credential and finally save data to local storage and server */    
+    this.setState({ loading: true, phoneNumber: phoneNumber });       
     firebase.auth().signInWithCredential(credential)
       .then((user) => {
         user.updateProfile({ displayName: this.state.name });
         let data = { firebaseId: user.uid, name: this.state.name, email: this.state.email.toLowerCase(), password: this.state.password, phone:phoneNumber }                
         const emailCredential = firebase.auth.EmailAuthProvider.credential(this.state.email, this.state.password);
          if (user) {              
-              user.linkWithCredential(emailCredential);              
-              this.sendData(data).then((response) => { this.setState({loading: false})});                                                       
+            user.linkWithCredential(emailCredential);              
+            this.sendData(data).then((response) => { this.setState({loading: false})}).catch((error)=> {
+              Alert.alert("Pídelo Tú",error.messages);
+            });                                                       
           }
       })
       .catch((error) => {
         this.setState({ loading: false });
         Alert.alert("Pídelo Tú",error.messages);
-      });   
-      /********/
+      });         
   }
 
-  sendData(data){
-    return fetch('http://192.168.100.4:8000/register', {
+  async sendData(data){
+    return await fetch('http:/pidelotu.azurewebsites.net/user', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -68,24 +65,20 @@ export default class Form extends React.Component {
     }).then(response => response.json())
       .then(json => {
         return json;    
-    }).catch((error) => {
-      return error;
+    }).catch(error => {
+      throw new Error(error.messages);
     });
   }
 
 
   render(){
+    const { loading } = this.state;
     const { params } = this.props.navigation.state;
     const phoneNumber = params ? params.phoneNumber : null;
     const credential = params ? params.credential : null;
 
-    if(this.state.loading) {
-        return(    
-          <View style={styles.body}>
-            <Image source={require('src/assets/images/bg.png')} style={styles.image} />
-            <Image style={styles.logo} source={require('src/assets/images/ic.png')} style={{width: 105, height: 105}}/>
-          </View>
-        )
+    if(loading) {
+        return <LoadingScreen/>
       }  
 
     return(

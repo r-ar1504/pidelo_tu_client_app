@@ -1,20 +1,13 @@
 import React, { Component } from 'react';
-import { DrawerNavigator, NavigationActions } from 'react-navigation';
 import { Container, Header, Content, Body, Right, Left} from 'native-base';
-import { Text, View, TouchableOpacity, TouchableWithoutFeedback, ScrollView, BackHandler, Image, YellowBox, AsyncStorage, ActivityIndicator } from 'react-native';
+import { View, TouchableWithoutFeedback, Image, YellowBox, Alert, BackHandler } from 'react-native';
 import style from './HomeStyle';
 import FoodFeed from './FoodFeed';
 import SearchButton from './SearchButton';
-import LeftTittleNav from './LeftTittleNav';
 import RightTittleNav from './RightTittleNav';
-import SideMenu from '../../components/SideMenu/SideMenu';
-import RestaurantContainer from '../../components/RestaurantContainer';
-import Profile from '../Profile/Profile';
 import OneSignal from 'react-native-onesignal';
+import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import { SlidingPane, SlidingPaneWrapper } from 'react-native-sliding-panes';
-
-
-
 
 export default class Home extends Component{
   static navigationOptions = {
@@ -43,8 +36,26 @@ export default class Home extends Component{
 
   componentWillMount(){
     OneSignal.sendTags({delivery_code: 'U10', user_type: 'client'});//Register tags for specific user. 
-    this.getRestaurants();     
+    this.getRestaurants().then((response) => {
+      let resp = response;
+        this.setState({
+          restaurants: resp.restaurants
+        });
+        this.setState({loading: false});
+    }).catch((error) => { Alert.alert("Pídelo Tú", error.messages); this.setState({loading: false});});     
   }
+
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
+  }
+
+  onBackButtonPressAndroid = () => {
+    return true;
+  };
 
   openDrawer(user){
     this.props.navigation.navigate('DrawerOpen', { user: user });
@@ -62,15 +73,13 @@ export default class Home extends Component{
     this.props.navigation.navigate('Search');
   }
 
-  getRestaurants(){
-    fetch('http://pidelotu.azurewebsites.net/get_restaurants')
+  async getRestaurants(){
+    return await fetch('http://pidelotu.azurewebsites.net/get_restaurants')
     .then( (response) => response.json() )
-    .then( (response) =>{
-        let resp = response;
-        this.setState({
-          restaurants: resp.restaurants
-        });
-        this.setState({loading: false});
+    .then( (json) =>{
+      return json; 
+    }).catch(error => {
+      throw new Error(error.messages);
     });
   }
 
@@ -95,12 +104,7 @@ export default class Home extends Component{
     const { params } = this.props.navigation.state;
     const user = params ? params.user : null;
     if (this.state.loading){
-      return (
-        <View style={styles.body} >
-          <Image source={require('src/assets/images/bg.png')} style={styles.image} />
-				  <Image style={styles.logo} source={require('src/assets/images/ic.png')} style={{width: 105, height: 105}}/>          
-  		  </View>	
-      )
+      return <LoadingScreen/>
     }
     return(
         <Container>

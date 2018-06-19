@@ -1,5 +1,4 @@
 import { StyleSheet, Dimensions } from 'react-native';
-import { COLOR_PRIMARY }from 'src/assets/GlobalStyleSheet';
 
 const { height, width } = Dimensions.get('window');
 export default StyleSheet.create({

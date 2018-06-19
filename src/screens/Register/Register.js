@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
-import { StackNavigator } from 'react-navigation';
-import { Text, View, TouchableOpacity, Alert, Image, AsyncStorage, TouchableWithoutFeedback, ImageBackground, Modal, BackHandler } from 'react-native';
+import React from 'react';
+import { Text, View, TouchableOpacity, Alert, Image, TouchableWithoutFeedback, ImageBackground, Modal, BackHandler } from 'react-native';
 import { Container, Content, Footer, Input, Item, Header, Body, Right, Left, Icon  } from 'native-base';
 import VerificationCode from "./VerificationCode";
 import PhoneInput from 'react-native-phone-input';
@@ -8,6 +7,7 @@ import ValidationComponent from 'react-native-form-validator';
 
 import firebase from 'react-native-firebase';
 import styles from './RegisterStyle';
+import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 
 export default class Register extends ValidationComponent {
   static navigationOptions = {
@@ -39,8 +39,7 @@ export default class Register extends ValidationComponent {
     if (codeInput.length < 6){
       Alert.alert("Pídelo Tú","Escribe un código válido");
     }
-    else {
-      /* Pass credential through the next forms until the register finish*/
+    else {      
       this.setState({ loading: true });
       const { verificationId, code } = this.state.phoneAuthSnapshot;          
       //if (code == codeInput){
@@ -109,6 +108,9 @@ export default class Register extends ValidationComponent {
           const emailCredential = firebase.auth.EmailAuthProvider.credential(response[0].email, response[0].password);          
           firebase.auth().signInWithCredential(emailCredential);                        
         }
+      }).catch((error) => {
+        this.setState({ loading: false });
+        Alert.alert("Pídelo Tú","Hubo un error, por favor inténtalo más tarde");
       });      
     }
     else {
@@ -116,27 +118,21 @@ export default class Register extends ValidationComponent {
     }           
   }
 
-  checkNumber(phoneNumber){
-    const url = 'http://192.168.100.4:8000/checkNumber/'+phoneNumber;
-    return fetch(url)      
-      .then(response => {              
-        if (response.ok) {
-          return response.json();
-        }
-        else {
-          throw new Error("Algo salió mal");
-        }
-      }); 
+  async checkNumber(phoneNumber){
+    const url = 'http://pidelotu.azurewebsites.net/checkNumber/'+phoneNumber;
+    return await fetch(url)      
+      .then(response => response.json())
+      .then(json => {
+        return json;
+      }).catch(error => {
+        throw new Error(error);
+      });     
   }
 
   render() {
     const { loading, showModal, verificationCode, phoneAuthSnapshot, phoneNumber } = this.state;
     if(loading) {
-        return(              
-            <ImageBackground source={require('src/assets/images/bg.png')} style={styles.body}>
-              <Image source={require('src/assets/images/ic.png')} style={{width: 105, height: 105}}/>
-            </ImageBackground>          
-        )
+        return <LoadingScreen/>
       }
     if (showModal) {
       return (     
@@ -154,9 +150,7 @@ export default class Register extends ValidationComponent {
       )
     }
     if (verificationCode) {
-      return (
-        <VerificationCode validCode={this.validCode}/>
-      )
+      return <VerificationCode validCode={this.validCode}/>      
     } 
     return (
       <Container style={styles.container}>

@@ -4235,7 +4235,7 @@ prop-types@15.6.0:
     loose-envify "^1.3.1"
     object-assign "^4.1.1"
 
-prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.0:
+prop-types@^15.5.10, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@^15.6.0:
   version "15.6.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.1.tgz#36644453564255ddda391191fb3a125cbdf654ca"
   dependencies:
@@ -4312,6 +4312,19 @@ react-devtools-core@3.1.0:
   dependencies:
     shell-quote "^1.6.1"
     ws "^2.0.3"
+
+react-native-check-box@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-check-box/-/react-native-check-box-2.1.0.tgz#a4e5fa2c1860cfc3f5758ae3493b6ec2ec7c2878"
+  dependencies:
+    prop-types "^15.5.7"
+
+react-native-checkbox-heaven@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/react-native-checkbox-heaven/-/react-native-checkbox-heaven-0.1.5.tgz#fd54cec78b948d4c6316801ff8cbc2c82b824055"
+  dependencies:
+    prop-types "^15.6.0"
+    react-native-vector-icons "^4.0.0"
 
 react-native-dismiss-keyboard@1.0.0:
   version "1.0.0"
@@ -4391,6 +4404,10 @@ react-native-onesignal@^3.1.4:
   dependencies:
     invariant "^2.2.2"
 
+react-native-openpay@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-openpay/-/react-native-openpay-2.0.1.tgz#679f1c9adc45ceeb41ba9997ec189d9bf4caf626"
+
 react-native-phone-input@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/react-native-phone-input/-/react-native-phone-input-0.2.1.tgz#ac6852a1ea37d8d58ff83ded52d18d7b6303e667"
@@ -4434,6 +4451,14 @@ react-native-tab-view@^0.0.74:
 react-native-textinput-effects@^0.4.2:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/react-native-textinput-effects/-/react-native-textinput-effects-0.4.2.tgz#05336a8ed9e4992397fc5de714692d774eb91b07"
+
+react-native-vector-icons@^4.0.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/react-native-vector-icons/-/react-native-vector-icons-4.6.0.tgz#e4014311ffa6de397d914ffc31b7097a874cc8d5"
+  dependencies:
+    lodash "^4.0.0"
+    prop-types "^15.5.10"
+    yargs "^8.0.2"
 
 react-native-vector-icons@^4.5.0:
   version "4.5.0"

@@ -45,7 +45,7 @@ image:{
     height: 70,
     marginTop: 10,              
     borderRadius: 50,              
-    margin: 5,
+    margin: 5,    
   },
   radioButton:{
     width: 60,
@@ -55,7 +55,7 @@ image:{
     borderRadius: 50,              
     justifyContent: 'center',
     alignItems:'center',
-    position: 'absolute',
+    position: 'absolute',    
   },
   wrapper: {        
     
@@ -70,7 +70,7 @@ image:{
     alignItems: 'center',            
   },
   grid: {
-    width:  width*.60,
+    width:  width*.80,
     height: height *.30,    
     margin: 10,
     backgroundColor: '#fff',
@@ -94,7 +94,7 @@ image:{
   },
   description:{
     fontFamily: FONT_NORMAL,
-    fontSize:18,
+    fontSize:24,
     color:'#000', 
     textAlign:'center',
     flex: 1, 

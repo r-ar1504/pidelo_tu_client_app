@@ -25,10 +25,10 @@ export default class Form extends ValidationComponent {
     });
 
     if(this.isFormValid()){
-      this.props.confirm(number,year,month,cv);
+      this.props.confirm(number);
     }
     else {
-      Alert.alert("Pídelo Tú",this.getErrorMessages());
+      Alert.alert("Pídelo Tú","Pequeño detalle, dejaste un campo vacío");
     }  
   }
 
@@ -73,17 +73,10 @@ export default class Form extends ValidationComponent {
     }    
     return years;
   }
-
-  setNumber(number){    
-    
-  }  
+  
 
 	render(){
-    const number = this.state.number;
-    const month = this.state.month; 
-    const year = this.state.year; 
-    const cv = this.state.cv;
-    const cp = this.state.cp;
+    const { number, month, year, cv, cp } = this.state;    
 
 		return(                       
 		    <View style={styles.container}>
@@ -102,13 +95,13 @@ export default class Form extends ValidationComponent {
           </View>
           <View style={styles.selectContainer}>
             <View style={{borderWidth : 1, borderColor : "white", width: 150 }}>
-            <Picker iosHeader="Select one" mode="dropdown" itemStyle={{color: 'white'}} style = {{color: 'white'}} selectedValue={this.state.month} onValueChange={(month) => {this.setState({month})}}>
+            <Picker iosHeader="Select one" mode="dropdown" style = {{backgroundColor: 'transparent', color:'white'}} selectedValue={this.state.month} onValueChange={(month) => {this.setState({month})}}>
               <Picker.Item label="" value="" />
               {this.month()}
             </Picker>
             </View>
             <View style={{borderWidth : 1, borderColor : "white", width: 150, marginLeft: 6 }}>            
-            <Picker iosIcon={<Icon name="ios-arrow-down-outline" style={{color: 'white'}} />} iosHeader="Select one" mode="dropdown" style = {{color: 'white' }} selectedValue={this.state.year} onValueChange={(year) => {this.setState({year})}}>
+            <Picker iosHeader="Select one" mode="dropdown" style = {{backgroundColor: 'transparent', color:'white' }} selectedValue={this.state.year} onValueChange={(year) => {this.setState({year})}}>
               <Picker.Item label="" value="" />
               {this.years()}
             </Picker>
@@ -123,6 +116,7 @@ export default class Form extends ValidationComponent {
               <Input style={styles.inputText} ref={(cp) => this.cp = cp} onChangeText={(cp)=> {this.setState({cp});}} placeholder='Código Postal' placeholderTextColor='white' keyboardType="phone-pad" maxLength={5}/>               
             </Item>
           </View>
+          
           <TouchableOpacity style={styles.button} onPress={this.confirm.bind(this,number,month,year,cv,cp)}>
            <Text style={styles.buttonText}>CONTINUAR</Text>
          </TouchableOpacity> 

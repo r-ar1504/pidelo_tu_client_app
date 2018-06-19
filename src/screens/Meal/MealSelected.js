@@ -1,140 +1,210 @@
 import React, { Component } from 'react';
-import FontIcon from 'react-native-vector-icons/FontAwesome';
-import { Alert, Text, View, Image, BackHandler, AsyncStorage, TextInput, TouchableOpacity, YellowBox, ActivityIndicator, ImageBackground, Modal, Dimensions} from 'react-native';
-import { Icon, Container, Content, Header, Left, Body, Right, Button } from 'native-base';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { Alert, Text, View, Image, BackHandler, TextInput, TouchableOpacity, ImageBackground, AsyncStorage } from 'react-native';
+import { Icon, Container, Content, Header, Left, Body, Right } from 'native-base';
 import style from './MealStyle';
 import firebase from 'react-native-firebase';
-import moment from 'moment';
+import { RadioGroup, RadioButton } from 'react-native-flexi-radio-button';
+import CheckBox from 'react-native-checkbox-heaven'
 
-import Mapa from '../../components/Maps/Maps';
+import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 
-let { width, height } = Dimensions.get('window');
-
+const tempArray = [];
+const Ctotal = 0;
 export default class MealSelected extends Component{
   static navigationOptions ={
       headerTransparent: true
   }
   constructor(props){
-    super(props);
-
-    const { params } = this.props.navigation.state;
-    const meal = params ? params.meal : null;
-    const restaurant = params ? params.restaurant_id : null;
+    super(props);   
 
     this.state = {
       number: 1,
-      user: "Rodolfo Ríos",
-      meal_id: meal.id,
-      category_id: meal.category_id,
-      price: meal.price,       
-      loading: false, 
-      allowLocation: false,
-      total: meal.price, 
-      preparation_time: meal.preparation_time, 
-      image: meal.image, 
-      name: meal.name, 
-      description: meal.description,
-      restaurant: restaurant,     
-    }        
+      user:firebase.auth().currentUser,
+      meal:JSON.parse(this.props.meal),                  
+      loading: false,       
+      total: 0,  
+      price: 0,
+      subtype: 0,
+      ingredients: []                
+    }
   }
 
   componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
-
-    this.setState({ user: firebase.auth().currentUser });                               
+    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);   
+    let { meal } = this.state
+    if (!meal.price) {
+      Ctotal = meal.sub_type[0].price;
+      this.setState({total: Ctotal, price: Ctotal, subtype: meal.sub_type[0].id })      
+    }
+    else {
+      Ctotal = meal.price;
+      this.setState({total: Ctotal, price: Ctotal});      
+    }         
   }
 
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
   }
 
-  onBackButtonPressAndroid = () => {
-    this.props.navigation.goBack();
+  onBackButtonPressAndroid = () => {        
+    return true;
   }
 
   IncrementItem = () => {
-    const price = this.state.price * (this.state.number + 1);
-    this.setState({ number: this.state.number + 1 });
-    this.setState({ total: price});
+    let { price, number, } = this.state;
+    const total = price * (number + 1);
+    this.setState({ number: number + 1, total: total });
+    tempArray = [];
+    Ctotal = total;
   }
   DecreaseItem = () => {
-    if (this.state.number > 1) {
-      const price = this.state.price * (this.state.number - 1);
-      this.setState({ number: this.state.number - 1 });
-      this.setState({ total: price});
+    let { price, number } = this.state;
+    if (number > 1) {
+      const total = price * (number - 1);
+      this.setState({ number: number - 1, total: total});
+      Ctotal = total;
     }
+    tempArray = [];    
   }
 
-  accept(region){      
-    this.setState({loading: true});      
-    this.sendData(region).then((response) => {                  
-      this.setState({allowLocation: false, loading:false});  
-      Alert.alert("Pídelo Tú","Se a agregado tu pedido al carrito, ¿Deseas seguir comprando?",[
-        {text: 'Sí', onPress: () => {this.props.navigation.goBack()}},
-        {text: 'Finalizar compra', onPress: () => {this.props.navigation.navigate('CartShop')}}
-      ],{cancelable: false});                       
-    }).catch(error => {
-      this.setState({loading: false, allowLocation:false});
-      Alert.alert("Pídelo Tú",error.message);
-    });                 
+  onSelect(index, selectedItem){    
+    Ctotal = (selectedItem.price * this.state.number);
+    this.setState({total:Ctotal, price: selectedItem.price, subtype: selectedItem.id});
+    tempArray = [];    
+  }
+
+  onClick = (item) => {   
+    if (!tempArray.includes(item.name)) {
+      tempArray.push(item.name);
+      Ctotal = Ctotal + item.price;
+    }
+    else {
+      let index = tempArray.indexOf(item.name);
+      tempArray.splice(index,1);   
+      Ctotal = Ctotal - item.price;    
+    }    
+  }  
+
+  async accept(){      
+    this.setState({loading: true});
+    let restaurant = await AsyncStorage.getItem('restaurant')
+    
+    if (restaurant == null) {
+      this.store().then(async (response) => { 
+        this.setState({loading:false});  
+        await AsyncStorage.setItem('restaurant',this.props.restaurant.toString());          
+        Alert.alert("Pídelo Tú","Se a agregado tu pedido al carrito, ¿Deseas seguir comprando?",[
+          {text: 'Sí', onPress: () => {this.props.dismissMeal()}},
+          {text: 'Finalizar compra', onPress: () => {this.props.cart()}}
+        ],{cancelable: false});                       
+      }).catch(error => {
+        this.setState({loading: false});
+        Alert.alert("Pídelo Tú",error.messages);
+      });  
+    }
+    else {
+      if (restaurant == this.props.restaurant.toString()) {
+        this.store().then(async (response) => {  
+          this.setState({loading:false});                  
+          Alert.alert("Pídelo Tú","Se a agregado tu pedido al carrito, ¿Deseas seguir comprando?",[
+            {text: 'Sí', onPress: () => {this.props.dismissMeal()}},
+            {text: 'Finalizar compra', onPress: () => {this.props.cart()}}
+          ],{cancelable: false});                       
+        }).catch(error => {
+          this.setState({loading: false});
+          Alert.alert("Pídelo Tú",error.messages);
+        }); 
+      }
+      else {
+        Alert.alert("Pídelo Tú","Tienes elementos en tu carrito sin procesar debes finalizar la compra para poder agregar este elemento.",[
+          {text: 'OK', onPress: () => {this.props.dismissMeal()}},
+          {text: 'Ir al carrito', onPress: () => {this.props.cart()}}
+        ],{cancelable: false});                       
+      }
+    }
+                 
   }
 
   
-  sendData(region){    
-    return fetch('http://pidelotu.azurewebsites.net/order', {
+  async store(){  
+    let { meal, user, number, subtype }  = this.state;    
+    return await fetch('http://pidelotu.azurewebsites.net/cart', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({        
-        restaurant_id:this.state.restaurant,
-        meal_id:this.state.meal_id,
-        meal_category_id:this.state.category_id,
-        user_id:this.state.user.uid,
-        total:this.state.total,
-        latitude:region.latitude,
-        longitude:region.longitude,
-        created_at:moment().format("YYYY-MM-DD H:mm:ss")
+      body: JSON.stringify({                
+        meal_id:meal.id,        
+        user_id:user.uid,
+        total:Ctotal,
+        quantity:number,
+        sub_type_id:subtype,
+        ingredients:JSON.stringify(tempArray)                         
       })
-    }).then(response => response.json())
-      .then(json => {
-        return json;
-    }).catch((error) => {
-
-      alert(JSON.stringify(error))
-      return error;
+    }).then(response => { return response.json()})
+      .catch(error => {
+        throw new Error(error.messages);
     });
   }
 
-  render(){
-    const { params } = this.props.navigation.state;
-    const meal = params ? params.meal : null;         
-    if(this.state.loading) {
-      return(
-        <Modal animationType="slide" transparent={true} visible={this.state.loading} onRequestClose={() => {console.log('close modal')}}>          
-          <ImageBackground source={require('src/assets/images/bg.png')} style={style.body}>
-            <Image source={require('src/assets/images/ic.png')} style={{width: 105, height: 105}}/>          
-          </ImageBackground>          
-        </Modal>
-      )
-    }  
+  renderImage(){
+    let { meal } = this.state;
+    if(meal.image){
+      return <Image source={{uri:'http://pidelotu.azurewebsites.net/images/meals/'+meal.image}} style={style.image}/>    
+    }
+    else {
+      return <Text style={{fontFamily: 'Lato-Bold', color:'#11c0f6', fontSize:40, textAlign:'center'}}>{meal.name}</Text>    
+    }
+  }
 
-    if(this.state.allowLocation) {
-        return(    
-          <Modal animationType="slide" transparent={true} visible={this.state.allowLocation} onRequestClose={() => {console.log('close modal')}}>
-            <Mapa confirm={this.accept.bind(this)} goBack={() => {this.setState({allowLocation: false})}}/>
-          </Modal> 
+  renderSubtypes() {
+    let { meal } = this.state;
+    if (meal.has_subtype != 0){
+      return meal.sub_type.map((item,i) => {
+        return (
+          <RadioButton value={item} style={style.radioCont} key={item.id}>              
+            <Text style={{color:'#fff', fontFamily: 'Lato-Light', textAlign:'center', fontSize: 16}}>{item.name}</Text>                           
+          </RadioButton>
         )
-      }    
+      })
+    }
+  }
 
+  renderIngredients() {
+    let { meal,ingredients } = this.state;
+    if (meal.has_ingredients != 0){
+      return meal.ingredients.map((item,i) => {
+        return (
+        <View key={item.id} style={style.radioCont}>
+         <CheckBox
+          label={item.name}
+          labelStyle={{color:'#fff', fontFamily: 'Lato-Light', textAlign:'center', fontSize: 16}}
+          iconSize={24}
+          iconName='matMix'          
+          checkedColor='#11c0f6'
+          uncheckedColor='white'
+          onChange={this.onClick.bind(this,item)}
+        />          
+        </View>
+        )
+      })
+    }
+  }
+
+  render(){
+    
+    const { meal, loading, number } = this.state;      
+    if(loading) {
+      return <LoadingScreen/>
+    }  
+       
     return(
 			<Container>
         <ImageBackground source={require('src/assets/images/background.png')} style={style.background}/>
         <Header style={{ backgroundColor: 'transparent', elevation: 0}}>
           <Left>
-            <TouchableOpacity onPress={() => { this.props.navigation.navigate('Restaurant'); }}>
+            <TouchableOpacity onPress={() => { this.props.dismissMeal() }}>
               <Icon name="arrow-back" style={{color:'white', fontSize: 25}} />
             </TouchableOpacity>
           </Left>
@@ -142,36 +212,47 @@ export default class MealSelected extends Component{
 
           </Body>
           <Right>
-            <Icon active name='time' style={{color:'white', fontSize: 15}} /><Text style={{marginLeft: 5, fontFamily: 'Lato-Light', color:'#fff'}}>00:{this.state.preparation_time}:00</Text>
+            <Icon active name='time' style={{color:'white', fontSize: 25, alignSelf:'center'}} /><Text style={{marginLeft: 5, fontFamily: 'Lato-Light', color:'#fff', fontSize: 16}}>00:{meal.preparation_time}:00</Text>
           </Right>
         </Header>
 
         <View style={style.meal} >
-          <Image source={{uri:'http://pidelotu.azurewebsites.net/images/meals/'+this.state.image}} style={style.image}/>
+          {this.renderImage()}
         </View>
 
         <Content padder>
           <View>
             <View style={{flexDirection: 'row', paddingLeft: 10, paddingTop: 10}}>
-              <Text style={{fontFamily: 'Lato-Bold', color:'#11c0f6'}}>{this.state.name}</Text>
+              <Text style={{fontFamily: 'Lato-Bold', color:'#11c0f6', fontSize: 16}}>{meal.name}</Text>
             </View>
             <View style={{flexDirection: 'row', paddingLeft: 10, paddingTop: 10}}>
-              <Text style={{fontFamily: 'Lato-Light', color:'#fff', flex:1, flexWrap: 'wrap'}}>{this.state.description}</Text>
-              <Text style={{marginLeft: 180, fontFamily: 'Lato-Bold', color:'#fff', flex: 1}}>${this.state.total}</Text>
+              <Text style={{fontFamily: 'Lato-Light', color:'#fff', flex:1, flexWrap: 'wrap', fontSize: 16}}>{meal.description}</Text>
+              <Text style={{marginLeft: 10, fontFamily: 'Lato-Bold', color:'#fff', fontSize: 16}}>${Ctotal}</Text>
             </View>
           </View>
           <View style={{width: "100%", backgroundColor: '#11c0f6', marginTop: 10}}>
             <View style={{flexDirection: 'row', paddingLeft: 10, alignItems:'flex-start'}}>
-              <Text style={{color:'#ffffff', textAlign:'center', fontFamily: 'Lato-Light', alignSelf: 'center'}}>Cantidad</Text>
-              <TextInput style={style.input} placeholderTextColor="#fff" underlineColorAndroid="#fff" keyboardType='numeric' value={this.state.number.toString()} editable={false} ></TextInput>
+              <Text style={{color:'#ffffff', textAlign:'center', fontFamily: 'Lato-Light', alignSelf: 'center', fontSize: 16}}>Cantidad</Text>
+              <TextInput style={style.input} placeholderTextColor="#fff" underlineColorAndroid="#fff" keyboardType='numeric' value={number.toString()} editable={false} ></TextInput>
               <TouchableOpacity style={style.button} onPress={this.IncrementItem}><Text style={style.text}>+</Text></TouchableOpacity>
               <TouchableOpacity style={style.button} onPress={this.DecreaseItem}><Text style={style.text}>-</Text></TouchableOpacity>
             </View>
+          </View>        
+          {(meal.has_subtype == 1) ? <Text style={{color:'#fff', fontFamily: 'Lato-Light', marginTop:10, fontSize: 16}}>Elige la presentacion</Text> : <View/> }
+          
+          <RadioGroup onSelect = {(index, value) => this.onSelect(index, value)} selectedIndex={0} size={24} color={"white"} activeColor={"#11c0f6"}  style = {style.radioGroup}>
+            {this.renderSubtypes()}                      
+          </RadioGroup>
+
+          {(meal.has_ingredients == 1) ? <Text style={{color:'#fff', fontFamily: 'Lato-Light', marginTop:10, fontSize: 16}}>Elige los ingredientes</Text> : <View/> }
+
+          <View style={style.radioGroup}>
+            {this.renderIngredients()}
           </View>
-          <View style={{flexDirection: 'column', alignItems:'center', marginTop:80}}>
-            <TouchableOpacity style={style.confirm} onPress={()=>this.setState({allowLocation: true})}><Text style={style.text}>ORDENAR</Text></TouchableOpacity>    
+          <View style={{flexDirection: 'column', alignItems:'center', marginTop:50}}>
+            <TouchableOpacity style={style.confirm} onPress={this.accept.bind(this)}><Text style={style.text}>ORDENAR</Text></TouchableOpacity>    
           </View>
-        </Content>
+        </Content>        
 			</Container>
     );
   }

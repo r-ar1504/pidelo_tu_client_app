@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Container, Header, Left, Body, Right, Button, Icon, Title, Segment, Content, Text, Tabs, Tab } from 'native-base';
-import { View, BackHandler, Image, ImageBackground, Modal, ActivityIndicator, Alert, NetInfo } from 'react-native';
+import { Container, Content, Tabs, Tab } from 'native-base';
+import { BackHandler, Alert, NetInfo } from 'react-native';
 import styles from './OrderHistoryStyle';
 import OrderHistory from './OrderHistory';
 import OrderComming from './OrderComming';
 import firebase from 'react-native-firebase';
+import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 
 export default class Orders extends Component {
   constructor(props){
@@ -19,15 +20,11 @@ export default class Orders extends Component {
 
     this.orderAgain = this.orderAgain.bind(this);        
   }
-
-  componentWillMount() {
-   
-  }
-
+  
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);  
     NetInfo.isConnected.addEventListener('connectionChange', this._handleConnectionChange);
-     this.getOrders();     
+     this.getOrders().then(()=> {}).catch((error) => {Alert.alert("Pídelo Tú",error.messages)});     
   }
 
   componentWillUnmount() {
@@ -45,7 +42,7 @@ export default class Orders extends Component {
         {cancelable: false});
       }
       else {
-        this.getOrders();
+        this.getOrders().then(()=> {}).catch((error) => {Alert.alert("Pídelo Tú",error.messages)});  ;
       }
     });
   };
@@ -54,9 +51,9 @@ export default class Orders extends Component {
     this.props.navigation.goBack();
   };
 
-  getOrders(){ 
-    const url = 'http://192.168.100.4:8000/orders/' + this.state.user.uid;
-     return fetch(url)
+  async getOrders(){ 
+    const url = 'http://pidelotu.azurewebsites.net/orders/' + this.state.user.uid;
+     return await fetch(url)
         .then((response) => {
           return response.json();
         }).then(response => {
@@ -72,7 +69,7 @@ export default class Orders extends Component {
         }
         this.setState({historyOrders: historyOrders, nextOrders: nextOrders, loading: false});
         }).catch((error) => {
-          return error.message;        
+          throw new Error(error.messages)        
         });     
   }
 
@@ -80,15 +77,10 @@ export default class Orders extends Component {
     this.props.navigation.navigate('MealSelected', { meal: meal, restaurant_id: restaurant});
   }
 
-  render() {   
-     if(this.state.loading) {
-        return(        
-           <Modal animationType="slide" transparent={true} visible={this.state.loading} onRequestClose={() => {console.log('close modal')}}>
-            <ImageBackground source={require('src/assets/images/bg.png')} style={styles.body}>
-              <ActivityIndicator size={50} color="#11c0f6" animating={true}/>
-            </ImageBackground>
-          </Modal>          
-        )
+  render() {  
+    const { loading } = this.state; 
+     if(loading) {
+        return <LoadingScreen/>
       }   
     return (
       <Container style={styles.container}>

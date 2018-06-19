@@ -58,18 +58,23 @@ export default StyleSheet.create({
     textAlign:'center',
     borderWidth:1,
     borderColor:'white',
-    fontFamily: 'Lato-Regular'
+    fontFamily: FONT_NORMAL,
+    fontSize: 20,
+    alignSelf:'center'    
   },
   movil: {
     backgroundColor:COLOR_PRIMARY,
-    borderRadius:20,    
+    borderBottomRightRadius:25,
+    borderTopRightRadius:25,
     color:'#ffffff',
     padding:10,
-    width:300,
+    width:150,
     textAlign:'center',
     borderWidth:1,
     borderColor:'white',
-    fontFamily: 'Lato-Regular'
+    fontFamily: FONT_NORMAL,
+    fontSize: 20,
+    alignSelf:'center'    
   },
   signupTextCont : {
     paddingVertical:16,

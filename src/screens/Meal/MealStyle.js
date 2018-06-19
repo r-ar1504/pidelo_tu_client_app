@@ -1,6 +1,7 @@
 import { StyleSheet, Dimensions } from 'react-native';
 import { COLOR_PRIMARY, FONT_NORMAL }from 'src/assets/GlobalStyleSheet';
 
+const { width, height } = Dimensions.get('window');
 
 export default StyleSheet.create({
   background:{    
@@ -24,13 +25,13 @@ export default StyleSheet.create({
     alignSelf: 'center'
   },
   image:{
-    width: 250,
-    height: 250,
+    width: 175,
+    height: 175,
     resizeMode:'contain'    
   },
   input: {
-    fontSize: 14, 
-    fontFamily: 'Lato-Light', 
+    fontSize: 16, 
+    fontFamily: FONT_NORMAL, 
     color: 'white', 
     width: 30, 
     marginLeft: 180, 
@@ -51,6 +52,30 @@ export default StyleSheet.create({
     justifyContent:'center'
 
   },  
+  radioGroup: {
+    alignSelf: 'center',
+    width: width,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 50,    
+  },
+  radioCont: {
+    width: 100,
+    height: 70, 
+    justifyContent: 'center',
+    alignItems: 'center',  
+  },
+  radioButton:{
+    width: 70,
+    height: 70,
+    marginTop: 10,
+    margin: 5,              
+    borderRadius: 50,              
+    justifyContent: 'center',
+    alignItems:'center',
+    position: 'absolute',    
+  },
   text: {  
     fontSize: 20,  
     color:'#ffffff',

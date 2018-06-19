@@ -1,6 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { COLOR_PRIMARY, FONT_NORMAL }from 'src/assets/GlobalStyleSheet';
-
+const { width, height } = Dimensions.get('window');
 
 export default StyleSheet.create({
   image:{
@@ -64,21 +64,38 @@ export default StyleSheet.create({
   mealCont:{
     borderWidth:1,
     borderColor:'grey',
-    height: 150,
-    width:250,
+    height: 180,
+    width:290,
     margin:10,
     justifyContent:'flex-start',
     alignItems:'center',
     padding:10,
     marginBottom:  10
   },
-  mealImg:{
-    width:100,
-    height:100,
-    resizeMode: 'contain'
+  mealImg:{              
+    width: 120,
+    height: 120,
+    resizeMode:'contain'
+  },
+  foodCont:{
+    width:120, 
+    height:120, 
+    backgroundColor:'rgba(0,0,0,.6)', 
+    alignItems:'center', 
+    justifyContent:'center', 
+    flexDirection:'row' 
+  },
+  Textdescription: {
+    fontFamily: FONT_NORMAL,
+    fontSize:20,
+    textAlign:'center',    
+    color:'#000',  
+    flex:1,
+    flexWrap:'wrap'  
   },
   infoCont:{
     flexDirection:'row',
+    flex:1,
     flexWrap: 'nowrap'
   },
   description:{
@@ -87,7 +104,7 @@ export default StyleSheet.create({
     color:'#000',
     textAlign:'center',
     flex: 1,
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   price: {
     fontFamily: 'Lato-Regular',

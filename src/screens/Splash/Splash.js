@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { StackNavigator } from 'react-navigation';
-import { StyleSheet, Modal, ImageBackground, Image, YellowBox, BackHandler, AsyncStorage } from 'react-native';
+import { StyleSheet, Image, YellowBox, BackHandler, View } from 'react-native';
 import firebase from 'react-native-firebase';
-import { View } from 'native-base';
+
 
 export default class Splash extends Component {
   static navigationOptions = {

@@ -8,6 +8,7 @@ import Video from 'react-native-video';
 import { Container } from 'native-base';
 import styles from './LoginStyle';
 import firebase from 'react-native-firebase';
+import Splash from '../Splash/Splash';
 
  export default class Login extends React.Component {
    static navigationOptions = {
@@ -68,11 +69,7 @@ import firebase from 'react-native-firebase';
     
   render() {    
     if(this.state.loading) {
-        return(              
-            <ImageBackground source={require('src/assets/images/bg.png')} style={styles.body}>
-              <ActivityIndicator size={50} color="#11c0f6"/>
-            </ImageBackground>          
-        )
+        return <Splash/>
       }    
 		return(      			  
       <View style={styles.container}>        

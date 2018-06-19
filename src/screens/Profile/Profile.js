@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
-import {  Text, View, Image, BackHandler, AsyncStorage, TextInput, TouchableOpacity, ImageBackground, ActivityIndicator, Alert} from 'react-native';
+import {  Text, View, Image, BackHandler, TextInput, TouchableOpacity, ImageBackground, Alert} from 'react-native';
 import { Icon, Container, Content, Header, Left, Body, Right, Button } from 'native-base';
 import style from './ProfileStyle';
 import firebase from 'react-native-firebase';
 
 import { YellowBox } from 'react-native';
+import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 
 export default class Profile extends Component{
   static navigationOptions ={
@@ -30,9 +31,7 @@ export default class Profile extends Component{
   componentWillMount(){      
     this.setState({loading: true})
     this.getCurrentUser(this.state.user.uid).then((item) => { 
-      this.setState({ email: item.email });          
-      this.setState({ password: item.password });
-      this.setState({loading: false})
+      this.setState({ email: item.email, password: item.password, loading: false});
     });
   }
 
@@ -49,25 +48,22 @@ export default class Profile extends Component{
   };
 
   async getCurrentUser(id) {
-    let url = 'http://192.168.100.4:8000/getCurrentUser/'+id;
-    let data = await fetch(url)
+    let url = 'http://pidelotu.azurewebsites.net/user/'+id;
+    return await fetch(url)
           .then(res => res.json())
           .then(json => {
             return json[0];
           }).catch(error => {
             throw new Error(error.messages);
-          }); 
-      return data;    
+          });    
   }
 
   showPassword() {
     if (this.state.showPassword) {    
-        this.setState({ showPassword: false });
-        this.setState({ eyeIcon: 'eye-off' });
+        this.setState({ showPassword: false, eyeIcon: 'eye-off' });
     }
     else {
-      this.setState({ showPassword: true });
-      this.setState({ eyeIcon: 'eye' })
+      this.setState({ showPassword: true, eyeIcon: 'eye' })
     }
   }
 
@@ -84,19 +80,19 @@ export default class Profile extends Component{
           }                           
           this.setState({loading: false});
         }).catch((error) => {
-          alert(error);
-          this.setState({loading: false})
+          Alert.alert("Pídelo Tú",error.messages);
+          this.setState({loading: false});
         }); 
     })
     .catch(error => {
       this.setState({ loading: false })
-        alert(error)
+      Alert.alert("Pídelo Tú",error.messages);
     });
   }
 
-  sendData(data){    
-    return fetch('http://192.168.100.4:8000/update', {
-      method: 'POST',
+  async sendData(data){    
+    return await fetch('http://pidelotu.azurewebsites.net/user', {
+      method: 'PUT',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -105,9 +101,8 @@ export default class Profile extends Component{
     }).then(response => response.json())
       .then(json => {        
         return json;    
-    }).catch((error) => {
-      alert(error);
-      return error;
+    }).catch((error) => {      
+      throw new Error(error.messages)
     });
   }
 
@@ -142,13 +137,10 @@ export default class Profile extends Component{
   }
  
   render(){
-     if(this.state.loading) {
-        return(    
-         <ImageBackground source={require('src/assets/images/bg.png')} style={style.body}>
-            <Image style={style.logo} source={require('src/assets/images/ic.png')} style={{width: 105, height: 105}}/>          
-          </ImageBackground>
-        )
-      }  
+    const { loading } = this.state;
+    if(loading) {
+      return <LoadingScreen/>
+    }  
     return(
 			<Container>        
         <Image source={require('src/assets/images/background.png')} style={style.image}/>

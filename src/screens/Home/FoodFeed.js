@@ -31,15 +31,14 @@ export default class FoodFeed extends Component{
       return(
         <View style={styles.feed_container}>
           <View style={styles.food_banner}>
-            <Image source={{uri: this.state.restaurantBanner}} style={styles.big_food}/>
+						<TouchableOpacity onPress={this.openMeal.bind(this)}>
+            	<Image source={{uri: this.state.restaurantBanner}} style={styles.big_food}/>
+						</TouchableOpacity>
           </View>
-          <View style={styles.food_mini}>
-            <TouchableOpacity onPress={this.openMeal.bind(this)}>
-            	<Image source={{uri:this.state.meal1}} style={styles.food_img1}/>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={this.openMeal.bind(this)}>
-            	<Image source={{uri:this.state.meal2}} style={styles.food_img2}/>
-            </TouchableOpacity>
+          <View style={styles.food_mini}>            
+            <Image source={{uri:this.state.meal1}} style={styles.food_img1}/>
+            
+            <Image source={{uri:this.state.meal2}} style={styles.food_img2}/>            
           </View>          
         </View>        
       )

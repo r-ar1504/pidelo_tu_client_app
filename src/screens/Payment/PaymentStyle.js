@@ -1,6 +1,5 @@
 import { StyleSheet, Dimensions } from 'react-native';
 import { COLOR_PRIMARY, FONT_NORMAL } from 'src/assets/GlobalStyleSheet';
-import { Right } from 'native-base';
 
 export default styles = StyleSheet.create({
   container : {

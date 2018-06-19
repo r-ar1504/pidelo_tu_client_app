@@ -5,19 +5,18 @@ import firebase from "react-native-firebase";
 import styles from './PaymentStyle';
 import Form from './Form';
 
+import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
+
 export default class Payment extends Component {
 
   constructor(props){
     super(props);
 
-    this.state = { user: null }
-    this.confirm = this.confirm.bind(this);   
+    this.state = { user:firebase.auth().currentUser }     
   }
 
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
-
-    this.setState({user: firebase.auth().currentUser})
   }
 
   componentWillUnmount() {
@@ -28,10 +27,22 @@ export default class Payment extends Component {
     this.props.navigation.goBack();
   };  
 
+  confirm(card) {
+    this.store(card).then(response => {
+      if (response.message === 'success') {
+        this.setState({loading:false});
+        this.props.navigation.navigate('Modal', {
+          text: 'Tu forma de pago ha sido agregada',
+          button:'Continuar',
+          action: 'Payment',
+        });
+      }  
+    }).catch((error) => { Alert.alert("Pídelo Tú", error.messages) });
+  }
 
-  confirm(card,year,month,csv) {
+  async store(card) {
     this.setState({loading:true});
-    return fetch('http://192.168.100.13:8000/addPaymethod', {
+    return await fetch('http://pidelotu.azurewebsites.net/payment', {
       method:'POST',
       headers: {
         'Accept': 'application/json',
@@ -39,40 +50,24 @@ export default class Payment extends Component {
       },
       body: JSON.stringify({        
         user_id:this.state.user.uid,
-        card_number:card,
-        year:year,
-        month:month,
-        csv:csv,
+        card_number:card,        
       })
     }).then(response => response.json()).then(response => {            
-      if (response.message === 'success') {
-        this.setState({loading:false});
-        this.props.navigation.navigate('Modal', {
-          text: 'Tu forma de pago ha sido aprobada',
-          button:'Continuar',
-          action: 'Payment',
-        });
-      }      
+      return response;      
     }).catch(error => {
       this.setState({loading:false});
-      Alert.alert("Pídelo Tú",error.message);
+      throw new Error(error.messages);
     })
   }
 
-   render() {
+   render() {    
     if(this.state.loading) {
-      return(
-        <Modal animationType="slide" transparent={true} visible={this.state.loading} onRequestClose={() => {console.log('close modal')}}>          
-          <ImageBackground source={require('src/assets/images/bg.png')} style={styles.body}>
-            <Image source={require('src/assets/images/ic.png')} style={{width: 105, height: 105}}/>          
-          </ImageBackground>          
-        </Modal>
-      )
-    }  
+    return <LoadingScreen/>      
+    }     
 		return(      
 			<View style={styles.container}>
         <ImageBackground source={require('src/assets/images/background.png')} style={styles.background}/>
-				<Form confirm={this.confirm}/>
+				<Form confirm={this.confirm.bind(this)}/>
 			</View>      
 		)
 	}
