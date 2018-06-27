@@ -26,7 +26,7 @@ export default StyleSheet.create({
     flexDirection:'row', 
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 480,    
+    marginTop: 450,    
     padding:15,
     backgroundColor: 'transparent',
   },

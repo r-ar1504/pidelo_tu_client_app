@@ -72,37 +72,34 @@ export default class Profile extends Component{
     firebase.auth().currentUser.updateEmail(this.state.email)
     .then((user) => {               
       user.updatePassword(this.state.password);           
-      let data = { firebaseId: user.uid, email: this.state.email.toLowerCase(), password: this.state.password }                              
-      this.sendData(data).then((response) => {
-          alert(JSON.stringify({response}));
-          if (response == 1){
-            Alert.alert("Pídelo Tú","Se han actulizado tus datos");
-          }                           
+      let data = {email: this.state.email.toLowerCase(), password: this.state.password }                              
+      this.sendData(user.uid,data).then((response) => {                    
+          Alert.alert("Pídelo Tú",response.message);                    
           this.setState({loading: false});
         }).catch((error) => {
-          Alert.alert("Pídelo Tú",error.messages);
+          Alert.alert("Pídelo Tú",error.message);
           this.setState({loading: false});
         }); 
     })
     .catch(error => {
       this.setState({ loading: false })
-      Alert.alert("Pídelo Tú",error.messages);
+      Alert.alert("Pídelo Tú",error.message);
     });
   }
 
-  async sendData(data){    
-    return await fetch('http://pidelotu.azurewebsites.net/user', {
+  async sendData(id,data){    
+    return await fetch('http://pidelotu.azurewebsites.net/user/'+id, {
       method: 'PUT',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: JSON.stringify(data)
     }).then(response => response.json())
       .then(json => {        
         return json;    
     }).catch((error) => {      
-      throw new Error(error.messages)
+      throw new Error(error.message)
     });
   }
 

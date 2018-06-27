@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { StackNavigator } from 'react-navigation';
+import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 import { Content, Item, Label, Input, Icon, Footer } from 'native-base';
 import ValidationComponent from 'react-native-form-validator';
 import styles from './LoginStyle';
+import { LoginButton } from 'react-native-fbsdk';
 
 export default class Form extends ValidationComponent {
   static navigationOptions = {
@@ -29,7 +29,8 @@ export default class Form extends ValidationComponent {
     else {
       alert(this.getErrorMessages());
     }    
-  }  
+  }
+    
 
 	render(){ 
     const email = this.state.email; 
@@ -50,7 +51,7 @@ export default class Form extends ValidationComponent {
               <Text style={styles.buttonText} onPress={this.signIn.bind(this,email,password)}>INGRESAR</Text>
             </TouchableOpacity>
             <Item style={styles.signupTextCont}>
-            <TouchableOpacity onPress={this.fblogin}><Text style={styles.fb}><Icon active name={'logo-facebook'} style={{color:'white', fontSize:20}} /> FACEBOOK</Text></TouchableOpacity>
+              <TouchableOpacity onPress={this.props.fblogin}><Text style={styles.fb}><Icon active name={'logo-facebook'} style={{color:'white', fontSize:20}} /> FACEBOOK</Text></TouchableOpacity>
               <TouchableOpacity onPress={this.props.register}><Text style={styles.movil}><Icon active name={'phone-portrait'} style={{color:'white', fontSize:20}} /> MOVIL</Text></TouchableOpacity>
             </Item>
         {/*<Footer style={{backgroundColor:'#00000000', flexDirection:'row', justifyContent:'space-between'}}>            

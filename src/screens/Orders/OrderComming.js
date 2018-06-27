@@ -45,7 +45,7 @@ export default class OrderComming extends Component {
               <Icon active name='time' style={{color:'white', fontSize: 15, marginLeft: 150}} /><Text style={{marginLeft: 5, fontFamily: 'Lato-Light', color:'#fff'}}>00:20:00</Text>              
             </View>
             <View style={{flexDirection: 'row', paddingLeft: 10, paddingTop: 10}}>              
-              <Text style={{fontFamily: 'Lato-Light', color:'#fff'}}>{order.total / order.price}</Text>              
+              <Text style={{fontFamily: 'Lato-Light', color:'#fff'}}>{order.quantity}</Text>              
               <Text style={{marginLeft: 10, fontFamily: 'Lato-Light', color:'#fff'}}>{order.description}</Text>     
             </View>
             <View style={{flexDirection: 'row', paddingLeft: 10, paddingTop: 10}}>              

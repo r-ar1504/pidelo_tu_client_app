@@ -24,7 +24,7 @@ export default class Orders extends Component {
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);  
     NetInfo.isConnected.addEventListener('connectionChange', this._handleConnectionChange);
-     this.getOrders().then(()=> {}).catch((error) => {Alert.alert("Pídelo Tú",error.messages)});     
+     this.getOrders().then(()=> {}).catch((error) => {Alert.alert("Pídelo Tú",error.message); this.setState({loading:false})});     
   }
 
   componentWillUnmount() {
@@ -42,7 +42,7 @@ export default class Orders extends Component {
         {cancelable: false});
       }
       else {
-        this.getOrders().then(()=> {}).catch((error) => {Alert.alert("Pídelo Tú",error.messages)});  ;
+        this.getOrders().then(()=> {}).catch((error) => {Alert.alert("Pídelo Tú",error.message)});  ;
       }
     });
   };
@@ -69,7 +69,7 @@ export default class Orders extends Component {
         }
         this.setState({historyOrders: historyOrders, nextOrders: nextOrders, loading: false});
         }).catch((error) => {
-          throw new Error(error.messages)        
+          throw new Error(error.message)        
         });     
   }
 

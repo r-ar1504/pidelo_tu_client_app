@@ -25,7 +25,8 @@ export default class Splash extends Component {
   };
 
   componentDidMount(){
-    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);    
+    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid); 
+    firebase.auth().languageCode = 'es-419';   
       this.authSubscription = firebase.auth().onAuthStateChanged((user) => {        
         if (user) {             
             this.props.navigation.navigate('Home',{user:user});                                                                                                                  

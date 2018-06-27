@@ -2,7 +2,6 @@ import React from 'react';
 import { Text, View, TextInput, TouchableOpacity, BackHandler } from 'react-native';
 import { Item } from 'native-base';
 import styles from './RegisterStyle';
-import firebase from 'react-native-firebase'; 
 
 export default class VerificationCode extends React.Component {
   static navigationOptions = {

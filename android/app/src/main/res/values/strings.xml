@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Pídelo Tú</string>
+    <string name="app_name">PídeloTú</string>
+    <string name="facebook_app_id">943967419108089</string>
 </resources>

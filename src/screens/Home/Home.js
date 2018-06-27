@@ -42,7 +42,7 @@ export default class Home extends Component{
           restaurants: resp.restaurants
         });
         this.setState({loading: false});
-    }).catch((error) => { Alert.alert("Pídelo Tú", error.messages); this.setState({loading: false});});     
+    }).catch((error) => { Alert.alert("Pídelo Tú", error.message); this.setState({loading: false});});     
   }
 
   componentDidMount() {
@@ -79,7 +79,7 @@ export default class Home extends Component{
     .then( (json) =>{
       return json; 
     }).catch(error => {
-      throw new Error(error.messages);
+      throw new Error(error.message);
     });
   }
 

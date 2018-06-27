@@ -104,9 +104,12 @@ android {
   *  compileSdkVersion 23
   *  buildToolsVersion "23.0.1"
 **/
+    dexOptions {
+        jumboMode true
+    }
 
-    compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.1"
 
     defaultConfig {
         applicationId "com.pidelo_tu_client"
@@ -165,9 +168,12 @@ dependencies {
     compile fileTree(dir: "libs", include: ["*.jar"])
     compile "com.android.support:appcompat-v7:23.0.1"
     compile "com.facebook.react:react-native:+" 
+    
     compile project(':react-native-video')
     compile project(':react-native-vector-icons')
+    compile project(':react-native-conekta')
     compile project(':react-native-openpay')
+    compile project(':react-native-fbsdk')
     compile(project(':react-native-onesignal')) {
         exclude group: 'com.google.android.gms'
     }

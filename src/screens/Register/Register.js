@@ -18,8 +18,7 @@ export default class Register extends ValidationComponent {
 
   constructor(props) {
     super(props);
-        
-    this.validCode = this.validCode.bind(this);
+            
     this.state = { phoneAuthSnapshot: null, phoneNumber: '', loading: false, showModal: false, verificationCode: false };    
   }
 
@@ -35,102 +34,148 @@ export default class Register extends ValidationComponent {
     return true;
   };
 
-  validCode(codeInput){    
+  async validCode(codeInput){    
     if (codeInput.length < 6){
       Alert.alert("Pídelo Tú","Escribe un código válido");
     }
     else {      
       this.setState({ loading: true });
-      const { verificationId, code } = this.state.phoneAuthSnapshot;          
-      //if (code == codeInput){
-        const credential = firebase.auth.PhoneAuthProvider.credential(verificationId, codeInput);          
-          this.setState({ loading: false });
-          this.props.navigation.navigate('Modal',{
-            text:'Tu código ha sido exitoso',
-            button:'Finalizar',
-            action: 'Form',
-            credential: credential,
-            phoneNumber: this.state.phoneNumber
-        });
-      //}
-      //else {
-        //this.setState({ loading: false });
-        //alert("El código no coincide, por favor intente de nuevo");
-      //}                
+      const { verificationId } = this.state.phoneAuthSnapshot; 
+      const { params } = this.props.navigation.state;
+      const fbcredential  = params ? params.fbcredential : null;
+      const credential = firebase.auth.PhoneAuthProvider.credential(verificationId, codeInput) 
+      let { phoneNumber } = this.state;                
+      this.checkNumber(phoneNumber).then(async (response) => {            
+        if (response.length == 0) {  
+          if (fbcredential) {                  
+            await firebase.auth().signInWithCredential(fbcredential).then(user => {
+              user.linkWithCredential(credential);
+              this.initUser(fbcredential.token).then((response) => {
+                let data = { firebaseId: user.uid, name: response.name, email: response.email.toLowerCase(), password: Math.random().toString(36).slice(2), phone:phoneNumber } 
+                this.sendData(data).then((response) => { this.setState({loading: false})}).catch((error)=> {
+                  this.setState({loading: false})
+                  Alert.alert("Pídelo Tú",error.message);
+                }).catch((error) => {
+                  this.setState({loading: false})
+                  Alert.alert("Pídelo Tú",error.message);
+                }); 
+              });
+            });
+          }                     
+          else {
+            this.props.navigation.navigate('RegisterForm',{ credential: credential, phoneNumber: phoneNumber });
+          }          
+        }
+        else {                    
+          await firebase.auth().signInWithCredential(credential)
+        }
+      }).catch((error) => {
+        this.setState({ loading: false });
+        Alert.alert("Pídelo Tú",error.message);
+      });                       
     }       
+  }
+
+  async initUser(token) {
+    return await fetch('https://graph.facebook.com/v2.5/me?fields=email,name&access_token=' + token)
+    .then((response) => { return response.json() })
+    .then((json) => {      
+      return json;      
+    })
+    .catch(error => {
+      throw new Error(error.message)
+    })
+  }
+    
+  async sendData(data){
+    return await fetch('http:/pidelotu.azurewebsites.net/user', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    }).then(response => response.json())
+      .then(json => {
+        return json;    
+    }).catch(error => {
+      throw new Error(error.message);
+    });
   }
    
   confirm(){    
     this.validate({ phoneNumber: {required: true} });
-
+    const { params } = this.props.navigation.state;
+    const fbcredential  = params ? params.fbcredential : null;
     const phoneNumber = this.phone.getCountryCode()+this.state.phoneNumber;
 
     if(this.isFormValid()){
-      this.setState({ loading: true }); 
-      this.checkNumber(phoneNumber).then((response) => {            
-        if (response.length == 0) {             
-            firebase.auth().languageCode = 'es-419';             
-            firebase.auth().verifyPhoneNumber(phoneNumber)
-            .on('state_changed', (phoneAuthSnapshot) => {    
-            switch (phoneAuthSnapshot.state) {
+      this.setState({ loading: true });           
+      firebase.auth().verifyPhoneNumber(phoneNumber)
+        .on('state_changed', async (phoneAuthSnapshot) => {    
+          switch (phoneAuthSnapshot.state) {
               // ------------------------
               //  IOS AND ANDROID EVENTS
               // ------------------------
-              case firebase.auth.PhoneAuthState.CODE_SENT: // or 'sent'                
-                this.setState({ loading: false, phoneAuthSnapshot: phoneAuthSnapshot, phoneNumber: phoneNumber, showModal: true});
-              break;
-              case firebase.auth.PhoneAuthState.ERROR: // or 'error'
-                this.setState({ loading: false });                                
-                Alert.alert("Pídelo Tú",phoneAuthSnapshot.error.toString());                
-              break;
+            case firebase.auth.PhoneAuthState.CODE_SENT: // or 'sent'                
+              this.setState({ loading: false, phoneAuthSnapshot: phoneAuthSnapshot, phoneNumber: phoneNumber, showModal: true});
+            break;
+            case firebase.auth.PhoneAuthState.ERROR: // or 'error'
+              this.setState({ loading: false });                                
+              Alert.alert("Pídelo Tú",phoneAuthSnapshot.error.toString());                
+            break;
               // ---------------------
               // ANDROID ONLY EVENTS
               // ---------------------
-              case firebase.auth.PhoneAuthState.AUTO_VERIFY_TIMEOUT: // or 'timeout'
-                this.setState({verificationCode: true, loading:false});
-              break;
-              case firebase.auth.PhoneAuthState.AUTO_VERIFIED: // or 'verified'  
-                const { verificationId, code } = phoneAuthSnapshot;
-                const credential = firebase.auth.PhoneAuthProvider.credential(verificationId, code);
-                this.setState({verificationCode: false, loading:false});
-                this.props.navigation.navigate('RegisterForm',{ credential: credential, phoneNumber: phoneNumber });                      
-              break;
-            }
-          }, (error) => {
-            this.setState({ loading: false });
-            alert(error + "Id:" + error.verificationId);
+            case firebase.auth.PhoneAuthState.AUTO_VERIFY_TIMEOUT: // or 'timeout'  
+              this.setState({verificationCode: true, loading:false});                                              
+            break;
+            case firebase.auth.PhoneAuthState.AUTO_VERIFIED: // or 'verified'                  
+              let { verificationId, code } = phoneAuthSnapshot;
+              let credential = firebase.auth.PhoneAuthProvider.credential(verificationId, code);                                              
+              this.checkNumber(phoneNumber).then(async (response) => {    
+                this.setState({verificationCode: false, loading: false});        
+                if (response.length == 0) {             
+                  this.props.navigation.navigate('RegisterForm',{ credential: credential, phoneNumber: phoneNumber });
+                }
+                else {          
+                  if (fbcredential) {                  
+                    await firebase.auth().signInWithCredential(fbcredential).then(user => {
+                      user.linkWithCredential(credential);
+                    });
+                  }
+                  await firebase.auth().signInWithCredential(credential)
+                }
+              }).catch((error) => {
+                this.setState({ loading: false });
+                Alert.alert("Pídelo Tú","Hubo un error, por favor inténtalo más tarde");
+              });                                                                          
+            break;
+          }
+        }, (error) => {
+          this.setState({ loading: false });
+            Alert.alert(error + "Id:" + error.verificationId);
             this.props.navigation.goBack();             
-          }, (phoneAuthSnapshot) => {
+        }, (phoneAuthSnapshot) => {
             
-          });            
-        }
-        else {
-          const emailCredential = firebase.auth.EmailAuthProvider.credential(response[0].email, response[0].password);          
-          firebase.auth().signInWithCredential(emailCredential);                        
-        }
-      }).catch((error) => {
-        this.setState({ loading: false });
-        Alert.alert("Pídelo Tú","Hubo un error, por favor inténtalo más tarde");
-      });      
+        });                        
     }
     else {
-      Alert.alert("Pídelo Tú",this.getErrorMessages());
+      Alert.alert("Pídelo Tú","Ops, Tienes campos vacíos");
     }           
   }
 
   async checkNumber(phoneNumber){
     const url = 'http://pidelotu.azurewebsites.net/checkNumber/'+phoneNumber;
     return await fetch(url)      
-      .then(response => response.json())
-      .then(json => {
-        return json;
-      }).catch(error => {
-        throw new Error(error);
+      .then(response => { return response.json() })
+      .catch(error => {
+        throw new Error(error.messages);
       });     
   }
 
   render() {
-    const { loading, showModal, verificationCode, phoneAuthSnapshot, phoneNumber } = this.state;
+    const { loading, showModal, verificationCode, phoneNumber } = this.state;
     if(loading) {
         return <LoadingScreen/>
       }
@@ -150,7 +195,7 @@ export default class Register extends ValidationComponent {
       )
     }
     if (verificationCode) {
-      return <VerificationCode validCode={this.validCode}/>      
+      return <VerificationCode validCode={this.validCode.bind(this)}/>      
     } 
     return (
       <Container style={styles.container}>

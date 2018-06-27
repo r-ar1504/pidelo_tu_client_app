@@ -1,17 +1,18 @@
 import React from 'react';
-import { Alert, Text, View, Image, TouchableOpacity, ImageBackground, TouchableWithoutFeedback, AsyncStorage } from 'react-native';
+import { Alert, Text, View, Image, TouchableOpacity, ImageBackground, TouchableWithoutFeedback, AsyncStorage, Dimensions } from 'react-native';
 import { Picker, Icon, Container, Content, Header, Left, Body, Right, Item, ListItem, List, Thumbnail, Input} from 'native-base';
 import Swiper from 'react-native-swiper';
 import ValidationComponent from 'react-native-form-validator';
 import styles from './CartShopStyle';
 import firebase from 'react-native-firebase';
 import openpay from 'react-native-openpay';
+import conekta from 'react-native-conekta';
 import moment from 'moment';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import Mapa from '../../components/Maps/Maps';
-
+const { width, height } = Dimensions.get('window');
 export default class CartShop extends ValidationComponent {
     static navigationOptions ={
         headerTransparent: true
@@ -19,33 +20,41 @@ export default class CartShop extends ValidationComponent {
     constructor(props) {
       super(props);
 
-      this.state = { payments:[], carShop:[], total:0, currentCard: '',allowLocation:false, onchange: false, loading:true, number: '', month : '', year: '', cv: '', cp: '', secure: true, eyeIcon: 'eye' }       
+      this.state = { payments:[], carShop:[], total:0, currentCard: '', allowLocation:false, onchange: false, loading:true, month : '', year: '', csv: '', secure: true, eyeIcon: 'eye' }       
     }
 
     async componentDidMount() {   
       openpay.setup('mf4nsxsfmoaic0jt53jk', 'pk_f7d9db95d7134915a994750e274760d9');             
-      this.getData().then(async (response) => {        
-        let cart = []
-        let value = await AsyncStorage.getItem('cart')
-        
-        if (value != null && value.length == 0) { cart = JSON.parse(value) } else { await AsyncStorage.setItem('cart', JSON.stringify(response.carshop), () => { cart = response.carshop }); }
+      conekta.setPublicKey('key_LTysaksuZuj6GJkqCUB6ACA');
+      this.getData().then(async (response) => {  
+        let cart = response.carshop;
+        let subtotal = 0.0;                               
+        /*let value = await AsyncStorage.getItem('cart')              
+        if (value) {
+          cart = JSON.parse(value)           
+        }
+        else { 
+          await AsyncStorage.setItem('cart', JSON.stringify(response.carshop)); 
+          cart = await AsyncStorage.getItem('cart')                 
+        }*/
         
         if (response.payments.length > 0) {
-          this.setState({payments: response.payments, currentCard: response.payments[response.payments.length - 1].card_number.toString().substring(12,16)});                    
-        }
-
-        this.setState({carShop: cart, loading:false, total: response.subtotal });
-    
+          this.setState({payments: response.payments, currentCard: response.payments[response.payments.length - 1].card_number.toString()});                            
+        }     
+        cart.map((item) => {
+          subtotal = subtotal + parseFloat(item.total);
+        });
+        
+        this.setState({carShop: cart, loading:false, total: subtotal });
+      
       }).catch((error) => { this.setState({loading:false}); Alert.alert("Pídelo Tú", error.message); this.props.navigation.goBack(); });
 	  }
 		
 		showCV(){
-			if (this.state.secure){
-				this.setState({ secure: false, eyeIcon: 'eye-off' });
-			}
-			else {
-				this.setState({ secure: true, eyeIcon: 'eye' })
-			}
+			if (this.state.secure)
+				this.setState({ secure: false, eyeIcon: 'eye-off' });			
+			else 
+				this.setState({ secure: true, eyeIcon: 'eye' })			
 		}
 	
 		month(){
@@ -53,12 +62,12 @@ export default class CartShop extends ValidationComponent {
 				for (let i = 1; i <= 12; i++) {
 					if (items.length < 9) {
 						items.push( 
-							<Picker.Item label={"0"+i} value={i} key={i} />
+							<Picker.Item label={"0"+i} value={"0"+i} key={i} />
 						);
 					}
 					else {
 						items.push( 
-							<Picker.Item label={""+i} value={i} key={i} />
+							<Picker.Item label={i.toString()} value={i} key={i} />
 						);
 					}        
 				} 
@@ -69,11 +78,11 @@ export default class CartShop extends ValidationComponent {
 			const years = []
 			const currentYear = new Date();
 			years.push(
-					<Picker.Item label={""+moment(currentYear).year()} value={moment(currentYear).year()} key={0} />
+					<Picker.Item label={moment(currentYear).year().toString()} value={moment(currentYear).year()} key={0} />
 				);
 			for (let i = 1; i <= 10; i++) {
 				years.push(
-					<Picker.Item label={""+moment(currentYear).add(i,'year').year()} value={moment(currentYear).add(i,'year').year()} key={i} />
+					<Picker.Item label={moment(currentYear).add(i,'year').year().toString()} value={moment(currentYear).add(i,'year').year()} key={i} />
 				);
 			}    
 			return years;
@@ -82,41 +91,44 @@ export default class CartShop extends ValidationComponent {
     async getData() {
       let url = 'http://pidelotu.azurewebsites.net/cart/'+firebase.auth().currentUser.uid;
       return await fetch(url)
-          .then(res => res.json())
-          .then(json => {
-            return json;
-          }).catch(error => {
-            throw new Error(error);
-          });      
+      .then(res => {  return res.json() })
+      .catch(error => {
+        throw new Error(error.message);
+      });      
     }
 
-    async deleteItem(item,index) {      
+    async deleteItem(item,index) { 
+      this.setState({loading:true});    
       let { carShop, total } = this.state; 
-      let array = carShop;       
-      array.splice(index,1);   
-      await AsyncStorage.removeItem('cart')              
-      await AsyncStorage.setItem('cart', JSON.stringify(array))
-      this.setState({carShop: array, total: total - item.total}); 
-      /*this.delete(item.id).then((res) => {
-              
+      let array = carShop;             
+      //await AsyncStorage.removeItem('cart')              
+      //await AsyncStorage.setItem('cart', JSON.stringify(array))      
+      this.delete(item.id,firebase.auth().currentUser.uid).then((res) => {
+        if (res.message == 'Success') {
+          let subtotal = total - item.total
+          array.splice(index,1);   
+          this.setState({carShop: array, total: subtotal, loading:false}) 
+        }                
       }).catch((error) => {
-        Alert.alert("Pídelo Tú",error.messages);
-      });*/
+        Alert.alert("Pídelo Tú",error.message);
+        this.setState({loading:false}) 
+      });
     }
     
 
-    async delete(id) {      
-      return await fetch('http://pidelotu.azurewebsites.net/cart/'+id+'/'+firebase.auth().currentUser.uid, {
+    async delete(id,firebaseId) {      
+      return await fetch('http://pidelotu.azurewebsites.net/cart/'+id, {
         method: 'DELETE',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
+          'token': firebaseId,
         }       
       }).then(response => response.json())
         .then(json => {
           return json;
       }).catch(error => {
-        throw new Error(error.messages);
+        throw new Error(error.message);
       })
     }
 
@@ -139,19 +151,59 @@ export default class CartShop extends ValidationComponent {
         .then(json => {
           return json;
         }).catch(error => {
-          throw new Error(error.messages);
+          throw new Error(error.message);
         });
     }
 
     generateToken(){
+      let { currentCard, month, year, csv } = this.state
+      let y = year.toString().substring(2,4);
       return openpay.createCardToken({
         holder_name: 'John Doe',
-        card_number: '4111111111111111',
-        expiration_month: '02',
-        expiration_year: '20',
-        cvv2: '110'
+        card_number: currentCard,
+        expiration_month: month,
+        expiration_year: y,
+        cvv2: csv
       })
-      .then(token => { return token });
+      .then(token => { return token })
+      .catch(error => {
+        throw new Error(error.message)
+      })
+      /*return conekta.createToken({        
+        cardNumber: currentCard,
+        name: 'Manolo Virolo',
+        cvc: csv,
+        expMonth: month,
+        expYear: y,        
+      })
+      .then(token => { return token.id })
+      .catch(error => {
+        throw new Error(error.messages)
+      })*/
+    }
+
+    accept() {      
+      this.validate({ csv: { required: true, numbers: true }, month: { required: true }, year: { required: true } });
+      if (!this.isFormValid()){
+        Alert.alert("Pídelo Tú","Ops, tienes campos vacíos");
+      }
+      else {
+        this.setState({allowLocation:true})
+      }
+    }
+
+    confirm(region){
+      this.generateToken().then((token) => {
+        this.store(region,token).then(async (response) => {
+          //await AsyncStorage.removeItem('cart')
+          await AsyncStorage.removeItem('restaurant')
+          Alert.alert("Pídelo Tú",response.message,[{ text: 'OK', onPress: () => {this.props.navigation.navigate('Home',{user: firebase.auth().currentUser})} }],{cancelable: false});            
+        }).catch((error) => {
+          Alert.alert("Pídelo Tú",error.message);
+        })
+      }).catch((error) => {
+        Alert.alert("Pídelo Tú",error.message);
+      })        
     }
 
 
@@ -178,7 +230,7 @@ export default class CartShop extends ValidationComponent {
                     <Text style={styles.text}>{item.quantity}</Text>
                   </Left>
                   <Body style={{padding: 5}}>
-                    <Text style={styles.text}>{item.description}</Text>
+                    <Text style={styles.text}>{item.name}</Text>
                   </Body>
                   <Right style={{flexDirection:'row', alignItems:'flex-end', justifyContent:'center', padding: 5}}>
                     <Text style={styles.text}>${item.total}</Text>
@@ -198,7 +250,7 @@ export default class CartShop extends ValidationComponent {
                 <View>
                       <View style={{flexDirection:'row', borderBottomColor:'white', borderTopColor:'transparent', borderLeftColor:'transparent', borderRightColor:'transparent', borderWidth:0.8, width:'100%'}}>
                         <Left style={{padding:10, flexDirection:'row'}}>
-                            <Image source={require('../../assets/images/Visa_Logo.png')} style={{width: 35, height: 20, resizeMode:'contain', marginRight:10}}/><Text style={[styles.text]}>●●●{currentCard}</Text>
+                            <Image source={require('../../assets/images/Visa_Logo.png')} style={{width: 35, height: 20, resizeMode:'contain', marginRight:10}}/><Text style={[styles.text]}>●●●{currentCard.substring(12,16)}</Text>
                         </Left> 
                         <Body style={{padding:10}}>
                             <Text style={styles.text}></Text>
@@ -212,23 +264,25 @@ export default class CartShop extends ValidationComponent {
 										  <View style={{padding: 10,flexDirection:'row', borderBottomColor:'white', borderTopColor:'transparent', borderLeftColor:'transparent', borderRightColor:'transparent', borderWidth:0.8, width:'100%', justifyContent:'center', alignItems:'center'}}>                        												
                         <FontAwesomeIcon size={20} name="calendar" color="#fff" style={{padding: 5}}/>
                         <Text style={[styles.text,{marginRight:6}]}>Fecha exp.</Text>
-                        <View style={{borderWidth : 1, borderColor : "white", width: 100, height: 50 }}>
-            								<Picker mode="dropdown" style={{backgroundColor:'transparent', color:'white', }} itemStyle={{ alignItems: 'center' }} textStyle={{color:'#5cb85c'}} selectedValue={this.state.month} onValueChange={(month) => {this.setState({month})}}>              								
-              									{this.month()}
-            									</Picker>
+                          <View style={{borderWidth : 1, borderColor : "white", width: width * .10, height: 50 }}>
+            							  <Picker mode="dropdown" style={{backgroundColor:'transparent', color:'white', }} itemStyle={{ alignItems: 'center' }} textStyle={{color:'#5cb85c'}} selectedValue={this.state.month} onValueChange={(month) => {this.setState({month:month})}}>              								
+                              <Picker.Item label={""} value={""} />
+              								{this.month()}
+            							  </Picker>
             							</View>           											
-            							<View style={{borderWidth : 1, borderColor : "white", width: 100, marginLeft: 6, height: 50 }}>            
-            								<Picker mode="dropdown" style={{backgroundColor:'transparent', color: 'white'}} itemStyle={{ alignItems: 'center' }} textStyle={{color:'#5cb85c'}}  selectedValue={this.state.year} onValueChange={(year) => {this.setState({year})}}>              								
-              									{this.years()}
+            							<View style={{borderWidth : 1, borderColor : "white", width: width * .15, marginLeft: 6, height: 50 }}>            
+            								<Picker mode="dropdown" style={{backgroundColor:'transparent', color: 'white'}} itemStyle={{ alignItems: 'center' }} textStyle={{color:'#5cb85c'}}  selectedValue={this.state.year} onValueChange={(year) => {this.setState({year:year})}}>              								
+                              <Picker.Item label={""} value={""} />
+                                {this.years()}
             								</Picker>
             							</View>                      
 													<Item style={{width:100,marginLeft:6}}>                                          
-              							<Input style={{color:'white', fontFamily: 'Lato-Light'}} ref={(cv) => this.cv = cv} onChangeText={(cv)=> {this.setState({cv});}} secureTextEntry={this.state.secure} placeholder='CV' placeholderTextColor='white' maxLength={3}/>
+              							<Input style={{color:'white', fontFamily: 'Lato-Light'}} ref={(csv) => this.csv = csv} onChangeText={(csv)=> {this.setState({csv:csv});}} secureTextEntry={this.state.secure} placeholder='CSV' placeholderTextColor='white' maxLength={3}/>
               							<Icon active name={this.state.eyeIcon} style={{color:'white'}} onPress={this.showCV.bind(this)} />              
             							</Item>                                                                                                                                     
                       </View>
                       <View style={{flexDirection: 'column', alignItems:'center', marginTop:30}}>
-                        <TouchableOpacity style={styles.confirm} onPress={() => {this.setState({allowLocation:true})}}><Text style={styles.text}>ORDENAR</Text></TouchableOpacity>    
+                        <TouchableOpacity style={styles.confirm} onPress={this.accept.bind(this)}><Text style={styles.text}>ORDENAR</Text></TouchableOpacity>    
                       </View>
                     </View>
         )
@@ -241,26 +295,6 @@ export default class CartShop extends ValidationComponent {
         )
       }
     }
-
-    accept(region) {
-      this.validate({ csv: { required: true } });
-      if (!this.isFormValid()){
-        Alert.alert("Pídelo Tú","Ops, tienes campos vacíos");
-      }
-      else {
-        this.generateToken().then((token) => {
-          this.store(region,token).then(async (response) => {
-            Alert.alert("Pídelo Tú",JSON.stringify(response))
-            await AsyncStorage.removeItem('cart')
-          }).catch((error) => {
-            Alert.alert("Pídelo Tú",error.messages);
-          })
-        }).catch((error) => {
-          Alert.alert("Pídelo Tú",error.messages);
-        })
-        
-      }
-    }
 				
     render(){
     const { onchange, loading, total, carShop, allowLocation } = this.state;  
@@ -268,7 +302,7 @@ export default class CartShop extends ValidationComponent {
           return <LoadingScreen/>
         }
         if(allowLocation) {
-          return <Mapa confirm={this.accept.bind(this)} goBack={() => {this.setState({allowLocation: false})}}/>                      
+          return <Mapa confirm={this.confirm.bind(this)} goBack={() => {this.setState({allowLocation: false})}}/>                      
         } 
         if (!carShop.length){
           return (
@@ -289,7 +323,7 @@ export default class CartShop extends ValidationComponent {
                 </Header>
                
                 <Content>      
-                  <View style={{flexDirection:'column', flex:1, alignItems:'center', justifyContent:'center'}}>
+                  <View style={{flexDirection:'column', flex:1, alignItems:'center', justifyContent:'center',alignSelf:'center'}}>
                     <Text style={styles.Title}>NO HAY ELEMENTOS EN TU CARRITO</Text>
                   </View>
                 </Content>

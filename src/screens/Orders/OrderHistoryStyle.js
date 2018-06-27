@@ -1,6 +1,6 @@
 import { StyleSheet, Dimensions } from 'react-native';
 import { COLOR_PRIMARY, FONT_NORMAL }from 'src/assets/GlobalStyleSheet';
-
+const { width, height } = Dimensions.get('window')
 export default StyleSheet.create({
   image:{    
     flex:1,
@@ -27,11 +27,11 @@ export default StyleSheet.create({
     alignItems:'center', 
     justifyContent:'center',       
     alignSelf: 'center',                
-    width: 380,
+    width: width,
     height: 100,
   },
   foodCont: {
-    width:380, 
+    width:width, 
     height:100, 
     backgroundColor:'rgba(0,0,0,.6)', 
     alignItems:'center', 
@@ -51,7 +51,7 @@ export default StyleSheet.create({
     color:'#fff',        
   },
   deliveryDetails: {
-    width: 380,
+    width: width,
     height: 100,
     borderLeftWidth: 1,
     borderRightWidth: 1,
@@ -86,7 +86,7 @@ export default StyleSheet.create({
     fontFamily: FONT_NORMAL    
   },
   deliveryProgress: {
-    width: 380,
+    width: width,
     height: 150,
     borderWidth: 1,    
     borderColor: '#dbdbdb',      

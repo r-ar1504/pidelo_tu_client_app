@@ -4,11 +4,10 @@ const { width, height } = Dimensions.get('window');
 
 export default StyleSheet.create({
   image:{
-    flex:1,
-    resizeMode:'stretch',
+    flex:1,    
     position: 'absolute',
     width: '100%',
-    height: 140,
+    height: 100,
     justifyContent: 'center'
   },
   header: {
@@ -37,8 +36,7 @@ export default StyleSheet.create({
     color: '#fff',
     opacity: 0.8,
     fontSize: 40,    
-    fontWeight: 'bold',
-    marginRight: 10
+    fontWeight: 'bold',    
   },
   titleCont:{
     marginTop: 20,

@@ -29,8 +29,9 @@ export default class MealSelected extends Component{
     }
   }
 
-  componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);   
+  async componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);      
+    
     let { meal } = this.state
     if (!meal.price) {
       Ctotal = meal.sub_type[0].price;
@@ -88,7 +89,8 @@ export default class MealSelected extends Component{
   async accept(){      
     this.setState({loading: true});
     let restaurant = await AsyncStorage.getItem('restaurant')
-    
+    let array = JSON.parse(await AsyncStorage.getItem('cart'))
+    let { meal, user, number, subtype }  = this.state;
     if (restaurant == null) {
       this.store().then(async (response) => { 
         this.setState({loading:false});  
@@ -99,20 +101,25 @@ export default class MealSelected extends Component{
         ],{cancelable: false});                       
       }).catch(error => {
         this.setState({loading: false});
-        Alert.alert("Pídelo Tú",error.messages);
+        Alert.alert("Pídelo Tú",error.message);
       });  
     }
     else {
       if (restaurant == this.props.restaurant.toString()) {
         this.store().then(async (response) => {  
-          this.setState({loading:false});                  
+          this.setState({loading:false}); 
+          /*let i = array.id  
+          let data = { id:i+1,meal_id:meal.id,user_id:user.uid,total:Ctotal,quantity:number,description:meal.description,sub_type_id:subtype,ingredients:JSON.stringify(tempArray)}
+          array.push(data)
+          await AsyncStorage.removeItem('cart')
+          await AsyncStorage.setItem('cart',JSON.stringify(array))*/
           Alert.alert("Pídelo Tú","Se a agregado tu pedido al carrito, ¿Deseas seguir comprando?",[
             {text: 'Sí', onPress: () => {this.props.dismissMeal()}},
             {text: 'Finalizar compra', onPress: () => {this.props.cart()}}
           ],{cancelable: false});                       
         }).catch(error => {
           this.setState({loading: false});
-          Alert.alert("Pídelo Tú",error.messages);
+          Alert.alert("Pídelo Tú",error.message);
         }); 
       }
       else {
@@ -179,8 +186,9 @@ export default class MealSelected extends Component{
         <View key={item.id} style={style.radioCont}>
          <CheckBox
           label={item.name}
-          labelStyle={{color:'#fff', fontFamily: 'Lato-Light', textAlign:'center', fontSize: 16}}
-          iconSize={24}
+          style={{padding:10, marginLeft:4}}
+          labelStyle={{color:'#fff', fontFamily: 'Lato-Light', textAlign:'center', fontSize: 16, marginLeft: 4}}
+          iconSize={20}
           iconName='matMix'          
           checkedColor='#11c0f6'
           uncheckedColor='white'
