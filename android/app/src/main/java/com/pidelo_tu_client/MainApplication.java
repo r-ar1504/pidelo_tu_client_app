@@ -14,11 +14,10 @@ import com.oblador.vectoricons.VectorIconsPackage;
 import com.brentvatne.react.ReactVideoPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.facebook.react.ReactApplication;
-import com.RNOpenpay.RNOpenpayPackage;
-import com.dieam.reactnativeconekta.ReactNativeConektaPackage;
 import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.auth.RNFirebaseAuthPackage;
+import com.gettipsi.stripe.StripeReactPackage;
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,15 +39,14 @@ public class MainApplication extends Application implements ReactApplication{
         mCallbackManager = new CallbackManager.Factory().create();
         return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
-            new RNOpenpayPackage(),
+            new StripeReactPackage(),                       
             new ReactVideoPackage(),
             new VectorIconsPackage(),
             new ReactNativeOneSignalPackage(),
             new RNFirebasePackage(),
             new RNFirebaseAuthPackage(),
             new FBSDKPackage(mCallbackManager),
-            new MapsPackage(),
-            new ReactNativeConektaPackage()
+            new MapsPackage()            
         );
       }
 

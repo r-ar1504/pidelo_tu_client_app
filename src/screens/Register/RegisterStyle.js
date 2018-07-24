@@ -1,6 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import { COLOR_PRIMARY, COLOR_FOURTH, FONT_NORMAL, FONT_BOLD } from 'src/assets/GlobalStyleSheet';
-
+const { width, height } = Dimensions.get('window')
 export default StyleSheet.create({
   container: {
     backgroundColor:'#ffffff',
@@ -53,6 +53,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems:'center',
     justifyContent :'center',
+    width:width * .90,
     padding:20
   },
   input: {          

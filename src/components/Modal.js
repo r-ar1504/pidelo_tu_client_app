@@ -30,7 +30,7 @@ export default class Modal extends Component {
     return true;
   };
 
-  confirm(action, phoneAuthSnapshot, phoneNumber, credential){
+  confirm(action, phoneAuthSnapshot, phoneNumber, credential, screen){
     
     switch(action){
       case 'Verification': {
@@ -40,7 +40,7 @@ export default class Modal extends Component {
           this.props.navigation.navigate('RegisterForm', { phoneNumber: phoneNumber, credential: credential});
       } break;
       case 'Payment': {
-        this.props.navigation.navigate('Home', {user: firebase.auth().currentUser});
+        this.props.navigation.navigate(screen, {user: firebase.auth().currentUser});
       } break;      
     }        
   }  
@@ -50,6 +50,7 @@ export default class Modal extends Component {
     const text = params ? params.text : null;
     const button = params ? params.button : null;
     const action = params ? params.action : null;
+    const screen = params ? params.screen : null;
     const phoneAuthSnapshot = params ? params.phoneAuthSnapshot : null;
     const phoneNumber = params ? params.phoneNumber : null;
     const credential = params ? params.credential : null;
@@ -61,7 +62,7 @@ export default class Modal extends Component {
           <Image source={require('src/assets/images/check.png')} style={styles.check}/>
         </View>
         <Text style={styles.info}>{text}</Text>
-        <TouchableOpacity style={styles.button} onPress={this.confirm.bind(this, action, phoneAuthSnapshot, phoneNumber, credential)}>
+        <TouchableOpacity style={styles.button} onPress={this.confirm.bind(this, action, phoneAuthSnapshot, phoneNumber, credential, screen)}>
             <Text style={styles.buttonText}>{button}</Text>
         </TouchableOpacity>                
   		</View>

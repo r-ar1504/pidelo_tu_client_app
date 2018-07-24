@@ -111,17 +111,25 @@ android {
     compileSdkVersion 26
     buildToolsVersion "26.0.1"
 
-    defaultConfig {
+    defaultConfig {        
         applicationId "com.pidelo_tu_client"
-        minSdkVersion 16
-        targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion 17
+        targetSdkVersion 26        
+        versionCode 3
+        versionName "3.1"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
         manifestPlaceholders = [onesignal_app_id: "baedd007-9325-4e3e-83fc-d8be136450bd",
-                                onesignal_google_project_number: "44425980713"]
+                                onesignal_google_project_number: "241621586796"]        
+    }
+    signingConfigs {
+        release {
+            storeFile file(PIDELO_TU_CLIENT_APP_RELEASE_STORE_FILE)
+            storePassword PIDELO_TU_CLIENT_APP_RELEASE_STORE_PASSWORD
+            keyAlias PIDELO_TU_CLIENT_APP_RELEASE_KEY_ALIAS
+            keyPassword PIDELO_TU_CLIENT_APP_RELEASE_KEY_PASSWORD
+        }
     }
     splits {
         abi {
@@ -135,6 +143,7 @@ android {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release
@@ -152,46 +161,43 @@ android {
     }
 }
 
-/*
-dependencies {
-    compile project(':react-native-video')
-    compile project(':react-native-vector-icons')
-    compile project(':react-native-onesignal')
-    compile project(':react-native-maps')
-    compile(project(':react-native-firebase')) {
-        transitive = false
-    }
-    compile project(':react-native-vector-icons')
-    compile project(':react-native-video')
- */
 dependencies {    
     compile fileTree(dir: "libs", include: ["*.jar"])
     compile "com.android.support:appcompat-v7:23.0.1"
     compile "com.facebook.react:react-native:+" 
     
     compile project(':react-native-video')
-    compile project(':react-native-vector-icons')
-    compile project(':react-native-conekta')
-    compile project(':react-native-openpay')
-    compile project(':react-native-fbsdk')
+    compile project(':react-native-vector-icons')           
+    compile project(':react-native-fbsdk')        
+    compile (project(':tipsi-stripe')){
+        exclude group: 'com.google.android.gms'
+    }        
     compile(project(':react-native-onesignal')) {
         exclude group: 'com.google.android.gms'
     }
     compile(project(':react-native-maps')){
         exclude group: 'com.google.android.gms'
     }
-    compile ('com.google.android.gms:play-services-maps:11.4.2') {
+    compile ('com.google.android.gms:play-services-gcm:11.8.0') {
         force = true
     }
-    compile ("com.google.android.gms:play-services-base:11.4.2") {
+    compile ('com.google.android.gms:play-services-maps:11.8.0') {
         force = true
     }
+    compile ("com.google.android.gms:play-services-base:11.8.0") {
+        force = true
+    }
+    compile ('com.google.android.gms:play-services-wallet:11.8.0') {
+        force = true
+    }
+  
     compile(project(':react-native-firebase')) {
         transitive = false
     }    
+    
     // Firebase dependencies    
-    compile "com.google.firebase:firebase-core:11.4.2"
-    compile "com.google.firebase:firebase-auth:11.4.2"
+    compile "com.google.firebase:firebase-core:11.8.0"
+    compile "com.google.firebase:firebase-auth:11.8.0"
 }
 
 

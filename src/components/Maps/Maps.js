@@ -23,14 +23,21 @@ export default class Maps extends React.Component {
           latitudeDelta: LATITUDE_DELTA,
           longitudeDelta: LONGITUDE_DELTA,
         },
+        marker: {
+          latitude: LATITUDE,
+          longitude: LONGITUDE,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
+        },
         address: null,
+        title: '',
+        description: '',
         mapStyle: customStyle,
         disabled:true            
       };        
   }
 
-  componentDidMount() {     
-     //could change for address location saved in local storage            
+  componentDidMount() {          
       navigator.geolocation.getCurrentPosition(
         position => {
           this.setState({
@@ -40,6 +47,12 @@ export default class Maps extends React.Component {
               latitudeDelta: LATITUDE_DELTA,
               longitudeDelta: LONGITUDE_DELTA,
             },
+            marker: {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+              latitudeDelta: LATITUDE_DELTA,
+              longitudeDelta: LONGITUDE_DELTA,
+            }
           });
           this.getAddress(position.coords.latitude,position.coords.longitude)
               .then(response => { 
@@ -48,13 +61,13 @@ export default class Maps extends React.Component {
               });           
         },
       (error) => {    
-        Alert.alert("Pídelo Tú",error.message);  
+        Alert.alert("PídeloTú",error.message);  
         //When request address failed, get the last address storaged or a default location      
       });    
   }  
 
-  getAddress(lat,long){
-    return fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+long+'&key=AIzaSyCYIhiPOMgLbwZrN9vT8ChwNtPKqKkOrs0')
+  async getAddress(lat,long){
+    return await fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+long+'&key=AIzaSyCYIhiPOMgLbwZrN9vT8ChwNtPKqKkOrs0')
       .then((res) => res.json())
       .then((json) => {
         if (json.status !== 'OK') {
@@ -64,8 +77,8 @@ export default class Maps extends React.Component {
       });
   }
 
-  getLongLat(address){
-    return fetch('https://maps.googleapis.com/maps/api/geocode/json?address='+address+'&key=AIzaSyCYIhiPOMgLbwZrN9vT8ChwNtPKqKkOrs0')
+  async getLongLat(address){
+    return await fetch('https://maps.googleapis.com/maps/api/geocode/json?address='+address+'&key=AIzaSyCYIhiPOMgLbwZrN9vT8ChwNtPKqKkOrs0')
       .then((res) => res.json())
       .then((json) => {
         if (json.status !== 'OK') {
@@ -75,21 +88,26 @@ export default class Maps extends React.Component {
       }); 
   }  
 
-  async onMapPress(e){          
+  onMapPress(e){   
+    this.getAddress(e.nativeEvent.coordinate.latitude,e.nativeEvent.coordinate.longitude)
+        .then(response => {
+          let address = response.split(','); 
+          this.setState({title: address[0] + ' ' + address[1]})
+        });           
     this.setState({ 
       region: { 
         latitude: e.nativeEvent.coordinate.latitude,
         longitude: e.nativeEvent.coordinate.longitude, 
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,             
-      }, 
-      title: null     
-    });
-    await this.getAddress(e.nativeEvent.coordinate.latitude,e.nativeEvent.coordinate.longitude)
-        .then(response => {
-          let address = response.split(','); 
-          this.setState({title: address[0] + ' ' + address[1]})
-        });           
+      },
+      marker: {
+        latitude: e.nativeEvent.coordinate.latitude,
+        longitude: e.nativeEvent.coordinate.longitude, 
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,  
+      },            
+    });           
   }
 
   onRegionChange(region) {
@@ -98,11 +116,12 @@ export default class Maps extends React.Component {
     LONGITUDE_DELTA = region.longitudeDelta;
   }
 
-  render() {    
+  render() {  
+    const { title, marker, mapStyle, description, region } = this.state;  
     return (
       <View style={styles.container}>        
-        <MapView provider={PROVIDER_GOOGLE} customMapStyle={this.state.mapStyle} style={styles.map} region={ this.state.region } onRegionChangeComplete={this.onRegionChange.bind(this)} onPress={(e) => this.onMapPress(e)}>      
-          <MapView.Marker draggable coordinate={this.state.region} onDragEnd={(e) => this.onMapPress(e)} title={this.state.title} description={this.state.title}/>          
+        <MapView provider={PROVIDER_GOOGLE} customMapStyle={mapStyle} style={styles.map} region={ region } onRegionChangeComplete={this.onRegionChange.bind(this)} onPress={(e) => this.onMapPress(e)}>      
+          <MapView.Marker draggable coordinate={marker} onDragEnd={(e) => this.onMapPress(e)} title={title} description={description}/>          
         </MapView>
         <View style={styles.in}>
           <Icon name="search" size={20} color="#999999" style={{ paddingLeft:10}}/>

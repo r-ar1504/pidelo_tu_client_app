@@ -1,9 +1,8 @@
 import React from 'react';
-import { Text, TouchableOpacity } from 'react-native';
-import { Content, Item, Label, Input, Icon, Footer } from 'native-base';
+import { Text, TouchableOpacity, Alert } from 'react-native';
+import { Content, Item, Label, Input, Icon } from 'native-base';
 import ValidationComponent from 'react-native-form-validator';
 import styles from './LoginStyle';
-import { LoginButton } from 'react-native-fbsdk';
 
 export default class Form extends ValidationComponent {
   static navigationOptions = {
@@ -22,12 +21,11 @@ export default class Form extends ValidationComponent {
       password: {required: true},      
     });
 
-
     if(this.isFormValid()){
       this.props.signIn(email,password);
     }
     else {
-      alert(this.getErrorMessages());
+      Alert.alert("PídeloTú","Ops, tienes campos vacíos");
     }    
   }
     
@@ -39,7 +37,7 @@ export default class Form extends ValidationComponent {
           <Content scrollEnabled={false}>            
             <Item floatingLabel style={styles.inputBox}>              
               <Label style={{marginLeft: 15, marginTop: 5, color: 'white', fontFamily: 'Lato-Regular'}}>Correo Electrónico</Label>              
-              <Input style={styles.input} ref={(email) => this.correo = email} onChangeText={(email)=> {this.setState({email});}} onSubmitEditing={()=> this.password.focus()} keyboardType="email-address"/>
+              <Input style={styles.input} ref={(email) => this.correo = email} onChangeText={(email)=> {this.setState({email});}} keyboardType="email-address"/>
               <Icon active name='person' style={{color:'white'}} />
             </Item>
             <Item floatingLabel style={styles.inputBox}>              
@@ -52,7 +50,7 @@ export default class Form extends ValidationComponent {
             </TouchableOpacity>
             <Item style={styles.signupTextCont}>
               <TouchableOpacity onPress={this.props.fblogin}><Text style={styles.fb}><Icon active name={'logo-facebook'} style={{color:'white', fontSize:20}} /> FACEBOOK</Text></TouchableOpacity>
-              <TouchableOpacity onPress={this.props.register}><Text style={styles.movil}><Icon active name={'phone-portrait'} style={{color:'white', fontSize:20}} /> MOVIL</Text></TouchableOpacity>
+              <TouchableOpacity onPress={this.props.register}><Text style={styles.movil}><Icon active name={'phone-portrait'} style={{color:'white', fontSize:21}} /> MOVIL</Text></TouchableOpacity>
             </Item>
         {/*<Footer style={{backgroundColor:'#00000000', flexDirection:'row', justifyContent:'space-between'}}>            
               <TouchableOpacity onPress={this.props.signup}><Text style={styles.signupButton}> Crear cuenta</Text></TouchableOpacity>                        

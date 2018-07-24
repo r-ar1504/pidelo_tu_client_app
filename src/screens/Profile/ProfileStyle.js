@@ -34,7 +34,7 @@ export default StyleSheet.create({
     height: 100,
     borderRadius: 50,
     borderWidth: 1,
-    borderColor: '#fff'
+    borderColor: '#fff',
   },
   logo: {
     alignItems: 'flex-start',

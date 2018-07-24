@@ -27,11 +27,11 @@ export default StyleSheet.create({
     alignItems:'center', 
     justifyContent:'center',       
     alignSelf: 'center',                
-    width: width,
+    width: width * .90,
     height: 100,
   },
   foodCont: {
-    width:width, 
+    width:width * .90, 
     height:100, 
     backgroundColor:'rgba(0,0,0,.6)', 
     alignItems:'center', 
@@ -51,7 +51,7 @@ export default StyleSheet.create({
     color:'#fff',        
   },
   deliveryDetails: {
-    width: width,
+    width: width * .90,
     height: 100,
     borderLeftWidth: 1,
     borderRightWidth: 1,
@@ -86,9 +86,11 @@ export default StyleSheet.create({
     fontFamily: FONT_NORMAL    
   },
   deliveryProgress: {
-    width: width,
-    height: 150,
-    borderWidth: 1,    
+    width: width * .90,
+    height: 150,       
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderBottomWidth: 1,
     borderColor: '#dbdbdb',      
     alignSelf: 'center',    
   },

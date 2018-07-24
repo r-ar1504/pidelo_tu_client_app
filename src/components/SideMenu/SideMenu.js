@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
-import {  StyleSheet,  Text, View, Image, TouchableWithoutFeedback, AsyncStorage} from 'react-native';
+import { Text, View, Image, TouchableWithoutFeedback } from 'react-native';
 import style from './SideStyle';
-import { DrawerNavigator, NavigationActions } from 'react-navigation';
-import {  Item, Footer, Icon } from 'native-base';
+import {  Footer, Icon } from 'native-base';
 import firebase from 'react-native-firebase';
 export default class SideMenu extends Component{
   static navigationOptions = {
@@ -52,7 +51,7 @@ export default class SideMenu extends Component{
 
   /* Add Payment method */
   paymentMethod(){
-    this.props.navigation.navigate('Payment');
+    this.props.navigation.navigate('Payment', { screen: 'Home' });
   }
 
   /* Sign Out. */
@@ -81,7 +80,7 @@ export default class SideMenu extends Component{
             </TouchableWithoutFeedback>
           </View>
           <View style={style.sidebar_section}>
-          <Image source={require('src/assets/images/ic.png')} style={style.side_profile}/>
+            {(user.photoURL) ? <Image source={{uri:user.photoURL}} style={style.side_profile}/> : <Image source={require('src/assets/images/ic.png')} style={style.side_profile}/> }
           </View>
           <View style={style.sidebar_section}>
             <Text style={{fontSize: 20, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>{(user.displayName != null) ? user.displayName : user.providerData[0].phoneNumber}</Text>
@@ -109,21 +108,21 @@ export default class SideMenu extends Component{
             <TouchableWithoutFeedback onPress={this.orderHistory}>
               <View style={style.sidebar_link}>
                 <FontIcon name="list-ol" size={15} color="#fff" style={{marginTop: 8, paddingRight:4}} />
-                <Text style={{fontSize: 20, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>Historial de pedidos</Text>
+                <Text style={{fontSize: 20, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>Historial pedidos</Text>
               </View>
             </TouchableWithoutFeedback>
 
             <TouchableWithoutFeedback onPress={this.paymentMethod}>
               <View style={style.sidebar_link}>
                 <Icon active name="cash" style={{marginTop: 8, paddingRight:4, fontSize: 15, color: '#fff'}} />
-                <Text style={{fontSize: 20, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>Agregar método pago</Text>
+                <Text style={{fontSize: 20, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>Agregar tarjeta</Text>
               </View>
             </TouchableWithoutFeedback>
 
               <TouchableWithoutFeedback onPress={this.openCart}>
               <View style={style.sidebar_link}>
                 <Icon active name="cart" style={{marginTop: 8, paddingRight:4, fontSize: 15, color: '#fff'}} />
-                <Text style={{fontSize: 20, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>Carrito de compras</Text>
+                <Text style={{fontSize: 20, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>Carrito</Text>
               </View>
             </TouchableWithoutFeedback>
             <Footer style={{backgroundColor: 'transparent'}}>

@@ -7,8 +7,6 @@ export default StyleSheet.create({
   background:{    
     display: 'flex',
     flex:1,    
-    position: 'absolute',
-    ...StyleSheet.absoluteFillObject,
     justifyContent: 'center' 
   },  
   body: {

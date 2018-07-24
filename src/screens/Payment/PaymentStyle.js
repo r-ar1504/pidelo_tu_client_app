@@ -42,9 +42,8 @@ export default styles = StyleSheet.create({
   },
   dateContainer: {    
     flexDirection: 'row', 
-    justifyContent:'flex-start',
-    alignItems:'flex-start',   
-    alignSelf:'flex-start',    
+    justifyContent:'center',
+    alignItems:'flex-start',         
     marginTop:46  
   },
   selectContainer: {    

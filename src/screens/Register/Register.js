@@ -36,7 +36,7 @@ export default class Register extends ValidationComponent {
 
   async validCode(codeInput){    
     if (codeInput.length < 6){
-      Alert.alert("Pídelo Tú","Escribe un código válido");
+      Alert.alert("PídeloTú","Escribe un código válido");
     }
     else {      
       this.setState({ loading: true });
@@ -54,10 +54,10 @@ export default class Register extends ValidationComponent {
                 let data = { firebaseId: user.uid, name: response.name, email: response.email.toLowerCase(), password: Math.random().toString(36).slice(2), phone:phoneNumber } 
                 this.sendData(data).then((response) => { this.setState({loading: false})}).catch((error)=> {
                   this.setState({loading: false})
-                  Alert.alert("Pídelo Tú",error.message);
+                  Alert.alert("PídeloTú",error.message);
                 }).catch((error) => {
                   this.setState({loading: false})
-                  Alert.alert("Pídelo Tú",error.message);
+                  Alert.alert("PídeloTú",error.message);
                 }); 
               });
             });
@@ -71,7 +71,7 @@ export default class Register extends ValidationComponent {
         }
       }).catch((error) => {
         this.setState({ loading: false });
-        Alert.alert("Pídelo Tú",error.message);
+        Alert.alert("PídeloTú",error.message);
       });                       
     }       
   }
@@ -103,15 +103,15 @@ export default class Register extends ValidationComponent {
     });
   }
    
-  confirm(){    
+  async confirm(){    
     this.validate({ phoneNumber: {required: true} });
     const { params } = this.props.navigation.state;
     const fbcredential  = params ? params.fbcredential : null;
     const phoneNumber = this.phone.getCountryCode()+this.state.phoneNumber;
-
+    
     if(this.isFormValid()){
       this.setState({ loading: true });           
-      firebase.auth().verifyPhoneNumber(phoneNumber)
+      await firebase.auth().verifyPhoneNumber(phoneNumber)
         .on('state_changed', async (phoneAuthSnapshot) => {    
           switch (phoneAuthSnapshot.state) {
               // ------------------------
@@ -120,23 +120,41 @@ export default class Register extends ValidationComponent {
             case firebase.auth.PhoneAuthState.CODE_SENT: // or 'sent'                
               this.setState({ loading: false, phoneAuthSnapshot: phoneAuthSnapshot, phoneNumber: phoneNumber, showModal: true});
             break;
-            case firebase.auth.PhoneAuthState.ERROR: // or 'error'
+            case firebase.auth.PhoneAuthState.ERROR: // or 'error'                                          
               this.setState({ loading: false });                                
-              Alert.alert("Pídelo Tú",phoneAuthSnapshot.error.toString());                
             break;
               // ---------------------
               // ANDROID ONLY EVENTS
               // ---------------------
             case firebase.auth.PhoneAuthState.AUTO_VERIFY_TIMEOUT: // or 'timeout'  
-              this.setState({verificationCode: true, loading:false});                                              
+                                                            
             break;
-            case firebase.auth.PhoneAuthState.AUTO_VERIFIED: // or 'verified'                  
+            case firebase.auth.PhoneAuthState.AUTO_VERIFIED: // or 'verified'
+              this.setState({loading:true});                  
               let { verificationId, code } = phoneAuthSnapshot;
               let credential = firebase.auth.PhoneAuthProvider.credential(verificationId, code);                                              
               this.checkNumber(phoneNumber).then(async (response) => {    
-                this.setState({verificationCode: false, loading: false});        
-                if (response.length == 0) {             
-                  this.props.navigation.navigate('RegisterForm',{ credential: credential, phoneNumber: phoneNumber });
+                this.setState({verificationCode: false});        
+                if (response.length == 0) {     
+                  if (fbcredential) {                  
+                    await firebase.auth().signInWithCredential(fbcredential).then(user => {
+                      user.linkWithCredential(credential);
+                      this.initUser(fbcredential.token).then((response) => {
+                        let data = { firebaseId: user.uid, name: response.name, email: response.email.toLowerCase(), password: Math.random().toString(36).slice(2), phone:phoneNumber } 
+                        this.sendData(data).then((response) => { this.setState({loading: false})}).catch((error)=> {
+                          this.setState({loading: false})
+                          Alert.alert("Pídelo Tú",error.message);
+                        }).catch((error) => {
+                          this.setState({loading: false})
+                          Alert.alert("Pídelo Tú",error.message);
+                        }); 
+                      });
+                    });
+                  }
+                  else {  
+                    this.setState({loading: false})      
+                    this.props.navigation.navigate('RegisterForm',{ credential: credential, phoneNumber: phoneNumber });
+                  }
                 }
                 else {          
                   if (fbcredential) {                  
@@ -147,21 +165,19 @@ export default class Register extends ValidationComponent {
                   await firebase.auth().signInWithCredential(credential)
                 }
               }).catch((error) => {
-                this.setState({ loading: false });
+                this.setState({ loading: false, verificationCode: false });
                 Alert.alert("Pídelo Tú","Hubo un error, por favor inténtalo más tarde");
               });                                                                          
             break;
           }
-        }, (error) => {
-          this.setState({ loading: false });
-            Alert.alert(error + "Id:" + error.verificationId);
-            this.props.navigation.goBack();             
+        }, (error) => {          
+          Alert.alert("PídeloTú",error.message);                  
         }, (phoneAuthSnapshot) => {
             
         });                        
     }
     else {
-      Alert.alert("Pídelo Tú","Ops, Tienes campos vacíos");
+      Alert.alert("PídeloTú","Ops, Tienes campos vacíos");
     }           
   }
 
@@ -170,7 +186,7 @@ export default class Register extends ValidationComponent {
     return await fetch(url)      
       .then(response => { return response.json() })
       .catch(error => {
-        throw new Error(error.messages);
+        throw new Error(error.message);
       });     
   }
 
@@ -187,7 +203,7 @@ export default class Register extends ValidationComponent {
               <Image source={require('src/assets/images/check.png')} style={styles.check}/>
             </View>
             <Text style={styles.text}>Se ha enviado un código de verificación vía SMS a tu móvil</Text>
-            <TouchableOpacity style={styles.button} onPress={() => {this.setState({showModal: false, loading:true})}}>
+            <TouchableOpacity style={styles.button} onPress={() => {this.setState({showModal: false,  verificationCode:true})}}>
               <Text style={styles.buttonText}>Continuar</Text>
             </TouchableOpacity>     
           </ImageBackground>
@@ -195,16 +211,16 @@ export default class Register extends ValidationComponent {
       )
     }
     if (verificationCode) {
-      return <VerificationCode validCode={this.validCode.bind(this)}/>      
+      return <VerificationCode validCode={this.validCode.bind(this)} goBack={()=>{this.setState({verificationCode:false})}}/>      
     } 
     return (
       <Container style={styles.container}>
         <Header backgroundColor={'#fff'} style={{flexDirection: 'row', justifyContent: 'space-around', backgroundColor: 'transparent', elevation: 0, width: '100%'}}>
-              <Left style={{ flex: 1 }} >
-                <TouchableWithoutFeedback onPress={() => {this.props.navigation.goBack()}}>
-                  <Icon name='arrow-back' />
-                </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={() => {this.props.navigation.goBack()}}>
+              <Left style={{ flex: 1 }} >                
+                <Icon name='arrow-back' />                
               </Left>        
+            </TouchableWithoutFeedback>
               <Body style={{ flex: 1 }}>
               
               </Body>              
@@ -225,15 +241,14 @@ export default class Register extends ValidationComponent {
               cancelText="Cancelar"
               confirmText="Confirmar"            
             />
-            <Item regular style={{flex:1, borderColor: 'black', borderWidth: 0.7, width:100, height:30 }}>
+            <Item regular style={{flex:1, borderColor: 'black', borderWidth: 0.7, width:300, height:30 }}>
               <Input keyboardType="phone-pad" ref="number" value={this.state.phoneNumber} onChangeText={(phoneNumber) => {this.setState({phoneNumber})}} maxLength={10}/>
             </Item>
-          </View>
-          <Text style={styles.info}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam porta ex arcu, et scelerisque felis faucibus at. Aenean sit amet viverra mauris. Phasellus quis metus ac lectus ultrices lacinia sed ut tortor. Donec non dignissim metus, ac ornare augue. Aenean euismod velit nisl. Donec ullamcorper sagittis condimentum. Nullam pharetra lorem iaculis pharetra gravida. Nulla non pharetra ante. Aenean et libero dui. Nulla lacinia vestibulum ex sit amet elementum.</Text>
-          <Footer style={{backgroundColor:'#00000000', alignItems:'center', justifyContent:'center', marginBottom: 16}}>
-            <TouchableOpacity style={styles.button} onPress={this.confirm.bind(this)}><Text style={styles.buttonText}>CONTINUAR</Text></TouchableOpacity>
-          </Footer>
+          </View>                    
         </Content>
+        <Footer style={{backgroundColor:'#00000000', alignItems:'center', justifyContent:'center', marginBottom: 16}}>
+          <TouchableOpacity style={styles.button} onPress={this.confirm.bind(this)}><Text style={styles.buttonText}>CONTINUAR</Text></TouchableOpacity>
+        </Footer>
       </Container>
     );
   }

@@ -45,20 +45,20 @@ export default class OrderComming extends Component {
               <Icon active name='time' style={{color:'white', fontSize: 15, marginLeft: 150}} /><Text style={{marginLeft: 5, fontFamily: 'Lato-Light', color:'#fff'}}>00:20:00</Text>              
             </View>
             <View style={{flexDirection: 'row', paddingLeft: 10, paddingTop: 10}}>              
-              <Text style={{fontFamily: 'Lato-Light', color:'#fff'}}>{order.quantity}</Text>              
-              <Text style={{marginLeft: 10, fontFamily: 'Lato-Light', color:'#fff'}}>{order.description}</Text>     
+              <Text style={{marginLeft: 10, fontFamily: 'Lato-Light', color:'#fff'}}>{order.quantity}</Text>              
+              <Text style={{marginLeft: 10, fontFamily: 'Lato-Light', color:'#fff'}}>{order.name}</Text>     
             </View>
             <View style={{flexDirection: 'row', paddingLeft: 10, paddingTop: 10}}>              
-              <Text style={{fontFamily: 'Lato-Light', color:'#fff', fontSize: 12}}>(Aquí va la información adicional)</Text>                            
+              <Text style={{marginLeft: 10, fontFamily: 'Lato-Light', color:'#fff', fontSize: 12, flex: 1, flexWrap:'wrap'}}>(Aquí va la información adicional)</Text>                            
             </View>
             <View style={{flexDirection: 'row', paddingLeft: 10, paddingTop: 10}}>              
-              <Text style={{fontFamily: 'Lato-Bold', color:'#fff'}}>Total ${order.total}</Text>                            
+              <Text style={{marginLeft: 10, fontFamily: 'Lato-Bold', color:'#fff'}}>Total ${order.total}</Text>                            
             </View>
             <View style={{flexDirection: 'row', paddingLeft: 10, paddingTop: 10}}>              
-              <Icon active name='person' style={{color:'white', fontSize: 15}} /> 
-              <Text style={{marginLeft: 5, fontFamily: 'Lato-Light', color:'#fff'}}>Tu entrega por Jose Fernando</Text>                            
-                <TrackButton rest_id={order.order_id} openMap={this.getOrderLocation} />
-            </View>
+              <Icon active name='person' style={{marginLeft: 10, color:'white', fontSize: 15}} /> 
+              <Text style={{marginLeft: 5, fontFamily: 'Lato-Light', color:'#fff', flex: 1, flexWrap: 'wrap'}}>Tu entrega por Jose Fernando</Text>                                            
+              <TrackButton rest_id={order.order_id} openMap={this.getOrderLocation} />
+            </View>            
           </View>             
         </View>  
         )

@@ -5,8 +5,7 @@ import Swiper from 'react-native-swiper';
 import ValidationComponent from 'react-native-form-validator';
 import styles from './CartShopStyle';
 import firebase from 'react-native-firebase';
-import openpay from 'react-native-openpay';
-import conekta from 'react-native-conekta';
+import stripe from 'tipsi-stripe'
 import moment from 'moment';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
@@ -24,8 +23,12 @@ export default class CartShop extends ValidationComponent {
     }
 
     async componentDidMount() {   
-      openpay.setup('mf4nsxsfmoaic0jt53jk', 'pk_f7d9db95d7134915a994750e274760d9');             
-      conekta.setPublicKey('key_LTysaksuZuj6GJkqCUB6ACA');
+      stripe.setOptions({
+        publishableKey: 'pk_live_DtoYFRLSDmR2cNKFZPdHEgPf',
+        merchantId: 'MERCHANT_ID', // Optional
+        androidPayMode: 'test', // Android only
+      })
+      
       this.getData().then(async (response) => {  
         let cart = response.carshop;
         let subtotal = 0.0;                               
@@ -47,7 +50,7 @@ export default class CartShop extends ValidationComponent {
         
         this.setState({carShop: cart, loading:false, total: subtotal });
       
-      }).catch((error) => { this.setState({loading:false}); Alert.alert("Pídelo Tú", error.message); this.props.navigation.goBack(); });
+      }).catch((error) => { this.setState({loading:false}); Alert.alert("PídeloTú", error.message); this.props.navigation.goBack(); });
 	  }
 		
 		showCV(){
@@ -103,22 +106,25 @@ export default class CartShop extends ValidationComponent {
       let array = carShop;             
       //await AsyncStorage.removeItem('cart')              
       //await AsyncStorage.setItem('cart', JSON.stringify(array))      
-      this.delete(item.id,firebase.auth().currentUser.uid).then((res) => {
+      this.delete(item.id,firebase.auth().currentUser.uid).then(async (res) => {
         if (res.message == 'Success') {
           let subtotal = total - item.total
           array.splice(index,1);   
+          if (array.length == 0) {
+            await AsyncStorage.removeItem('restaurant')
+          }
           this.setState({carShop: array, total: subtotal, loading:false}) 
         }                
       }).catch((error) => {
-        Alert.alert("Pídelo Tú",error.message);
+        Alert.alert("PídeloTú",error.message);
         this.setState({loading:false}) 
       });
     }
     
 
     async delete(id,firebaseId) {      
-      return await fetch('http://pidelotu.azurewebsites.net/cart/'+id, {
-        method: 'DELETE',
+      return await fetch('http://pidelotu.azurewebsites.net/cart/delete/'+id, {
+        method: 'POST',
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -155,55 +161,46 @@ export default class CartShop extends ValidationComponent {
         });
     }
 
-    generateToken(){
+    async generateToken(){
       let { currentCard, month, year, csv } = this.state
       let y = year.toString().substring(2,4);
-      return openpay.createCardToken({
-        holder_name: 'John Doe',
-        card_number: currentCard,
-        expiration_month: month,
-        expiration_year: y,
-        cvv2: csv
-      })
-      .then(token => { return token })
-      .catch(error => {
-        throw new Error(error.message)
-      })
-      /*return conekta.createToken({        
-        cardNumber: currentCard,
-        name: 'Manolo Virolo',
+      let params = {
+        number: currentCard,
+        expMonth: parseInt(month),
+        expYear: parseInt(year),
         cvc: csv,
-        expMonth: month,
-        expYear: y,        
-      })
-      .then(token => { return token.id })
-      .catch(error => {
-        throw new Error(error.messages)
-      })*/
+        currency: 'usd',
+      }
+      return await stripe.createTokenWithCard(params) 
     }
 
     accept() {      
       this.validate({ csv: { required: true, numbers: true }, month: { required: true }, year: { required: true } });
       if (!this.isFormValid()){
-        Alert.alert("Pídelo Tú","Ops, tienes campos vacíos");
+        Alert.alert("PídeloTú","Ops, tienes campos vacíos");
       }
       else {
-        this.setState({allowLocation:true})
+        this.setState({loading:true})
+        this.generateToken().then((token) => {
+          this.setState({allowLocation:true, token: token.tokenId, loading:false})          
+        }).catch((error) => {
+          this.setState({loading:false})
+          Alert.alert("PídeloTú",error.message);
+        })
+        //this.setState({allowLocation:true})        
       }
     }
 
-    confirm(region){
-      this.generateToken().then((token) => {
-        this.store(region,token).then(async (response) => {
-          //await AsyncStorage.removeItem('cart')
-          await AsyncStorage.removeItem('restaurant')
-          Alert.alert("Pídelo Tú",response.message,[{ text: 'OK', onPress: () => {this.props.navigation.navigate('Home',{user: firebase.auth().currentUser})} }],{cancelable: false});            
-        }).catch((error) => {
-          Alert.alert("Pídelo Tú",error.message);
-        })
+    confirm(region){      
+      let { token } = this.state;
+      this.setState({loading:true})
+      this.store(region,token).then(async (response) => {
+        //await AsyncStorage.removeItem('cart')
+        //await AsyncStorage.removeItem('restaurant')
+        Alert.alert("PídeloTú",response.message,[{ text: 'OK', onPress: () => {this.setState({loading:false}); this.props.navigation.navigate('Home',{user: firebase.auth().currentUser})} }],{cancelable: false});            
       }).catch((error) => {
-        Alert.alert("Pídelo Tú",error.message);
-      })        
+        Alert.alert("PídeloTú",error.message);
+      })
     }
 
 
@@ -211,7 +208,7 @@ export default class CartShop extends ValidationComponent {
       let { payments }  = this.state;
         return payments.map((item,i) => {
             return (
-                <ListItem key={item.id} onPress={()=>{this.setState({onchange:false, currentCard:item.card_number.toString().substring(12,16)})}}>                    
+                <ListItem key={item.id} onPress={()=>{this.setState({onchange:false, currentCard:item.card_number.toString()})}}>                    
 									<Thumbnail square style={{width: 50, height: 35, resizeMode:'contain', marginRight:10}} source={require('../../assets/images/Visa_Logo.png')} />
                   <Body>										
                     <Text style={{fontSize:18}}>●●●●{item.card_number.toString().substring(12,16)}</Text>                    
@@ -290,7 +287,7 @@ export default class CartShop extends ValidationComponent {
       else {
         return (
           <View style={{flexDirection: 'column', alignItems:'center', marginTop:30}}>
-            <TouchableOpacity style={styles.confirm} onPress={() => {this.props.navigation.navigate('Payment')}}><Text style={styles.text}>AGREGAR FORMA DE PAGO</Text></TouchableOpacity>    
+            <TouchableOpacity style={styles.confirm} onPress={() => {this.props.navigation.navigate('Payment', { screen: 'CartShop' })}}><Text style={styles.text}>AGREGAR FORMA DE PAGO</Text></TouchableOpacity>    
           </View>
         )
       }
@@ -383,7 +380,7 @@ export default class CartShop extends ValidationComponent {
                 </View>
 
                 <Content>                    
-                    <View style={{width: "100%", backgroundColor: '#11c0f6', marginTop: 10}}>                        
+                    {/*<View style={{width: "100%", backgroundColor: '#11c0f6', marginTop: 10}}>                        
                         <Swiper style={styles.wrapper} height={150} activeDotColor={'#fff'}>                         
                             <View style={styles.slide}>                                    
                                 <Left style={{flexDirection: 'column', flex:1, padding:10}}>
@@ -400,7 +397,7 @@ export default class CartShop extends ValidationComponent {
                                 </Right>                                    
                             </View>                                                                                             
                         </Swiper>                          
-                    </View>
+        </View>*/}
                     { this.renderCarShop() }
                     <View style={{flexDirection:'row', borderBottomColor:'white', borderTopColor:'transparent', borderLeftColor:'transparent', borderRightColor:'transparent', borderWidth:0.8, width:'100%'}}>
                         <Left style={{padding:10}}>

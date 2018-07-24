@@ -30,7 +30,8 @@
     "react-native-textinput-effects": "^0.4.2",
     "react-native-vector-icons": "^4.5.0",
     "react-native-video": "^2.0.0",
-    "react-navigation": "^1.4.0"
+    "react-navigation": "^1.4.0",
+    "tipsi-stripe": "^5.2.4"
   },
   "devDependencies": {
     "babel-jest": "22.4.1",

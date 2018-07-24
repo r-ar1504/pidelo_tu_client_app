@@ -18,7 +18,7 @@ export default class TrackButton extends Component {
 
     render(){
         return(
-        <View>
+        <View style={{flex:1}}>
             <Button rounded small style={styles.button}  rest_id={this.props.rest_id} onPress={this.getCoords}><Text style={styles.buttonText}>Rastrear pedido</Text></Button>    
         </View>
         )

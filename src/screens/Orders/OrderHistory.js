@@ -27,7 +27,7 @@ export default class OrderHistory extends Component {
             </View>
             <View style={{flexDirection: 'row', paddingLeft: 10, paddingTop: 10}}>              
               <Text style={{fontFamily: 'Lato-Light', color:'#fff'}}>{moment(order.date).format('LLL')}</Text>              
-              <Button rounded small style={styles.button} onPress={() => {this.props.orderAgain(order, order.restaurant_id)}}><Text style={styles.buttonText}>Volver a ordenar</Text></Button>    
+              <Button rounded small style={styles.button} onPress={() => {this.props.openMeal(order, order.restaurant_id,order.open_time,order.close_time,order.not_working )}}><Text style={styles.buttonText}>Volver a ordenar</Text></Button>    
             </View>
             <View style={{flexDirection: 'row', paddingLeft: 10}}>              
               <Text style={{fontFamily: 'Lato-Light', color:'#fff'}}>Pedido #{order.order_id}</Text>                            
@@ -35,8 +35,8 @@ export default class OrderHistory extends Component {
           </View>  
           <View style={[styles.deliveryDetails, {'borderBottomWidth': 1}]}>
             <View style={{flexDirection: 'row', paddingLeft: 10, paddingTop: 10}}>
-              <Text style={{fontFamily: 'Lato-Light', color:'#fff'}}>{order.total / order.price}</Text>              
-              <Text style={{marginLeft: 10, fontFamily: 'Lato-Light', color:'#fff'}}>{order.description}</Text>              
+              <Text style={{fontFamily: 'Lato-Light', color:'#fff'}}>{order.quantity}</Text>              
+              <Text style={{marginLeft: 10, fontFamily: 'Lato-Light', color:'#fff'}}>{order.name}</Text>              
             </View>
             <View style={{flexDirection: 'row', paddingLeft: 10, paddingTop: 10}}>              
               <Icon active name='person' style={{color:'white', fontSize: 15}} /> 
@@ -49,8 +49,9 @@ export default class OrderHistory extends Component {
         </View>
       )
     })
-  } 
-  render() {
+  }
+  
+  render() {    
     return (  
       <Content padder style={{backgroundColor: '#3f51b5'}}>        
         {this.rederOrders()}                      

@@ -33,10 +33,11 @@ export default StyleSheet.create({
     justifyContent:'center',
   },
   restaurantTitle: {
-    color: '#fff',
+    color: '#000', 
+    fontFamily: 'Lato-Light',  
     opacity: 0.8,
-    fontSize: 40,    
-    fontWeight: 'bold',    
+    fontSize: 40,  
+    letterSpacing: 10      
   },
   titleCont:{
     marginTop: 20,
@@ -87,9 +88,8 @@ export default StyleSheet.create({
     fontFamily: FONT_NORMAL,
     fontSize:20,
     textAlign:'center',    
-    color:'#000',  
-    flex:1,
-    flexWrap:'wrap'  
+    color:'#fff',      
+    marginLeft:10
   },
   infoCont:{
     flexDirection:'row',
@@ -97,15 +97,12 @@ export default StyleSheet.create({
     flexWrap: 'nowrap'
   },
   description:{
-    fontFamily: 'Lato-Regular',
+    fontFamily: 'Lato-Light',
     fontSize:20,
     color:'#000',
-    textAlign:'center',
-    flex: 1,
-    flexWrap: 'wrap',
   },
   price: {
-    fontFamily: 'Lato-Regular',
+    fontFamily: 'Lato-Light',
     fontSize: 20,
     textAlign:'center',
     color:'#000',

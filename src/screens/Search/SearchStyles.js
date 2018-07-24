@@ -13,7 +13,7 @@ image:{
   searchCont: {
     alignSelf: 'center',
     backgroundColor: '#dbdbdb',
-    width: '90%',
+    width: width * .80,
     height: 40,
     flexDirection: 'row',
     justifyContent: 'center',
@@ -29,7 +29,7 @@ image:{
   searchInput: {
     width: 300,
     borderBottomWidth: 0,
-    fontFamily: FONT_NORMAL
+    fontFamily: FONT_NORMAL, 
   },
   radioGroup: {
     alignSelf: 'center',
@@ -38,20 +38,18 @@ image:{
     justifyContent: 'center',
     alignItems: 'flex-start',
     borderRadius: 50,
-    marginBottom: 1
+    marginBottom: 10
   },
   radioCont: {
     width: 70,
-    height: 70,
-    marginTop: 10,              
+    height: 70,                  
     borderRadius: 50,              
-    margin: 5,    
+    margin: 3,    
   },
   radioButton:{
     width: 60,
-    height: 60,
-    marginTop: 10,
-    margin: 5,              
+    height: 60,    
+    margin: 3,              
     borderRadius: 50,              
     justifyContent: 'center',
     alignItems:'center',
