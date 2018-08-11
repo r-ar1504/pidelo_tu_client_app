@@ -4,7 +4,7 @@ import {  Text, View, Image, BackHandler, TextInput, TouchableOpacity, ImageBack
 import { Icon, Container, Content, Header, Left, Body, Right, Button } from 'native-base';
 import style from './ProfileStyle';
 import firebase from 'react-native-firebase';
-
+import { URL } from "../../config/env";
 import { YellowBox } from 'react-native';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 
@@ -17,7 +17,7 @@ export default class Profile extends Component{
 
     const { params } = this.props.navigation.state;
     const user = params ? params.user : null;
-    this.state = { user: user, email: '', password: '', phoneNumber: '', showPassword: true, eyeIcon: 'eye', action: '', text: 'Editar', return: 'Regresar', cancel: '', editable: false, title: '' }    
+    this.state = { user: user, email: '', password: '', phoneNumber: '', showPassword: true, eyeIcon: 'eye', action: 'create', text: 'Editar', return: 'Regresar', cancel: 'arrow-back', editable: false, title: '' }    
     
     /*
     * Binded Functions:
@@ -38,6 +38,9 @@ export default class Profile extends Component{
       }
       else {
         this.setState({ email: item.data.email, password: item.data.password, phoneNumber:item.data.phone, loading: false});
+        // let credential = firebase.auth.EmailAuthProvider.credential(item.data.email, item.data.password)
+        // let user = firebase.auth().currentUser;
+        // user.reauthenticateWithCredential(credential)
       }      
     })
     .catch((error) => {
@@ -58,13 +61,10 @@ export default class Profile extends Component{
     this.props.navigation.goBack();
   };
 
-  async getCurrentUser(id) {
-    let url = 'http://pidelotu.azurewebsites.net/user/'+id;
-    return await fetch(url)
-    .then(res => res.json())
-    .then(json => {
-      return json;
-    }).catch(error => {
+  async getCurrentUser(id) {    
+    return await fetch(`${URL}/user/${id}`)
+    .then(res => { return res.json() })
+    .catch(error => {
       throw new Error(error.message);
     });    
   }
@@ -78,30 +78,31 @@ export default class Profile extends Component{
     }
   }
 
-  confirm(){
+  async confirm(){
     this.setState({ loading: true });   
     let { user } = this.state
-    let data = {email: this.state.email.toLowerCase(), password: this.state.password }                                  
-    this.sendData(user.uid,data).then(async (response) => {  
-      await firebase.auth().currentUser.updateEmail(this.state.email)
+    let data = {email: this.state.email.toLowerCase(), password: this.state.password }       
+    await firebase.auth().currentUser.updateEmail(this.state.email)
       .then((user) => {               
-        user.updatePassword(this.state.password);           
-        Alert.alert("PídeloTú",JSON.stringify(response));                    
-        this.setState({loading: false});        
+        user.updatePassword(this.state.password);                   
+        this.sendData(user.uid,data).then(async (response) => {  
+          Alert.alert("PídeloTú",JSON.stringify(response));                    
+          this.setState({loading: false});  
+        }).catch((error) => {
+          Alert.alert("PídeloTú",error.message);
+          this.setState({loading: false});
+        });         
       })
       .catch(error => {
         this.setState({ loading: false })
         Alert.alert("Pídelo Tú",error.message);
-      });                        
-    }).catch((error) => {
-      Alert.alert("PídeloTú",error.message);
-      this.setState({loading: false});
-    });           
+      });                            
+            
     
   }
 
   async sendData(id,data){    
-    return await fetch('http://pidelotu.azurewebsites.net/user/update/'+id, {
+    return await fetch(`${URL}/updateProfile/${id}`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -118,7 +119,7 @@ export default class Profile extends Component{
 
   back(){
     if (this.state.cancel == 'close') {
-      this.setState({action: '', text: 'Editar', return: 'Regresar', cancel: '', editable: false, title: '', pencil: ''})           
+      this.setState({action: 'create', text: 'Editar', return: 'Regresar', cancel: 'arrow-back', editable: false, title: '', pencil: ''})           
     }
     else {
       this.props.navigation.goBack();
@@ -139,64 +140,69 @@ export default class Profile extends Component{
   }
  
   render(){
-    const { loading, user } = this.state;
-    if(loading) {
-      return <LoadingScreen/>
-    }  
+    const { loading, user } = this.state;      
     return(
 			<Container>        
         <Image source={require('src/assets/images/background.png')} style={style.image}/>
-        <Header style={{ backgroundColor: 'transparent', elevation: 0}}>
-          <Left>
-            <TouchableOpacity onPress={this.back.bind(this)}>                            
-              <Text style={{fontSize:12, color: '#fff', padding: 10, fontFamily: 'Lato-Light'}}>                
-                <Icon name={this.state.cancel} style={{color:'white', fontSize: 25}} />
-                {this.state.return}
-              </Text>
+        <Header style={{ backgroundColor: 'transparent', elevation: 0}}>          
+            <TouchableOpacity onPress={this.back.bind(this)}>
+              <Left style={{flex: 1, alignItems:'center', justifyContent:'center'}}>              
+                <Icon name={this.state.cancel} style={{color:'white', fontSize: 35, alignSelf:'center', }} />                                
+              </Left>
             </TouchableOpacity>
-          </Left>
-          <Body>
-            <Text style={{fontSize:12, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light', alignSelf:'center', marginLeft: 75}}>{this.state.title}</Text>
-          </Body>
+           {/* <TouchableOpacity onPress={this.back.bind(this)}>                            
+                                   <Text style={{fontSize:15, color: '#fff', padding: 10, fontFamily: 'Lato-Regular'}}>                
+                                     <Icon name={this.state.cancel} style={{color:'white', fontSize: 35}} />
+                                     {this.state.return}
+                                   </Text>
+                                 </TouchableOpacity> */}          
+          {/*<Body style={{flex: 1, alignItems:'center', justifyContent:'center'}}>
+            <Text style={{fontSize:15, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Regular', alignSelf:'center', textAlign:'center'}}>{this.state.title}</Text>
+          </Body>*/}
           <Right>
-            <TouchableOpacity onPress={this.edit.bind(this)}>              
-              <Text style={{fontSize:12, color: '#fff', padding: 10, fontFamily: 'Lato-Light'}}>                     
-                <Icon name={this.state.action} style={{color:'white', fontSize: 25}} />         
-                {this.state.text}
-              </Text>
+             <TouchableOpacity onPress={this.edit.bind(this)}>
+              <Left style={{flex: 1, alignItems:'center', justifyContent:'center'}}>              
+                <Icon name={this.state.action} style={{color:'white', fontSize: 35, alignSelf:'center', }} />                                
+              </Left>
             </TouchableOpacity>
+            {/*<TouchableOpacity onPress={this.edit.bind(this)}>              
+                          <Text style={{fontSize:12, color: '#fff', padding: 10, fontFamily: 'Lato-Regular'}}>                     
+                            <Icon name={this.state.action} style={{color:'white', fontSize: 25}} />         
+                            {this.state.text}
+                          </Text>
+                        </TouchableOpacity>*/}
           </Right>                       
         </Header>         
         <View style={style.avatar_section} >
           {(user.photoURL) ? <Image source={{uri:user.photoURL}} style={style.profile}/> : <Image source={require('src/assets/images/ic.png')} style={style.profile}/> }
-          <Text style={{color: '#fff', fontSize:15, paddingTop:10, fontFamily:'Lato-Light'}}>Mi Perfil</Text>
+          <Text style={{color: '#fff', fontSize:15, paddingTop:10, fontFamily:'Lato-Regular'}}>Mi Perfil</Text>
         </View>
-        <Content scrollEnabled={false} disableKBDismissScroll={true} padder style={style.profile_data}>          
+        { loading ? <LoadingScreen/> : <Content scrollEnabled={false} disableKBDismissScroll={true} padder style={style.profile_data}>          
           <View style={[style.profile_element,{paddingTop: 10}]}>
-            <Text style={{fontSize:20, color: '#fff', alignSelf: 'flex-start', paddingLeft: 30, fontFamily: 'Lato-Light'}}>Correo Electronico</Text>
+            <Text style={{fontSize:20, color: '#fff', alignSelf: 'flex-start', paddingLeft: 30, fontFamily: 'Lato-Regular'}}>Correo Electronico</Text>
             <View style={style.profile_input}>
               <FontIcon name="envelope-open" size={25} color="#fff" style={{ paddingRight:10, paddingTop: 8}} />
-               <TextInput style={{fontSize: 15, color: '#11c0f6', fontFamily: 'Lato-Light', width: 200}} underlineColorAndroid={'transparent'} editable={this.state.editable} value={this.state.email} onChangeText={(email) => this.setState({email})}/>
+               <TextInput style={{fontSize: 15, color: '#11c0f6', fontFamily: 'Lato-Regular', width: 200}} underlineColorAndroid={'transparent'} editable={this.state.editable} value={this.state.email} onChangeText={(email) => this.setState({email})}/>
               {(user.providerId != 'facebook.com') ? <Icon name={this.state.pencil} style={{color:'white', fontSize: 25, paddingTop: 8}} /> : <Icon name={'logo-facebook'} style={{color:'white', fontSize: 25, paddingTop: 8}} /> }
             </View>
           </View>
           <View style={style.profile_element}>
-            <Text style={{fontSize:20, color: '#fff', alignSelf: 'flex-start', paddingLeft: 30, fontFamily: 'Lato-Light'}}>Celular</Text>
+            <Text style={{fontSize:20, color: '#fff', alignSelf: 'flex-start', paddingLeft: 30, fontFamily: 'Lato-Regular'}}>Celular</Text>
             <View style={style.profile_input}>
               <FontIcon name="phone" size={25} color="#fff" style={{ paddingRight:10, paddingTop: 8}} />
-              <TextInput style={{fontSize: 15, color: '#11c0f6', fontFamily: 'Lato-Light', width: 200}} underlineColorAndroid={'transparent'} editable={false} value={this.state.phoneNumber}/>
+              <TextInput style={{fontSize: 15, color: '#11c0f6', fontFamily: 'Lato-Regular', width: 200}} underlineColorAndroid={'transparent'} editable={false} value={this.state.phoneNumber}/>
               {/*<Icon name={this.state.pencil} style={{color:'white', fontSize: 25, paddingTop: 8}} onPress={() => {}} />*/}
             </View>
           </View>          
           <View style={style.profile_element}>
-            <Text style={{fontSize:20, color: '#fff', alignSelf: 'flex-start', paddingLeft: 30, fontFamily: 'Lato-Light'}}>Contraseña Actual</Text>
+            <Text style={{fontSize:20, color: '#fff', alignSelf: 'flex-start', paddingLeft: 30, fontFamily: 'Lato-Regular'}}>Contraseña Actual</Text>
             <View style={style.profile_input}>
               <FontIcon name="lock" size={25} color="#fff" style={{ marginRight:10, paddingTop: 8 }} />              
-              <TextInput style={{fontSize: 15, color: '#11c0f6', fontFamily: 'Lato-Light', width: 200 }} underlineColorAndroid={'transparent'} editable={this.state.editable} secureTextEntry={this.state.showPassword} value={this.state.password} onChangeText={(password) => this.setState({password})}/>
+              <TextInput style={{fontSize: 15, color: '#11c0f6', fontFamily: 'Lato-Regular', width: 200 }} underlineColorAndroid={'transparent'} editable={this.state.editable} secureTextEntry={this.state.showPassword} value={this.state.password} onChangeText={(password) => this.setState({password})}/>
               {(user.providerId != 'facebook.com') ? <Icon name={this.state.eyeIcon} style={{color:'white', fontSize: 25, paddingTop: 8}} onPress={this.showPassword.bind(this)} /> : <Icon name={'logo-facebook'} style={{color:'white', fontSize: 25, paddingTop: 8}} /> }             
             </View>
           </View>
-        </Content>
+        </Content> }
 			</Container>
     );
   }

@@ -46,7 +46,7 @@ export default StyleSheet.create({
   buttonText: {    
     color:'#ffffff',
     textAlign:'center',
-    fontFamily: 'Lato-Regular'
+    fontFamily: FONT_NORMAL
   },
    fb: {
     backgroundColor:COLOR_SECONDARY,
@@ -59,7 +59,7 @@ export default StyleSheet.create({
     borderWidth:1,
     borderColor:'white',
     fontFamily: FONT_NORMAL,
-    fontSize: 20,
+    fontSize: 16,
     alignSelf:'center'    
   },
   movil: {
@@ -73,7 +73,7 @@ export default StyleSheet.create({
     borderWidth:1,
     borderColor:'white',
     fontFamily: FONT_NORMAL,
-    fontSize: 20,
+    fontSize: 16,
     alignSelf:'center'    
   },
   signupTextCont : {
@@ -83,11 +83,11 @@ export default StyleSheet.create({
   },
   signupButton: {
     color:'#ffffff',      
-    fontFamily: 'Lato-Regular'  
+    fontFamily: FONT_NORMAL  
   },
   forgotpassButton: {
     color:'#ffffff',        
-    fontFamily: 'Lato-Regular'
+    fontFamily: FONT_NORMAL
   }, 
   image:{
     flex:1,

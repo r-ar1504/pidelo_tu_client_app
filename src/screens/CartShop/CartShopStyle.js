@@ -2,12 +2,12 @@ import { StyleSheet, Dimensions } from 'react-native';
 import { COLOR_PRIMARY, FONT_NORMAL }from 'src/assets/GlobalStyleSheet';
 
 export default StyleSheet.create({
-  background:{    
-    display: 'flex',
-    flex:1,    
+  background:{           
     position: 'absolute',
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: 'center' 
+    top:0,
+    bottom:0,
+    left:0,
+    right:0,    
   },  
   body: {
     flex: 9,
@@ -16,7 +16,7 @@ export default StyleSheet.create({
     justifyContent:'center',    
   },
   meal:{
-    paddingTop:5,
+    marginTop:10,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',        
@@ -25,7 +25,10 @@ export default StyleSheet.create({
   Title: {
     color: '#fff',    
     fontSize: 20,    
-    fontFamily: FONT_NORMAL
+    fontFamily: FONT_NORMAL,
+    flex: 1,
+    flexWrap:'wrap',
+    textAlign:'center'
   }, 
   wrapper: {
 
@@ -44,7 +47,7 @@ export default StyleSheet.create({
   },
   input: {
     fontSize: 14, 
-    fontFamily: 'Lato-Light', 
+    fontFamily: FONT_NORMAL, 
     color: 'white', 
     width: 30, 
     marginLeft: 180, 

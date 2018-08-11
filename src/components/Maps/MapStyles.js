@@ -2,32 +2,36 @@ import { StyleSheet, Dimensions } from 'react-native';
 import { COLOR_PRIMARY }from 'src/assets/GlobalStyleSheet';
 const { width, height } = Dimensions.get('window'); 
 export default StyleSheet.create({
-  container: {        
-    position:'absolute',
-    height: height,
+  container: {            
+    height: height / 3,
     width: width,    
-    flexDirection: 'column',    
+    flexDirection: 'column', 
+    alignItems:'center',
+    justifyContent: 'center'   
+  },
+  fullContainer: {    
+     ...StyleSheet.absoluteFillObject,
+    flex: 1,
+    width: '100%',
+    height: '100%', 
+    justifyContent:'center', 
+    alignItems:'center'     
   },
   map: {    
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+     ...StyleSheet.absoluteFillObject,
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    zIndex:5
   },
   bubble: {
-    backgroundColor: COLOR_PRIMARY,
-    width: 150,
+    backgroundColor: COLOR_PRIMARY,    
     paddingHorizontal: 18,
     paddingVertical: 12,
     borderRadius: 20,
   }, 
-  buttonContainer: {   
-    flexDirection:'row', 
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 450,    
-    padding:15,
+  buttonContainer: {               
+    padding:15,    
     backgroundColor: 'transparent',
   },
   in: {

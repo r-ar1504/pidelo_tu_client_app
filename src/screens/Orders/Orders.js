@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Content, Tabs, Tab } from 'native-base';
-import { BackHandler, Alert, NetInfo } from 'react-native';
+import { BackHandler, Alert, NetInfo, RefreshControl } from 'react-native';
 import styles from './OrderHistoryStyle';
 import OrderHistory from './OrderHistory';
 import OrderComming from './OrderComming';
@@ -8,6 +8,8 @@ import firebase from 'react-native-firebase';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import MealSelected from "../Meal/MealSelected";
 import moment from "moment";
+import { URL } from "../../config/env";
+import { COLOR_PRIMARY, COLOR_SECONDARY } from '../../assets/GlobalStyleSheet';
 
 export default class Orders extends Component {
   constructor(props){
@@ -29,7 +31,7 @@ export default class Orders extends Component {
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);  
     NetInfo.isConnected.addEventListener('connectionChange', this._handleConnectionChange);
-     this.getOrders().then(()=> {}).catch((error) => {Alert.alert("Pídelo Tú",error.message); this.setState({loading:false})});     
+    this.getData()     
   }
 
   componentWillUnmount() {
@@ -40,14 +42,14 @@ export default class Orders extends Component {
   _handleConnectionChange = (isConnected) => {
     NetInfo.isConnected.fetch().then(isConnected => {
       if (!isConnected) {
-        Alert.alert("Pídelo Tú","Necesitas una conexión a internet para ver tus pedidos", [
+        Alert.alert("PídeloTú","Necesitas una conexión a internet para ver tus pedidos", [
           {text: 'Regresar', onPress: () => {this.props.navigation.goBack()}}, 
           {text: 'OK', onPress: () => console.log('OK')}                   
         ],
         {cancelable: false});
       }
       else {
-        this.getOrders().then(()=> {}).catch((error) => {Alert.alert("Pídelo Tú",error.message)});  ;
+        this.getData()
       }
     });
   };
@@ -56,23 +58,27 @@ export default class Orders extends Component {
     this.props.navigation.goBack();
   };
 
+  getData(){
+    this.getOrders().catch((error) => { Alert.alert("Error",error.message) });
+  }
+
   async getOrders(){ 
-    const url = 'http://pidelotu.azurewebsites.net/orders/' + this.state.user.uid;
-     return await fetch(url)
+    const { user } = this.state;
+     return await fetch(`${URL}/orders/${user.uid}`)
         .then((response) => {
           return response.json();
         }).then(response => {
           const historyOrders = [];
-        const nextOrders = [];     
-        for (let i = response.length - 1; i >= 0; i--) {
-          if(response[i].status == 4) {
-            historyOrders.push(response[i]);
+          const nextOrders = [];     
+          for (let i = response.length - 1; i >= 0; i--) {
+            if(response[i].status == 4) {
+              historyOrders.push(response[i]);
+            }
+            else {
+              nextOrders.push(response[i]);
+            }
           }
-          else {
-            nextOrders.push(response[i]);
-          }
-        }
-        this.setState({historyOrders: historyOrders, nextOrders: nextOrders, loading: false});
+          this.setState({historyOrders: historyOrders, nextOrders: nextOrders, loading: false});
         }).catch((error) => {
           throw new Error(error.message)        
         });     
@@ -108,24 +114,31 @@ export default class Orders extends Component {
   }
 
   render() {  
-    const { loading, restaurant, meal, showMeal } = this.state; 
-    if(loading) {
-      return <LoadingScreen/>
-    } 
+    const { loading, restaurant, meal, showMeal } = this.state;      
     if (showMeal) {
       return <MealSelected restaurant={restaurant} meal={JSON.stringify(meal)} dismissMeal={this.dismissMeal.bind(this)} cart={this.cart.bind(this)}/>
     }  
     return (
       <Container style={styles.container}>
         {/*<Image source={require('src/assets/images/background.png')} style={styles.image}/>*/}
-        <Content padder>                                              
+        <Content refreshControl={
+            <RefreshControl
+              refreshing={loading}
+              onRefresh={this.getData.bind(this)}
+              colors={[COLOR_PRIMARY,COLOR_SECONDARY]}
+            />
+          }>                                              
           <Tabs tabBarUnderlineStyle={{opacity: 0}} locked={true}>
-            <Tab heading="Pedidos Anteriores" tabStyle={{backgroundColor:'transparent', borderWidth:1, borderBottomLeftRadius:15, borderTopLeftRadius:15, borderColor: '#dbdbdb'}} activeTabStyle={{backgroundColor: '#11c0f6', borderWidth:1, borderBottomLeftRadius:15, borderTopLeftRadius:15,  borderColor: '#dbdbdb'}}>
+          {
+            this.props.navigation.getParam('screen') == 'NextOrders' ? 
+            <Tab heading="Próximos" tabStyle={{backgroundColor:'transparent', borderWidth:1,  borderColor: '#dbdbdb', padding: 10 }} activeTabStyle={{backgroundColor: '#11c0f6', borderWidth:1,  borderColor: '#dbdbdb'}}>
+              <OrderComming orders={this.state.nextOrders} navigation={this.props.navigation}/>
+            </Tab>          :
+
+            <Tab heading="Pedidos Anteriores" tabStyle={{backgroundColor:'transparent', borderWidth:1, borderColor: '#dbdbdb', padding: 10}} activeTabStyle={{backgroundColor: '#11c0f6', borderWidth:1, borderColor: '#dbdbdb'}}>
               <OrderHistory orders={this.state.historyOrders} openMeal={this.openMeal} />
             </Tab>
-            <Tab heading="Próximos" tabStyle={{backgroundColor:'transparent', borderWidth:1, borderBottomRightRadius:15, borderTopRightRadius:15,  borderColor: '#dbdbdb'}} activeTabStyle={{backgroundColor: '#11c0f6', borderWidth:1, borderBottomRightRadius:15, borderTopRightRadius:15,  borderColor: '#dbdbdb'}}>
-              <OrderComming orders={this.state.nextOrders} navigation={this.props.navigation}/>
-            </Tab>          
+          }                        
           </Tabs>       
         </Content>  
       </Container>

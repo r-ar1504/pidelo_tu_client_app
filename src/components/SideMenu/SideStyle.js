@@ -5,7 +5,7 @@ const side_width = Dimensions.get('window').width*.60;
 const screen_height = Dimensions.get('window').height;
 export default StyleSheet.create({
   sidebar_container: {
-    backgroundColor: 'rgba(66, 103, 178, .75)',
+    backgroundColor: 'rgba(66, 103, 178, .9)',
     zIndex: 999,
     position: 'relative',
     height: screen_height,
@@ -33,10 +33,10 @@ export default StyleSheet.create({
     width: 190,
     flexDirection: "column",
     justifyContent: "flex-start",
-    paddingLeft: 10
+    paddingLeft: 5
   },
   sidebar_link:{
-    marginTop: 10,
+    marginTop: 15,
     justifyContent: 'flex-start',
     alignItems: 'center',
     flexDirection: 'row',

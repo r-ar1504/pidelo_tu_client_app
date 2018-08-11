@@ -6,7 +6,7 @@ import {
    Image
 } from 'react-native';
 
-export default class Logo extends Component<{}> {
+export default class Logo extends Component {
 	render(){
 		return(			
 				<Image  style={{width:230, height: 70, marginVertical: 35, marginTop:80}}

@@ -46,7 +46,7 @@ export default class SideMenu extends Component{
 
   /* User order history. */
   orderHistory(){
-    this.props.navigation.navigate('Orders');
+    this.props.navigation.navigate('Orders', { screen: 'OrdersHistory' });
   }
 
   /* Add Payment method */
@@ -76,57 +76,63 @@ export default class SideMenu extends Component{
 
           <View style={style.sidebar_section_arrow} >
             <TouchableWithoutFeedback onPress={this.dissmisSideMenu}>
-              <FontIcon size={20} name="arrow-left" color="#fff" />
+              <Icon name="arrow-back" style={{color:'white', fontSize: 35, alignSelf:'center', }} />                                
             </TouchableWithoutFeedback>
           </View>
           <View style={style.sidebar_section}>
             {(user.photoURL) ? <Image source={{uri:user.photoURL}} style={style.side_profile}/> : <Image source={require('src/assets/images/ic.png')} style={style.side_profile}/> }
           </View>
           <View style={style.sidebar_section}>
-            <Text style={{fontSize: 20, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>{(user.displayName != null) ? user.displayName : user.providerData[0].phoneNumber}</Text>
+            <Text style={{fontSize: 25, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Regular'}}>{(user.displayName != null) ? user.displayName : user.providerData[0].phoneNumber}</Text>
           </View>
           <View style={style.sidebar_section} >
           <TouchableWithoutFeedback>
-            <Text style={{fontSize: 20, color: '#fff', textAlign: 'left', borderBottomWidth: 1, borderBottomColor: '#fff', paddingTop: 20, width: 200, paddingBottom: 10, fontFamily: 'Lato-Light'}}>Mi Perfil</Text>
+            <Text style={{fontSize: 25, color: '#fff', textAlign: 'left', borderBottomWidth: 1, borderBottomColor: '#fff', paddingTop: 20, width: 200, paddingBottom: 10, fontFamily: 'Lato-Regular'}}>Mi Perfil</Text>
           </TouchableWithoutFeedback>
           </View>
           <View style={style.sidebar_links}>
             <TouchableWithoutFeedback onPress={this.home.bind(this,user)}>
               <View style={style.sidebar_link}>
-                <FontIcon name="home" size={15} color="#fff" style={{marginTop: 8, paddingRight:4}} />
-                <Text style={{fontSize: 20, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>Inicio</Text>
+                <Icon name="home" style={{marginTop: 8, paddingRight:4, fontSize: 25, color: '#fff'}} />
+                <Text style={{fontSize: 20, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Regular'}}>Inicio</Text>
               </View>
             </TouchableWithoutFeedback>
 
             <TouchableWithoutFeedback onPress={this.accountSettings.bind(this,user)}>
               <View style={style.sidebar_link}>
-                <FontIcon name="cogs" size={15} color="#fff"  style={{marginTop: 8, paddingRight:3}} />
-                <Text style={{fontSize: 20, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>Ajustes de perfil</Text>
+                <Icon name="cog" style={{marginTop: 8, paddingRight:4, fontSize: 25, color: '#fff'}} />
+                <Text style={{fontSize: 20, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Regular'}}>Ajustes de perfil</Text>
               </View>
             </TouchableWithoutFeedback>
 
             <TouchableWithoutFeedback onPress={this.orderHistory}>
               <View style={style.sidebar_link}>
-                <FontIcon name="list-ol" size={15} color="#fff" style={{marginTop: 8, paddingRight:4}} />
-                <Text style={{fontSize: 20, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>Historial pedidos</Text>
+                <Icon name="list" style={{marginTop: 8, paddingRight:4, fontSize: 25, color: '#fff'}} />
+                <Text style={{fontSize: 20, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Regular'}}>Historial pedidos</Text>
               </View>
             </TouchableWithoutFeedback>
 
             <TouchableWithoutFeedback onPress={this.paymentMethod}>
               <View style={style.sidebar_link}>
-                <Icon active name="cash" style={{marginTop: 8, paddingRight:4, fontSize: 15, color: '#fff'}} />
-                <Text style={{fontSize: 20, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>Agregar tarjeta</Text>
+                <Icon active name="cash" style={{marginTop: 8, paddingRight:4, fontSize: 25, color: '#fff'}} />
+                <Text style={{fontSize: 20, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Regular'}}>Formas de pago</Text>
               </View>
             </TouchableWithoutFeedback>
 
-              <TouchableWithoutFeedback onPress={this.openCart}>
+            <TouchableWithoutFeedback onPress={this.openCart}>
               <View style={style.sidebar_link}>
-                <Icon active name="cart" style={{marginTop: 8, paddingRight:4, fontSize: 15, color: '#fff'}} />
-                <Text style={{fontSize: 20, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Light'}}>Carrito</Text>
+                <Icon active name="cart" style={{marginTop: 8, paddingRight:4, fontSize: 25, color: '#fff'}} />
+                <Text style={{fontSize: 20, color: '#fff', paddingTop: 10, fontFamily: 'Lato-Regular'}}>Carrito</Text>
+              </View>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={this.logOut}>
+              <View style={style.sidebar_link}>
+                <Icon active name="log-out" style={{marginTop: 8, paddingRight:4, fontSize: 25, color: '#fff'}} />
+                <Text style={{fontSize: 20, color: '#fff', paddingTop: 10, textAlign: 'center', borderBottomWidth: 1, borderBottomColor: '#fff', fontFamily: 'Lato-Regular'}}>Cerrar Sesión</Text>
               </View>
             </TouchableWithoutFeedback>
             <Footer style={{backgroundColor: 'transparent'}}>
-                <Text style={{fontSize: 20, color: '#fff', textAlign: 'left', borderBottomWidth: 1, borderBottomColor: '#fff', paddingTop: 20,  paddingBottom: 10, fontFamily: 'Lato-Light'}}onPress={this.logOut}>Cerrar Sesión</Text>
+                
             </Footer>
           </View>
       </View>

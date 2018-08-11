@@ -3,16 +3,19 @@ import { COLOR_PRIMARY, FONT_NORMAL } from 'src/assets/GlobalStyleSheet';
 
 export default styles = StyleSheet.create({
   container : {
-    ...StyleSheet.absoluteFillObject
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',    
   },
   body: {
-    flex: 9,
-    flexDirection:'row',
+    flex: 9,    
     alignItems:'center',
     justifyContent:'center',    
   },
   logo: {
-    width:105,
-    height:105
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf:'center'
   }
 });

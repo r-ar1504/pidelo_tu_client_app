@@ -34,10 +34,12 @@ export default StyleSheet.create({
   },
   restaurantTitle: {
     color: '#000', 
-    fontFamily: 'Lato-Light',  
+    fontFamily: FONT_NORMAL,  
     opacity: 0.8,
-    fontSize: 40,  
-    letterSpacing: 10      
+    fontSize: 30,  
+    letterSpacing: 5,
+    flex:3,
+    flexWrap:'wrap'      
   },
   titleCont:{
     marginTop: 20,
@@ -48,7 +50,7 @@ export default StyleSheet.create({
   titleText:{
     color: '#000',
     fontSize: 20,   
-    fontFamily: 'Lato-Light'
+    fontFamily: FONT_NORMAL
   },
   wrapper: {
 
@@ -97,12 +99,12 @@ export default StyleSheet.create({
     flexWrap: 'nowrap'
   },
   description:{
-    fontFamily: 'Lato-Light',
+    fontFamily: FONT_NORMAL,
     fontSize:20,
     color:'#000',
   },
   price: {
-    fontFamily: 'Lato-Light',
+    fontFamily: FONT_NORMAL,
     fontSize: 20,
     textAlign:'center',
     color:'#000',

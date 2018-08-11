@@ -28,27 +28,25 @@ export default StyleSheet.create({
     resizeMode:'contain'    
   },
   input: {
-    fontSize: 16, 
+    fontSize: 20, 
     fontFamily: FONT_NORMAL, 
     color: 'white', 
-    width: 30, 
-    marginLeft: 180, 
+    width: 30,     
     alignSelf: 'center', 
     textAlign: 'center', 
     marginBottom: 10
   },
   button: {        
-    width: 25,
-    height: 25,    
-    marginLeft: 5,    
-    borderRadius: 50,
-    borderWidth: 1,
+    width: 45,
+    height: 45,    
+    marginLeft: 4,    
+    borderRadius: 45,
+    borderWidth: 2.5,
     borderColor: '#fff',
     backgroundColor:'transparent',
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent:'center'
-
   },  
   radioGroup: {
     alignSelf: 'center',

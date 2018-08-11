@@ -5,7 +5,7 @@ import { Hoshi } from 'react-native-textinput-effects';
 import styles from './RegisterStyle';
 import firebase from 'react-native-firebase'; 
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
-
+import { URL } from "../../config/env";
 export default class Form extends React.Component {
   static navigationOptions = {
      headerStyle:{
@@ -55,7 +55,7 @@ export default class Form extends React.Component {
   }
 
   async sendData(data){
-    return await fetch('http:/pidelotu.azurewebsites.net/user', {
+    return await fetch(URL+'/user', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

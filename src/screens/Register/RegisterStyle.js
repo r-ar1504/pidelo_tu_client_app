@@ -87,7 +87,7 @@ export default StyleSheet.create({
     fontSize:18,
     color:'white',
     padding:20, 
-    fontFamily: 'Lato-Light'  
+    fontFamily: FONT_NORMAL  
   },  
   circle: {
     width: 100,

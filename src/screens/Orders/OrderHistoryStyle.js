@@ -18,7 +18,7 @@ export default StyleSheet.create({
   container : {    
     flex: 1,
     alignItems:'center',
-    justifyContent :'flex-start',
+    justifyContent :'center',
     flexDirection:'column',
     backgroundColor: '#3f51b5',
     paddingTop: 10
@@ -87,7 +87,7 @@ export default StyleSheet.create({
   },
   deliveryProgress: {
     width: width * .90,
-    height: 150,       
+    height: height * .300,       
     borderLeftWidth: 1,
     borderRightWidth: 1,
     borderBottomWidth: 1,

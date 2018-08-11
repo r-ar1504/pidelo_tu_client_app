@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
-import { Container, Header, Content, Left, Body, Item } from 'native-base';
+import { Container, Header, Content, Left, Body, Item, Icon } from 'native-base';
 import { Text, View, Image, TextInput, BackHandler, TouchableWithoutFeedback, ImageBackground, Alert, Dimensions } from 'react-native';
 import { RadioGroup, RadioButton } from 'react-native-flexi-radio-button';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import Swiper from 'react-native-swiper';
-import FontIcon from 'react-native-vector-icons/FontAwesome';
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import MealSelected from "../Meal/MealSelected";
 import moment from "moment";
 import style from './SearchStyles';
+import { URL } from '../../config/env';
 const { width } = Dimensions.get('window')
 export default class Search extends Component{
   constructor(props){
@@ -82,7 +81,7 @@ export default class Search extends Component{
               <View style={style.slide} key={item.id}>
                 <View style={style.grid}>
                   <TouchableWithoutFeedback onPress={this.openRest.bind(this,item)}>
-                    <Image source={{uri:'http://pidelotu.azurewebsites.net/images/logos/'+item.logo}} style={style.mealImg}/>
+                    <Image source={{uri:`${URL}/images/logos/${item.logo}`}} style={style.mealImg}/>
                   </TouchableWithoutFeedback>
                   <View style={style.infoCont}>
                     <Text style={style.description}>{item.name}</Text>
@@ -98,12 +97,12 @@ export default class Search extends Component{
                 <View style={style.slide} key={item.id}>                                          
                   <View style={style.grid}>                  
                     <TouchableWithoutFeedback onPress={this.openMeal.bind(this,item,item.restaurant_id,item.open_time,item.close_time,item.not_working)}>
-                      <Image source={{uri:'http://pidelotu.azurewebsites.net/images/meals/'+item.image}} style={style.mealImg}/>
+                      <Image source={{uri:`${URL}/images/meals/${item.image}`}} style={style.mealImg}/>
                     </TouchableWithoutFeedback>
                     <View style={style.infoCont}>
-                      <Image  style={style.logo} source={{uri:'http://pidelotu.azurewebsites.net/images/logos/'+item.logo}} /><Text style={style.description}>{item.description}</Text>
+                      <Image  style={style.logo} source={{uri:`${URL}/images/logos/${item.logo}`}} /><Text style={style.description}>{item.description}</Text>
                       <View style={{flexDirection:'row', alignItems:'flex-end', alignSelf: 'flex-end'}}>
-                        <Icon active name='time' style={{color:'black', fontSize: 15}} /><Text style={{fontFamily: 'Lato-Light', color:'#000'}}>{item.preparation_time}MIN</Text>
+                        <Icon active name='time' style={{color:'black', fontSize: 15}} /><Text style={{fontFamily: 'Lato-Regular', color:'#000'}}>{item.preparation_time}MIN</Text>
                       </View>
                     </View>                  
                   </View>
@@ -116,10 +115,10 @@ export default class Search extends Component{
                 <View style={style.slide} key={item.id}>                                          
                   <View style={style.grid}>
                     <TouchableWithoutFeedback onPress={this.openRest.bind(this,item)}>
-                      <Image source={{uri:'http://pidelotu.azurewebsites.net/images/restaurants/categories/'+item.dashboard_banner}} style={style.mealImg}/>
+                      <Image source={{uri:`${URL}/images/restaurants/categories/${item.dashboard_banner}`}} style={style.mealImg}/>
                     </TouchableWithoutFeedback>
                     <View style={style.infoCont}>
-                      <Image  style={{resizeMode:'center', width: 35, height:35, marginLeft: 10}} source={{uri:'http://pidelotu.azurewebsites.net/images/logos/'+item.logo}} /><Text style={style.description}>{item.details}</Text>
+                      <Image  style={{resizeMode:'center', width: 35, height:35, marginLeft: 10}} source={{uri:`${URL}/images/logos/${item.logo}`}} /><Text style={style.description}>{item.details}</Text>
                     </View>                  
                   </View>
                 </View>
@@ -157,39 +156,35 @@ export default class Search extends Component{
 
   async search(){ 
     this.setState({isFilter:true});  
-    let url = 'http://pidelotu.azurewebsites.net/getMealsBy/' + this.state.selectedItem + '/' + this.state.text;    
-      return await fetch(url)
-            .then(response => {                                  
-              return response.json();              
-            }).catch(error => {              
-              throw new Error(error.message);
-            });                
+    let { selectedItem, text } = this.state    
+    return await fetch(`${URL}/getMealsBy/${selectedItem}/${text}`).then(response => {                                  
+      return response.json();              
+    }).catch(error => {              
+      throw new Error(error.message);
+    });                
   }
 
   render(){ 
-    const { items,restaurant, meal, showMeal, isFilter, backgroundColorRestaurant, backgroundColorMeal, editable, text, backgroundColorNear, backgroundColorFood } = this.state;
-    if (isFilter){
-      return <LoadingScreen/>
-    }
+    const { items,restaurant, meal, showMeal, isFilter, backgroundColorRestaurant, backgroundColorMeal, editable, text, backgroundColorNear, backgroundColorFood } = this.state;    
     if (showMeal) {
       return <MealSelected restaurant={restaurant} meal={JSON.stringify(meal)} dismissMeal={this.dismissMeal.bind(this)} cart={this.cart.bind(this)}/>
     }   
     return(
       <Container>
         <ImageBackground source={require('src/assets/images/background.png')} style={style.image}/>
-        <Header span={true} style={{ backgroundColor: 'transparent', elevation: 0, justifyContent: 'space-around', width: width, flexDirection: 'column'}}>
-          <View style={{ flexDirection: 'row' }}>
-          <TouchableWithoutFeedback onPress={ () => {this.props.navigation.navigate('Home')}}>                         
-              <View style={{marginLeft:10, paddingTop: 30}}>
-                <Icon name="arrow-left" size={20} color="#fff"/>                               
-              </View>                                    
-          </TouchableWithoutFeedback>
-          <Body style={{ flex: 1, marginLeft:10, paddingTop: 20 }}>
-            <Item style={style.searchCont}>
-              <Icon name="search" size={20} color="#999999" style={{marginLeft:80}}/>
-              <TextInput editable={editable} maxLength={150} underlineColorAndroid={'transparent'} placeholder={"Busqueda"} value={text} onChangeText={(text) => {this.setState({text})}} style={style.searchInput} onSubmitEditing={() => {this.search().then((response) => {this.setState({items:response, isFilter:false}); }).catch((error) => { Alert.alert("PídeloTú",error.message) })}}/>
-            </Item>
-          </Body>
+          <Header span={true} style={{ backgroundColor: 'transparent', elevation: 0, justifyContent: 'space-around', width: width, flexDirection: 'column'}}>
+            <View style={{ flexDirection: 'row' }}>
+              <TouchableWithoutFeedback onPress={ () => {this.props.navigation.navigate('Home')}}>                         
+                <View style={{marginLeft:10, paddingTop: 20}}>
+                  <Icon name="arrow-back" style={{color:'white', fontSize: 35, alignSelf:'center' }} />                                
+                </View>                                    
+              </TouchableWithoutFeedback>
+              <Body style={{ flex: 1, marginLeft:10, paddingTop: 20 }}>
+                <Item style={style.searchCont}>
+                  <Icon name="search" style={{marginLeft:80 }} />                                
+                <TextInput editable={editable} maxLength={150} underlineColorAndroid={'transparent'} placeholder={"Busqueda"} value={text} onChangeText={(text) => {this.setState({text})}} style={style.searchInput} onSubmitEditing={() => {this.search().then((response) => {this.setState({items:response, isFilter:false}); }).catch((error) => { Alert.alert("PídeloTú",error.message) })}}/>
+              </Item>
+            </Body>
           </View>
           <View style={{flexDirection: 'row', width: width}}>
             <RadioGroup onSelect = {(index, value) => this.onSelect(index, value)} selectedIndex={0} size={15} style = {style.radioGroup}>
@@ -219,11 +214,11 @@ export default class Search extends Component{
             </RadioGroup>
           </View>
         </Header>        
-        <Content style={{flex: 1}}>          
+        { isFilter ? <LoadingScreen/> : <Content style={{flex: 1}}>          
           <Swiper style={style.wrapper} height={390} activeDotColor={'#11c0f6'} key={items.length}>
             {this.renderItems()}     
           </Swiper>          
-        </Content>
+        </Content> }
       </Container>
     );
   }

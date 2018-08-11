@@ -115,8 +115,8 @@ android {
         applicationId "com.pidelo_tu_client"
         minSdkVersion 17
         targetSdkVersion 26        
-        versionCode 3
-        versionName "3.1"
+        versionCode 4
+        versionName "4.1"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }

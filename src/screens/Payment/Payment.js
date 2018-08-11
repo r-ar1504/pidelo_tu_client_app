@@ -1,20 +1,23 @@
 import React, { Component } from 'react';
-import { View, BackHandler, ImageBackground, Alert, TouchableOpacity, Text } from 'react-native';
-import { Header, Left, Body, Right, Icon } from "native-base";
+import { BackHandler, Alert, TouchableOpacity, Text, RefreshControl } from 'react-native';
+import { Container, Header, Left, Body, Right, Icon, List, Tabs, Tab, TabHeading, View, Content } from "native-base";
 import firebase from "react-native-firebase";
 import styles from './PaymentStyle';
 import Form from './Form';
-import { NavigationActions } from "react-navigation";
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
-
+import { URL } from "../../config/env";
+import { COLOR_PRIMARY, COLOR_SECONDARY, FONT_NORMAL } from "../../assets/GlobalStyleSheet";
+import CardList from '../../components/CardList/CardList';
 export default class Payment extends Component {
 
   constructor(props){
     super(props);
 
-    this.state = { user:firebase.auth().currentUser }   
-    
-    
+    this.state = { user:firebase.auth().currentUser, cards: [], loading: true }       
+  }
+
+  componentWillMount(){
+    this.refreshData()
   }
 
   componentDidMount() {
@@ -30,19 +33,43 @@ export default class Payment extends Component {
     this.props.navigation.navigate(params.screen);
   };  
 
-  confirm(card) {
-    const { params } = this.props.navigation.state;
-    this.store(card).then(response => {
-      if (response.message === 'success') {
-        this.setState({loading:false});
-        this.props.navigation.navigate(params.screen);
-      }  
-    }).catch((error) => { Alert.alert("PídeloTú", error.message) });
+  refreshData(){
+    this.get().then(response => {      
+      this.setState({ cards:response.cards, loading: false })
+    }).catch(error => {
+      this.setState({ loading: false })
+      Alert.alert("Error",error.message)
+    })
   }
 
-  async store(card) {
+  confirm(card,month,year,cv) {
+    const { params } = this.props.navigation.state;
     this.setState({loading:true});
-    return await fetch('http://pidelotu.azurewebsites.net/payment', {
+    this.store(card,month,year,cv).then(response => {
+      if (response.message === 'success') {
+        this.setState({loading:false});
+        Alert.alert("PídeloTú","Tu forma de pago se guardó correctamente")
+        this.props.navigation.navigate(params.screen);
+      }  
+    }).catch((error) => { 
+      Alert.alert("PídeloTú", error.message); 
+      this.setState({loading:false}); 
+    });
+  }
+
+  async get(){
+    let { user } = this.state;
+    return await fetch(`${URL}/payment/${user.uid}`)
+    .then(response => {
+      return response.json()
+    })
+    .catch(error => {
+      throw new Error(error.message)
+    })
+  }
+
+  async store(card,month,year,cv) {    
+    return await fetch(`${URL}/payment`, {
       method:'POST',
       headers: {
         'Accept': 'application/json',
@@ -50,40 +77,95 @@ export default class Payment extends Component {
       },
       body: JSON.stringify({        
         user_id:this.state.user.uid,
-        card_number:card,        
+        card_number:card,  
+        expMonth:month,
+        expYear:year,
+        cvc:cv      
       })
-    }).then(response => response.json()).then(response => {            
-      return response;      
-    }).catch(error => {
-      this.setState({loading:false});
+    })
+    .then(response => { return response.json() })
+    .catch(error => {      
       throw new Error(error.message);
     })
   }
 
-   render() { 
-    const { params } = this.props.navigation.state;
+  async remove(card){    
+    return await fetch(`${URL}/card/delete/${card}`,{
+      method:'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'token': this.state.user.uid,
+      }
+    }).then(response => {
+      return response.json()
+    }).catch(error => {
+      throw new Error(error.message)
+    })
+  }
 
-    if(this.state.loading) {
-    return <LoadingScreen/>      
-    }     
+  removeCard(item,index){
+    this.setState({loading:true});    
+      let { cards } = this.state; 
+      let array = cards;                
+      this.remove(item).then(async (res) => {
+        if (res.message == 'Success') {          
+          array.splice(index,1);             
+          this.setState({cards:array, loading:false}) 
+        }                
+      }).catch((error) => {
+        Alert.alert("Error",error.message);
+        this.setState({loading:false}) 
+      });
+  }
+
+  changeCard(){
+    return ;
+  }
+
+  render() { 
+    const { params } = this.props.navigation.state;
+    const { loading, cards } = this.state;        
 		return(      
-			<View style={styles.container}>
-        <ImageBackground source={require('src/assets/images/background.png')} style={styles.background}>
-        <Header style={{ backgroundColor: 'transparent', elevation: 0}}>
-          <Left>
-              <TouchableOpacity onPress={() => { this.props.navigation.navigate(params.screen) }}>
-                  <Icon name="arrow-back" style={{color:'white', fontSize: 25}} />                  
-              </TouchableOpacity>
-          </Left>
-          <Body>              
+      <Container style={{backgroundColor: COLOR_SECONDARY}} refreshControl={
+        <RefreshControl
+           refreshing={loading}
+           onRefresh={this.refreshData.bind(this)}
+           colors={[COLOR_PRIMARY,COLOR_SECONDARY]}
+         />
+       }>        
+        <Header hasTabs style={{backgroundColor:'transparent'}}>
+          <TouchableOpacity onPress={() => { this.props.navigation.navigate(params.screen) }}>
+            <Left style={{flex: 1, alignItems:'center', justifyContent:'center'}}>              
+              <Icon name="arrow-back" style={{color:'white', fontSize: 35, alignSelf:'center', }} />                                
+            </Left>
+          </TouchableOpacity>
+          <Body style={{flex: 1, alignItems:'center', alignSelf:'center'}}>   
+            <Text style={styles.MainText}>Formas de Pago</Text>           
           </Body>
-          <Right>
-                        
+          <Right style={{flex: 1}}>
+                          
           </Right>
         </Header>
-				  <Form confirm={this.confirm.bind(this)}/>
-        </ImageBackground>
-			</View>      
+        <Tabs>
+          <Tab heading={ <TabHeading style={{ backgroundColor: COLOR_SECONDARY}}><Icon name="card" /><Text style={{color:'white', fontSize: 18, fontFamily: FONT_NORMAL, marginLeft: 6}}>Tarjetas</Text></TabHeading>}>
+            <Content refreshControl={
+             <RefreshControl
+                refreshing={loading}
+                onRefresh={this.refreshData.bind(this)}
+                colors={[COLOR_PRIMARY,COLOR_SECONDARY]}
+              />
+            }>
+              <List>
+                { <CardList cards={cards} removeCard={this.removeCard.bind(this)} changeCard={this.changeCard.bind(this)}/> }
+              </List>
+            </Content>
+          </Tab>            
+          <Tab heading={ <TabHeading style={{ backgroundColor: COLOR_SECONDARY}}><Icon name="add" /><Text style={{color:'white', fontSize: 18, fontFamily: FONT_NORMAL, marginLeft: 6}}>Agregar Tarjeta</Text></TabHeading>}>
+            { loading ? <LoadingScreen/> : <Form confirm={this.confirm.bind(this)}/>}
+          </Tab>
+        </Tabs>                  
+      </Container>			     
 		)
 	}
  }

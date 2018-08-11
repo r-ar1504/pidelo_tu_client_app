@@ -10,6 +10,7 @@ export default StyleSheet.create({
     backgroundColor: '#fff',
   },
   searchBox: {
+    flex:1,
     alignSelf: 'center',
     flexDirection: 'row',
     justifyContent: 'center',

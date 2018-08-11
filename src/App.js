@@ -20,7 +20,7 @@ import Orders from './screens/Orders/Orders';
 import MealSelected from './screens/Meal/MealSelected';
 import ActiveOrder from './screens/ActiveOrder/ActiveOrder';
 import CartShop from './screens/CartShop/CartShop';
-
+import FullMaps from './components/Maps/FullMaps';
 const HomeDrawer = DrawerNavigator({
   Home:{
     screen: Home,
@@ -44,6 +44,9 @@ const HomeDrawer = DrawerNavigator({
   Maps:{
    screen: Maps,
   }, 
+  FullMap:{
+    screen: FullMaps
+  },
   Restaurant:{
     screen: Restaurant
   },

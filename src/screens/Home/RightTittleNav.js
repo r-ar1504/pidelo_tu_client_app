@@ -17,6 +17,7 @@ export default class SearchButton extends Component {
   render(){
     return(
       <View style={style.rightHead}>
+        {/* <Icon name="shopping-cart" size={35} color="#999999" style={{ paddingRight:10}} /> */}
         <Image source={require('src/assets/images/ic.png')} style={{width: 30,  height: 30 }}/>
       </View>
     );

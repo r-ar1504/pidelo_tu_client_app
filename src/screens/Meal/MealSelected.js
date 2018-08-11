@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { Alert, Text, View, Image, BackHandler, TextInput, TouchableOpacity, ImageBackground, AsyncStorage, TouchableWithoutFeedback } from 'react-native';
+import { Alert, Text, View, Image, BackHandler, TextInput, TouchableOpacity, ImageBackground, AsyncStorage, TouchableWithoutFeedback, Dimensions } from 'react-native';
 import { Icon, Container, Content, Header, Left, Body, Right } from 'native-base';
 import style from './MealStyle';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
 import { RadioGroup, RadioButton } from 'react-native-flexi-radio-button';
 import CheckBox from 'react-native-checkbox-heaven'
+import { URL } from "../../config/env";
 
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
-
+const { width } = Dimensions.get('window')
 const tempArray = [];
 const Ctotal = 0;
 export default class MealSelected extends Component{
@@ -23,8 +24,8 @@ export default class MealSelected extends Component{
       user:firebase.auth().currentUser,
       meal:JSON.parse(this.props.meal),                  
       loading: false,       
-      total: 0,  
-      price: 0,
+      total: 0.0,  
+      price: 0.0,
       subtype: 0,
       ingredients: []                
     }
@@ -41,7 +42,9 @@ export default class MealSelected extends Component{
     else {
       Ctotal = meal.price;
       this.setState({total: Ctotal, price: Ctotal});      
-    }         
+    }
+
+    // Alert.alert("Restaurant_ID",this.props.restaurant.toString())             
   }
 
   componentWillUnmount() {
@@ -49,7 +52,7 @@ export default class MealSelected extends Component{
   }
 
   onBackButtonPressAndroid = () => {        
-    return true;
+    return true
   }
 
   IncrementItem = () => {
@@ -70,7 +73,7 @@ export default class MealSelected extends Component{
   }
 
   onSelect(index, selectedItem){    
-    Ctotal = (selectedItem.price * this.state.number);
+    Ctotal = (selectedItem.price * this.state.number).toFixed(2);
     this.setState({total:Ctotal, price: selectedItem.price, subtype: selectedItem.id});
     tempArray = [];    
   }
@@ -88,52 +91,41 @@ export default class MealSelected extends Component{
   }  
 
   async accept(){      
-    this.setState({loading: true});
-    this.store().then(async (response) => { 
-      this.setState({loading:false});  
-      await AsyncStorage.setItem('restaurant',this.props.restaurant.toString());          
-      Alert.alert("Pídelo Tú","Se a agregado tu pedido al carrito, ¿Deseas seguir comprando?",[
-        {text: 'Sí', onPress: () => {this.props.dismissMeal()}},
-        {text: 'Finalizar compra', onPress: () => {this.props.cart()}}
-      ],{cancelable: false});                       
-    }).catch(error => {
-      this.setState({loading: false});
-      Alert.alert("Pídelo Tú",error.message);
-    });  
-    /*
+    this.setState({loading: true});             
     let restaurant = await AsyncStorage.getItem('restaurant')
-    let array = JSON.parse(await AsyncStorage.getItem('cart'))
-    let { meal, user, number, subtype }  = this.state;
-    if (restaurant == null) {
-      this.store().then(async (response) => { 
-        this.setState({loading:false});  
+    /*let array = JSON.parse(await AsyncStorage.getItem('cart'))
+    let { meal, user, number, subtype }  = this.state;*/    
+    if (!restaurant) {
+      this.store(this.props.restaurant.toString()).then(async (response) => { 
+        this.setState({loading:false});        
         await AsyncStorage.setItem('restaurant',this.props.restaurant.toString());          
-        Alert.alert("Pídelo Tú","Se a agregado tu pedido al carrito, ¿Deseas seguir comprando?",[
-          {text: 'Sí', onPress: () => {this.props.dismissMeal()}},
-          {text: 'Finalizar compra', onPress: () => {this.props.cart()}}
-        ],{cancelable: false});                       
-      }).catch(error => {
-        this.setState({loading: false});
-        Alert.alert("Pídelo Tú",error.message);
-      });  
-    }
-    else {
-      if (restaurant == this.props.restaurant.toString()) {
-        this.store().then(async (response) => {  
-          this.setState({loading:false}); 
-          let i = array.id  
-          let data = { id:i+1,meal_id:meal.id,user_id:user.uid,total:Ctotal,quantity:number,description:meal.description,sub_type_id:subtype,ingredients:JSON.stringify(tempArray)}
-          array.push(data)
-          await AsyncStorage.removeItem('cart')
-          await AsyncStorage.setItem('cart',JSON.stringify(array))
-          Alert.alert("Pídelo Tú","Se a agregado tu pedido al carrito, ¿Deseas seguir comprando?",[
+        if (response.message == 'success'){
+          Alert.alert("PídeloTú","Se a agregado tu pedido al carrito, ¿Deseas seguir comprando?",[
             {text: 'Sí', onPress: () => {this.props.dismissMeal()}},
             {text: 'Finalizar compra', onPress: () => {this.props.cart()}}
-          ],{cancelable: false});                       
-        }).catch(error => {
-          this.setState({loading: false});
-          Alert.alert("Pídelo Tú",error.message);
-        }); 
+          ],{cancelable: false});
+        }                
+      }).catch(error => {
+        this.setState({loading: false});
+        Alert.alert("Error",error.message);
+      }); 
+      Alert.alert("PídeloTú","No hay pedidos pendientes")
+    }
+    else {      
+      if (parseInt(restaurant) == this.props.restaurant) {
+          this.store(this.props.restaurant.toString()).then(async (response) => { 
+            this.setState({loading:false});                    
+            if (response.message == 'success'){
+              Alert.alert("PídeloTú","Se a agregado tu pedido al carrito, ¿Deseas seguir comprando?",[
+                {text: 'Sí', onPress: () => {this.props.dismissMeal()}},
+                {text: 'Finalizar compra', onPress: () => {this.props.cart()}}
+              ],{cancelable: false});
+            }                
+          }).catch(error => {
+            this.setState({loading: false});
+            Alert.alert("Error",error.message);
+          });       
+        Alert.alert("PídeloTú","Puedes agregar más elementos al carrito")
       }
       else {
         Alert.alert("Pídelo Tú","Tienes elementos en tu carrito sin procesar debes finalizar la compra para poder agregar este elemento.",[
@@ -141,14 +133,13 @@ export default class MealSelected extends Component{
           {text: 'Ir al carrito', onPress: () => {this.props.cart()}}
         ],{cancelable: false});                       
       }
-    }*/
-                 
+    }             
   }
 
   
-  async store(){  
+  async store(restaurant){  
     let { meal, user, number, subtype }  = this.state;    
-    return await fetch('http://pidelotu.azurewebsites.net/cart', {
+    return await fetch(`${URL}/cart`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
@@ -159,50 +150,16 @@ export default class MealSelected extends Component{
         user_id:user.uid,
         total:Ctotal,
         quantity:number,
-        sub_type_id:subtype,
-        ingredients:JSON.stringify(tempArray)                         
+        sub_type_id:subtype,        
+        ingredients:JSON.stringify(tempArray),
+        restaurant_id:restaurant,                         
       })
-    }).then(response => { return response.json()})
-      .catch(error => {
-        throw new Error(error.messages);
+    }).then(response => {       
+      return response.json()      
+    }).catch(error => {
+      throw new Error(error.message);
     });
-  }
-
-  renderImage(){
-    let { meal } = this.state;
-    if(meal.image){
-      return <ImageBackground resizeMode="cover" source={{uri:'http://pidelotu.azurewebsites.net/images/meals/'+meal.image}} style={{ width: "100%", height: 120 }}>
-              <Header span={true} style={{ backgroundColor: 'transparent', elevation: 0, height: 120,flexDirection: 'row'}}>    
-                <TouchableWithoutFeedback onPress={ () => {this.props.dismissMeal()}}>             
-                  <Left style={{marginLeft:10, paddingTop: 10, alignItems:'flex-start'}}>                    
-                    <FontIcon name="arrow-left" size={20} color="#fff"/>                                   
-                  </Left>          
-                </TouchableWithoutFeedback>
-                <Right style={{paddingTop: 10, alignItems:'center'}}>                  
-                  <Icon active name='time' style={{color:'white', fontSize: 25, alignSelf:'center'}} /><Text style={{marginLeft: 5, fontFamily: 'Lato-Light', color:'#fff', fontSize: 16, textAlign: 'center'}}>00:{meal.preparation_time}:00</Text>                  
-                </Right>                  
-              </Header> 
-            </ImageBackground>    
-    }
-    else {
-      return <ImageBackground resizeMode="cover" source={require('src/assets/images/ic.png')} style={{ width: "100%", height: 120 }}>
-              <Header span={true} style={{ backgroundColor: 'transparent', elevation: 0, height: 120}}>    
-                <TouchableWithoutFeedback onPress={ () => {this.props.navigation.navigate('Home')}}>             
-                  <Left style={{justifyContent:'center', alignItems:'flex-start'}}>
-                    <View style={{marginLeft:10, flex: 1, paddingTop: 20, flexDirection:'row' }}>
-                      <Icon name="arrow-back" style={{color:'white', fontSize: 25, alignSelf:'center'}} />                                  
-                    </View>                        
-                  </Left>          
-                </TouchableWithoutFeedback>
-                <Right style={{justifyContent:'center', alignItems:'flex-start'}}>
-                  <View style={{marginLeft:10, flex: 1, paddingTop: 20, flexDirection:'row' }}>
-                    <Icon active name='time' style={{color:'white', fontSize: 25, alignSelf:'center'}} /><Text style={{marginLeft: 5, fontFamily: 'Lato-Light', color:'#fff', fontSize: 16}}>00:{meal.preparation_time}:00</Text>
-                  </View>                        
-                </Right>                  
-              </Header> 
-            </ImageBackground>
-    }
-  }
+  }  
 
   renderSubtypes() {
     let { meal } = this.state;
@@ -210,7 +167,7 @@ export default class MealSelected extends Component{
       return meal.sub_type.map((item,i) => {
         return (
           <RadioButton value={item} style={style.radioCont} key={item.id}>              
-            <Text style={{color:'#fff', fontFamily: 'Lato-Light', textAlign:'center', fontSize: 16}}>{item.name}</Text>                           
+            <Text style={{color:'#fff', fontFamily: 'Lato-Regular', textAlign:'center', fontSize: 16}}>{item.name}</Text>                           
           </RadioButton>
         )
       })
@@ -226,9 +183,10 @@ export default class MealSelected extends Component{
          <CheckBox
           label={item.name}
           style={{padding:10, marginLeft:4}}
-          labelStyle={{color:'#fff', fontFamily: 'Lato-Light', textAlign:'center', fontSize: 16, marginLeft: 4}}
+          labelStyle={{color:'#fff', fontFamily: 'Lato-Regular', textAlign:'center', fontSize: 16, marginLeft: 4}}
           iconSize={20}
-          iconName='matMix'          
+          iconName='matMix'     
+          // checked={false}     
           checkedColor='#11c0f6'
           uncheckedColor='white'
           onChange={this.onClick.bind(this,item)}
@@ -238,48 +196,50 @@ export default class MealSelected extends Component{
       })
     }
   }
-
-  render(){
-    
-    const { meal, loading, number } = this.state;      
-    if(loading) {
-      return <LoadingScreen/>
-    }  
-       
+  render(){    
+    const { meal, loading, number } = this.state;                 
     return(
 		<Container>
-        {this.renderImage()} 
-                
-
-        {/*<View style={style.meal} >
-          {this.renderImage()}
-    </View>*/}
+      <ImageBackground resizeMode="cover" source={{uri:meal.image != 'null'? `${URL}/images/meals/${meal.image}` : this.props.banner}} style={{ width: "100%", height: 120, flexDirection:'row' }}>
+        <Header span={true} style={{ backgroundColor: 'transparent', elevation: 0, height: 120,flexDirection: 'row'}}>
+          <TouchableOpacity onPress={() => { this.props.dismissMeal() }}>
+            <Left style={{flex: 1, alignItems:'flex-start', justifyContent:'flex-start'}}>              
+              <Icon name="arrow-back" style={{color:'white', fontSize: 35, alignSelf:'center', }} />                                
+            </Left>
+          </TouchableOpacity>                    
+          <Right style={{paddingTop: 10, alignItems:'center'}}>                  
+            {/*<Icon active name='time' style={{color:'white', fontSize: 25, alignSelf:'center'}} /><Text style={{marginLeft: 5, fontFamily: 'Lato-Regular', color:'#fff', fontSize: 16, textAlign: 'center'}}>00:{meal.preparation_time}:00</Text>*/}                  
+          </Right>                  
+        </Header> 
+      </ImageBackground>                           
       <ImageBackground source={require('src/assets/images/background.png')} resizeMode={'cover'} style={style.background}>
-        <Content padder>
+        { loading ? <LoadingScreen/> : <Content padder>
           <View>
             <View style={{flexDirection: 'row', paddingLeft: 10, paddingTop: 10}}>
               <Text style={{fontFamily: 'Lato-Bold', color:'#11c0f6', fontSize: 16}}>{meal.name}</Text>
             </View>
             <View style={{flexDirection: 'row', paddingLeft: 10, paddingTop: 10}}>
-              <Text style={{fontFamily: 'Lato-Light', color:'#fff', flex:1, flexWrap: 'wrap', fontSize: 16}}>{meal.description}</Text>
+              <Text style={{fontFamily: 'Lato-Regular', color:'#fff', flex:1, flexWrap: 'wrap', fontSize: 16}}>{meal.description}</Text>
               <Text style={{marginLeft: 10, fontFamily: 'Lato-Bold', color:'#fff', fontSize: 16}}>${Ctotal}</Text>
             </View>
           </View>
-          <View style={{width: "100%", backgroundColor: '#11c0f6', marginTop: 10}}>
-            <View style={{flexDirection: 'row', paddingLeft: 10, alignItems:'flex-start'}}>
-              <Text style={{color:'#ffffff', textAlign:'center', fontFamily: 'Lato-Light', alignSelf: 'center', fontSize: 16}}>Cantidad</Text>
+          <View style={{backgroundColor: '#11c0f6', marginTop: 10, flexDirection:'row'}}>            
+            <Left style={{flex:1}}>
+              <Text style={{color:'#ffffff', fontFamily: 'Lato-Regular', fontSize: 16, paddingLeft: 10}}>Cantidad</Text>
+            </Left>                     
+            <Right style={{flex:1, flexDirection:'row', justifyContent:'flex-end', alignItems:'center', paddingRight:10}}>              
               <TextInput style={style.input} placeholderTextColor="#fff" underlineColorAndroid="#fff" keyboardType='numeric' value={number.toString()} editable={false} ></TextInput>
-              <TouchableOpacity style={style.button} onPress={this.IncrementItem}><Text style={style.text}>+</Text></TouchableOpacity>
-              <TouchableOpacity style={style.button} onPress={this.DecreaseItem}><Text style={style.text}>-</Text></TouchableOpacity>
-            </View>
+              <TouchableOpacity style={style.button} onPress={this.IncrementItem}><Text style={[style.text,{fontSize:30}]}>+</Text></TouchableOpacity>
+              <TouchableOpacity style={style.button} onPress={this.DecreaseItem}><Text style={[style.text,{fontSize:35}]}>-</Text></TouchableOpacity>
+            </Right>                                        
           </View>        
-          {(meal.has_subtype == 1) ? <Text style={{color:'#fff', fontFamily: 'Lato-Light', marginTop:10, fontSize: 16}}>Elige la presentacion</Text> : <View/> }
+          {(meal.has_subtype == 1) ? <Text style={{color:'#fff', fontFamily: 'Lato-Regular', marginTop:10, fontSize: 16}}>Elige la presentacion</Text> : <View/> }
           
           <RadioGroup onSelect = {(index, value) => this.onSelect(index, value)} selectedIndex={0} size={24} color={"white"} activeColor={"#11c0f6"}  style = {style.radioGroup}>
             {this.renderSubtypes()}                      
           </RadioGroup>
 
-          {(meal.has_ingredients == 1) ? <Text style={{color:'#fff', fontFamily: 'Lato-Light', marginTop:10, fontSize: 16}}>Elige los ingredientes</Text> : <View/> }
+          {(meal.has_ingredients == 1) ? <Text style={{color:'#fff', fontFamily: 'Lato-Regular', marginTop:10, fontSize: 16}}>Elige los ingredientes</Text> : <View/> }
 
           <View style={style.radioGroup}>
             {this.renderIngredients()}
@@ -287,7 +247,7 @@ export default class MealSelected extends Component{
           <View style={{flexDirection: 'column', alignItems:'center', marginTop:50}}>
             <TouchableOpacity style={style.confirm} onPress={this.accept.bind(this)}><Text style={style.text}>ORDENAR</Text></TouchableOpacity>    
           </View>
-        </Content> 
+        </Content> }
       </ImageBackground>       
 		</Container>
     );

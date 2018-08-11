@@ -4,7 +4,7 @@
 import React, { Component } from 'react';
 import { PermissionsAndroid } from 'react-native';
 import { StackNavigator, DrawerNavigator } from 'react-navigation';
-import { StyleSheet, ImageBackground, TouchableWithoutFeedback, TouchableOpacity, View, Text, Image, YellowBox, ActnativeivityIndicator, Alert } from 'react-native';
+import { StyleSheet, ImageBackground, TouchableWithoutFeedback, TouchableOpacity, View, Text, Image,  BackHandler, Alert } from 'react-native';
 import { Container, Header, Body,Footer, Left, Right, Content, Button } from 'native-base';
 import OneSignal from 'react-native-onesignal';
 import MapView from 'react-native-maps';
@@ -110,12 +110,15 @@ export default class ActiveOrder extends Component{
 
       },//Succes callback
       (error) => {
-        { alert("Error Calling plugin " + error) }
+        { alert("Error Calling plugin " + error.message) }
       }//Error callback
     );
-  }
+  }  
+
+  
 
   componentDidMount(){
+    BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
     navigator.geolocation.watchPosition((position)=>{
 
       this.setState({
@@ -137,6 +140,15 @@ export default class ActiveOrder extends Component{
       timeout: 3000
     })
   }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
+  }
+
+  onBackButtonPressAndroid = () => {
+    this.props.navigation.goBack()
+  };
+
   render(){
     return(
       <View style={{height: '100%'}}>
@@ -157,6 +169,7 @@ export default class ActiveOrder extends Component{
             coordinate={this.state.current_destination}>
           </MapView.Marker>
         <MapViewDirections
+          apikey={'AIzaSyDad6eM0UWYPMo_HCylrErxIh6L8zlsl9E'}          
           origin={this.state.delivery_man_coordinates}
           destination={this.state.current_destination}
           strokeWidth={4}
