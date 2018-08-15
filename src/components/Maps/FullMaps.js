@@ -51,10 +51,10 @@ export default class Maps extends React.Component {
     return (
       <Container style={styles.fullContainer}>        
         <MapView provider={PROVIDER_GOOGLE} customMapStyle={null} style={styles.map} region={ this.state.region } onRegionChangeComplete={r => this.onRegionChange(r)}>      
-          <MapView.Marker draggable coordinate={region} onDragEnd={(e) => this.onMapPress(e)} title={title} description={description}>
+          {/* <MapView.Marker draggable coordinate={region} onDragEnd={(e) => this.onMapPress(e)} title={title} description={description}>
             <Image source={require('src/assets/images/ic.png')} resizeMode="center" style={{width: 32, height: 32}}/>                                                                  
-          </MapView.Marker>
-        </MapView>                  
+          </MapView.Marker> */}
+        </MapView>        
         <Header noShadow style={{ backgroundColor: 'transparent', zIndex:6}}>
           <View style={styles.in}>
             <Icon name="search" size={20} color="#999999" style={{ paddingLeft:10}}/>
@@ -70,10 +70,11 @@ export default class Maps extends React.Component {
                 title: address[0] + ' ' + address[1],          
               });
               this.input.clear();
-              })}} underlineColorAndroid = {'transparent'} placeholder={this.state.title} style={{ width: 300, color:'grey', fontFamily: 'Lato-Light'}} />
+              }).catch(err => {Alert.alert("Error",err.message)})}} underlineColorAndroid = {'transparent'} placeholder={this.state.title} style={{ width: 300, color:'grey', fontFamily: 'Lato-Light'}} />
           </View>    
         </Header>
-        <Content style={{zIndex:30}}>             
+        <Content contentContainerStyle={{ justifyContent: 'center', flex: 1 }} style={{zIndex:30}}>    
+          <Image source={require('src/assets/images/location-ic.png')} resizeMode="center" style={{width: 50, height: 50, zIndex:30, justifyContent:'center', alignSelf:'center', alignItems:'center'}}/>                           
             {/*<Image source={require('src/assets/images/ic.png')} resizeMode="center" style={{width: 32, height: 32}}/>*/}                                                                  
         </Content>
         <Footer style={{height: 120, backgroundColor: 'transparent', zIndex:30}} noShadow>          

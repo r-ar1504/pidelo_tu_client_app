@@ -10,7 +10,8 @@ import OneSignal from 'react-native-onesignal';
 import MapView from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import { Marker } from 'react-native-maps';
-
+import getCoordinates from "../../components/Maps/getCurrentPosition";
+import watchPosition from "../../components/Maps/getCurrentPosition";
 /*-----------------------------------------------------------------
 * Style Component                                                 |
 *-----------------------------------------------------------------*/
@@ -92,35 +93,29 @@ export default class ActiveOrder extends Component{
   }
 
   componentWillMount(){
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-
-        this.setState({
-          delivery_man_coordinates : {
-            latitude : position.coords.latitude,
-            longitude : position.coords.longitude,
-          },
-          region:{
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            latitudeDelta: 0.0012,
-            longitudeDelta: 0.0011
-          },
-        });
-
-      },//Succes callback
-      (error) => {
-        { alert("Error Calling plugin " + error.message) }
-      }//Error callback
-    );
+    getCoordinates().then( position => {
+      this.setState({
+        delivery_man_coordinates : {
+          latitude : position.coords.latitude,
+          longitude : position.coords.longitude,
+        },
+        region:{
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          latitudeDelta: 0.0012,
+          longitudeDelta: 0.0011
+        },
+      });
+    }).catch( err => {
+      Alert.alert("Error",err.message)
+    })    
   }  
 
   
 
   componentDidMount(){
     BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid);
-    navigator.geolocation.watchPosition((position)=>{
-
+    watchPosition().then((position)=>{
       this.setState({
         delivery_man_coordinates:{
           latitude: position.coords.latitude,
@@ -133,11 +128,8 @@ export default class ActiveOrder extends Component{
           longitudeDelta: 0.0011
         }
       })
-    },(error) => {
-      alert(error)
-    },{
-      maximumAge: 2000,
-      timeout: 3000
+    }).catch(err => {
+      Alert.alert("Error",err.message)
     })
   }
 
@@ -181,7 +173,7 @@ export default class ActiveOrder extends Component{
             zIndex:6
           }}>
         <Left>
-          <Image source={require('src/assets/images/ic.png')} style={{
+          <Image source={require('src/assets/images/location-ic.png')} style={{
               width: 30,
               height: 30,
               marginLeft: 20

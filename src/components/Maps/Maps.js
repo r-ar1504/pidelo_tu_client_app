@@ -22,11 +22,7 @@ export default class Maps extends React.Component {
       mapStyle: customStyle,      
       fullMap:false            
     };        
-  }
-  
-  componenDidMount(){
-    Alert.alert(JSON.stringify(this.props.region))
-  }   
+  }     
 
   async getAddress(lat,long){
     return await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}&key=${API_KEY}`)
@@ -42,8 +38,6 @@ export default class Maps extends React.Component {
   onRegionChange(region) {
     const { title } = this.state
     this.setState({ region });    
-    LATITUDE_DELTA = region.latitudeDelta;
-    LONGITUDE_DELTA = region.longitudeDelta;
     this.props.confirm(region,title)
   }
 
@@ -53,7 +47,7 @@ export default class Maps extends React.Component {
       <View style={styles.container}>                                
         <MapView provider={PROVIDER_GOOGLE} customMapStyle={null} style={{width:width, height: height / 3}} region={ region } onRegionChangeComplete={r => this.onRegionChange(r)} onPress={e => this.props.full()}>          
         </MapView>                                                  
-        <Image source={require('src/assets/images/ic.png')} resizeMode="center" style={{width: 32, height: 32, position: 'absolute', justifyContent:'center', alignSelf:'center', alignItems:'center'}}/>                                              
+        <Image source={require('src/assets/images/location-ic.png')} resizeMode="center" style={{width: 50, height: 50, position: 'absolute', justifyContent:'center', alignSelf:'center', alignItems:'center'}}/>                                              
       </View>
     );
   }

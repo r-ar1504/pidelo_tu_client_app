@@ -171,7 +171,10 @@ dependencies {
     compile project(':react-native-fbsdk')        
     compile (project(':tipsi-stripe')){
         exclude group: 'com.google.android.gms'
-    }        
+    }  
+    compile(project(':react-native-geolocation-service')) {
+        exclude group: 'com.google.android.gms', module: 'play-services-location'
+    }          
     compile(project(':react-native-onesignal')) {
         exclude group: 'com.google.android.gms'
     }
@@ -190,7 +193,7 @@ dependencies {
     compile ('com.google.android.gms:play-services-wallet:11.8.0') {
         force = true
     }
-  
+    compile 'com.google.android.gms:play-services-location:11.8.0'
     compile(project(':react-native-firebase')) {
         transitive = false
     }    

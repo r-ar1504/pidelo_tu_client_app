@@ -18,6 +18,7 @@ import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.auth.RNFirebaseAuthPackage;
 import com.gettipsi.stripe.StripeReactPackage;
+import com.agontuk.RNFusedLocation.RNFusedLocationPackage;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,6 +47,7 @@ public class MainApplication extends Application implements ReactApplication{
             new RNFirebasePackage(),
             new RNFirebaseAuthPackage(),
             new FBSDKPackage(mCallbackManager),
+            new RNFusedLocationPackage(),
             new MapsPackage()            
         );
       }
