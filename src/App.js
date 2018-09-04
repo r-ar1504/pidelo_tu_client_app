@@ -9,7 +9,7 @@ import Restaurant from './screens/Restaurant/Restaurant';
 import Search from './screens/Search/Search';
 import Home from './screens/Home/Home';
 import Payment from './screens/Payment/Payment';
-import Discounts from './screens/Discounts/Discounts';
+
 import Register from './screens/Register/Register';
 import RegisterForm from './screens/Register/Form';
 import VerificationCode from './screens/Register/VerificationCode';
@@ -21,6 +21,7 @@ import MealSelected from './screens/Meal/MealSelected';
 import ActiveOrder from './screens/ActiveOrder/ActiveOrder';
 import CartShop from './screens/CartShop/CartShop';
 import FullMaps from './components/Maps/FullMaps';
+
 const HomeDrawer = DrawerNavigator({
   Home:{
     screen: Home,
@@ -37,10 +38,7 @@ const HomeDrawer = DrawerNavigator({
   },
   Payment:{
     screen: Payment
-  },
-  Discounts:{
-    screen: Discounts
-  },
+  },  
   Maps:{
    screen: Maps,
   }, 
@@ -92,7 +90,7 @@ export default StackNavigator({
   },
   RegisterForm: {
     screen: RegisterForm
-  },
+  },  
 },
   {
   initialRouteName: 'Splash'

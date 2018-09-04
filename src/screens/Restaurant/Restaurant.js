@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Header, Content, Body, Right, Left, Tabs, Tab, List, ListItem, Thumbnail, Button, Card, CardItem, Icon, ScrollableTab } from 'native-base';
-import { Rating } from 'react-native-elements';
+// import { Rating } from 'react-native-elements';
+import StarRating from 'react-native-star-rating';
 import FontIcon from 'react-native-vector-icons/FontAwesome';
 import styles from './RestaurantStyle';
 import Swiper from 'react-native-swiper';
@@ -8,6 +9,7 @@ import{ Alert, YellowBox, Text, View, TouchableWithoutFeedback, BackHandler, Ima
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import MealSelected from "../Meal/MealSelected";
 import moment from "moment";
+import firebase from "react-native-firebase";
 import { URL } from "../../config/env";
 import { COLOR_PRIMARY, COLOR_SECONDARY } from '../../assets/GlobalStyleSheet';
 const { width } = Dimensions.get('window')
@@ -15,13 +17,8 @@ export default class Search extends Component{
   constructor(props){
     super(props);
 
-    this.state = { items: [], meal:{}, loading: true, showMeal: false, restaurant_data:this.props.navigation.getParam("restaurant_data"), restaurant: 0, info: '', not_working:false }
-        
-    /*YellowBox.ignoreWarnings([
-      "Warning: Can't call setState (or forceUpdate)"
-    ])*/
-        
-    this.openDiscounts = this.openDiscounts.bind(this);
+    this.state = { items: [], meal:{}, loading: true, showMeal: false, scrollY:this.props.navigation.getParam("scrollY"), restaurant_data:this.props.navigation.getParam("restaurant_data"), restaurant: 0, info: '', not_working:false, starCount: 0 }
+            
   }
 
   componentDidMount(){
@@ -41,7 +38,7 @@ export default class Search extends Component{
     
     this.refreshData()
     this.setState({ banner:`${URL}/images/restaurants/banners/${restaurant_data.banner}`, 
-                  logo:`${URL}/images/logos/${restaurant_data.logo}` })
+                  logo:`${URL}/images/logos/${restaurant_data.logo}`, starCount: restaurant_data.ranking })
   }
 
   componentWillUnmount() {
@@ -49,13 +46,9 @@ export default class Search extends Component{
   }
 
   onBackButtonPressAndroid = () => {
-    this.props.navigation.goBack()
+    this.props.navigation.navigate('Home', { scrollY: this.state.scrollY})
   };
-
-  openDiscounts(){
-    this.props.navigation.navigate('Discounts')
-  }  
-
+  
   dismissMeal(){
     this.setState({showMeal:false});
   }
@@ -81,6 +74,36 @@ export default class Search extends Component{
       this.setState({loading: false})
       Alert.alert("PídeloTú",error.message);
     });
+  }
+
+  ratingCompleted(rating) {
+    const { restaurant_data } = this.state
+    this.rateRestaurant(restaurant_data, rating).then(ok => {
+      this.setState({ starCount: rating });
+      Alert.alert("PídeloTú",ok.message)
+      // console.warn(ok)
+    }).catch(error => {
+      Alert.alert("Error",error.message)
+    })
+  }
+  
+  async rateRestaurant(restaurant_data, rating){    
+    return await fetch(`${URL}/rate_restaurant`,{
+      method: 'POST', 
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body:JSON.stringify({
+        'restaurant_id':restaurant_data.id,
+        'firebase_id':firebase.auth().currentUser.uid,
+        'rate':rating
+      })
+    }).then(response => {
+      return response.json()
+    }).catch(err => {
+      throw new Error(err.message)
+    })
   }
 
   renderMeals(){  
@@ -140,7 +163,7 @@ export default class Search extends Component{
       <Container style={{backgroundColor:'white'}}>       
         <ImageBackground resizeMode="cover" source={{uri:banner}}  style={{ width: "100%", height: 120, flexDirection:'row' }}>         
           <Header span={true} style={{ backgroundColor: 'transparent', elevation: 0, height: 120}}>    
-            <TouchableOpacity onPress={() => { this.props.navigation.goBack() }}>
+            <TouchableOpacity onPress={() => { this.props.navigation.navigate('Home', { scrollY: this.state.scrollY}) }}>
               <Left style={{flex: 1, alignItems:'flex-start', justifyContent:'flex-start'}}>              
                 <Icon name="arrow-back" style={{color:'white', fontSize: 35, alignSelf:'center', }} />                                
               </Left>
@@ -170,14 +193,24 @@ export default class Search extends Component{
                   <Text style={{fontFamily:'Lato-Regular',fontWeight:'bold', flex:3, flexWrap: 'wrap'}} note>{info}</Text>
                 </Body>
               </Left>
-              <Body/>
-              <Right>
-                <Rating                  
-                  type="star"                  
-                  startingValue={3.6}                
-                  imageSize={20}
-                  onFinishRating={this.ratingCompleted}                  
+              <Body>
+                <StarRating
+                  disabled={false}
+                  maxStars={5}
+                  rating={this.state.starCount}
+                  selectedStar={(rating) => this.ratingCompleted(rating)}
+                  starSize={20}
+                  fullStarColor={'yellow'}
                 />
+                {/* <Rating                  
+                    type="star"                  
+                    startingValue={restaurant_data.ranking}                
+                    imageSize={20}
+                    onFinishRating={}                  
+                  /> */}
+              </Body>
+              <Right>
+
               </Right>              
             </CardItem>
           </Card>           

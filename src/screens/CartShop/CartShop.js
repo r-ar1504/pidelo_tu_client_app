@@ -25,7 +25,7 @@ export default class CartShop extends ValidationComponent {
   }
   constructor(props) {
     super(props);
-    this.state = { payments: [], carShop: [], restaurantCoords: {}, total: 0, envio: 25.0, currentCard: '', fullMap: false, onchange: false, loading: true, loadingData: true, expMonth: '', expYear: '', csv: '', region: { latitude: LATITUDE, longitude: LONGITUDE, latitudeDelta: LATITUDE_DELTA, longitudeDelta: LONGITUDE_DELTA }, title: '' }
+    this.state = { payments: [], carShop: [], restaurantCoords: { latitude: LATITUDE, longitude: LONGITUDE, latitudeDelta: LATITUDE_DELTA, longitudeDelta: LONGITUDE_DELTA }, total: 0, envio: 25.0, currentCard: '', fullMap: false, onchange: false, loading: true, loadingData: true, expMonth: '', expYear: '', csv: '', region: { latitude: LATITUDE, longitude: LONGITUDE, latitudeDelta: LATITUDE_DELTA, longitudeDelta: LONGITUDE_DELTA } }
   }
 
   componentDidMount() {
@@ -57,27 +57,8 @@ export default class CartShop extends ValidationComponent {
         cart.map((item) => {
           subtotal = subtotal + parseFloat(item.total);
         });
-        this.setState({ carShop: cart, total: subtotal, restaurantCoords: response.coords, loadingData: false });
-        getCoordinates().then(position => {
-          this.setState({
-            region: {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-              latitudeDelta: LATITUDE_DELTA,
-              longitudeDelta: LONGITUDE_DELTA,
-            }
-          });
-          this.getAddress(position.coords.latitude, position.coords.longitude).then(response => {
-            let address = response.split(',');
-            this.setState({ title: address[0] + ' ' + address[1], loading: false })
-          }).catch(error => {
-            this.setState({ loading: false });
-            Alert.alert("Error", error.message)
-          });
-        }).catch(error => {
-          this.setState({ loading: false });
-          Alert.alert("Error", error.message)
-        })
+        this.setState({ carShop: cart, total: subtotal, restaurantCoords: { latitude: parseFloat(response.coords.latitude), longitude: parseFloat(response.coords.longitude) }, loadingData: false });
+        this.getCurrentPosition()
       }
     })
       .catch((error) => {
@@ -85,17 +66,22 @@ export default class CartShop extends ValidationComponent {
       });
   }
 
-  async getAddress(lat, long) {
-    return await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}&key=${API_KEY}`)
-      .then((res) => res.json())
-      .then((json) => {
-        if (json.status !== 'OK') {
-          throw new Error(`Geocode error: ${json.status}`);
+  getCurrentPosition() {
+    getCoordinates().then(position => {
+      this.setState({
+        region: {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
         }
-        return json.results[0].formatted_address;
       });
+      this.setState({ loading: false });
+    }).catch(error => {
+      this.setState({ loading: false });
+      Alert.alert("Error", error.message)
+    })
   }
-
 
   async getItems() {
     let uid = firebase.auth().currentUser.uid;
@@ -136,13 +122,14 @@ export default class CartShop extends ValidationComponent {
   deleteItem(item, index) {
     this.setState({ loading: true });
     let { carShop, total } = this.state;
-    let array = carShop;
+    const array = carShop;
     this.delete(item.id, firebase.auth().currentUser.uid).then(async (res) => {
       if (res.message == 'Success') {
         let subtotal = total - item.total
         array.splice(index, 1);
         if (array.length == 0) {
-          await AsyncStorage.removeItem('restaurant')
+          await AsyncStorage.removeItem('restaurant');
+          this.props.navigation.goBack();
         }
         this.setState({ carShop: array, total: subtotal, loading: false })
       }
@@ -233,23 +220,25 @@ export default class CartShop extends ValidationComponent {
     return await stripe.createTokenWithCard(params)
   }
 
-  onRegionChange(region, title) {
+  onRegionChange(region) {
     this.setState({ region: region });
-    const response = this.getServiceDistance()    
+    const response = this.getServiceDistance()
     let km = response / 1000
-    if (parseInt(km) > 0) {
-      let extra = km - 5
-      let totalkm = extra * 3
-      this.setState({envio:25.0 + totalkm})
+    // console.warn("KM",km)
+    if (parseInt(km) > 0 && km > 5) {
+      let kmextra = km - 5
+      let costoextra = kmextra * 4
+      // console.warn("Costo Extra", costoextra)     
+      this.setState({ envio: 25 + Math.ceil(costoextra) })
       // Alert.alert("Response", response.toString() + "KM: " + km)
     }
-    else { 
-      this.setState({envio: 25.0})
+    else {
+      this.setState({ envio: 25 })
     }
     // Alert.alert("Response", response.toString() + "KM: " + km)
   }
 
-  onRegionChangeComplete(region, title) {
+  onRegionChangeComplete(region) {
     this.setState({
       region: {
         latitude: region.latitude,
@@ -258,7 +247,7 @@ export default class CartShop extends ValidationComponent {
         longitudeDelta: LONGITUDE_DELTA,
       }
     })
-    this.setState({ fullMap: false })    
+    this.setState({ fullMap: false })
   }
 
   openMap() {
@@ -361,7 +350,7 @@ export default class CartShop extends ValidationComponent {
     }
     return (
       <Container>
-        {fullMap ? <Maps title={this.state.title} region={this.state.region} confirm={this.onRegionChangeComplete.bind(this)} /> : <ImageBackground source={require('src/assets/images/background.png')} style={styles.background}>
+        {fullMap ? <Maps region={this.state.region} restaurant={this.state.restaurantCoords} confirm={this.onRegionChangeComplete.bind(this)} /> : <ImageBackground source={require('src/assets/images/background.png')} style={styles.background}>
           <Header style={{ backgroundColor: 'transparent', elevation: 0 }}>
             <Left style={{ flex: 1 }}>
               <TouchableOpacity onPress={() => { this.props.navigation.goBack() }}>
@@ -376,13 +365,13 @@ export default class CartShop extends ValidationComponent {
             <Right style={{ flex: 1 }}>
             </Right>
           </Header>
-          {loading ? <LoadingScreen /> : <Content refreshControl={
-            <RefreshControl
-              refreshing={loadingData}
-              onRefresh={this.getData.bind(this)}
-              colors={[COLOR_PRIMARY, COLOR_SECONDARY]}
-            />
-          }>
+          {loading ? <LoadingScreen /> : <Content
+          // <RefreshControl
+          //   refreshing={loadingData}
+          //   onRefresh={this.getData.bind(this)}
+          //   colors={[COLOR_PRIMARY, COLOR_SECONDARY]}
+          // />
+          >
             {this.renderCarShop()}
             <View style={{ flexDirection: 'row', borderBottomColor: 'white', borderTopColor: 'transparent', borderLeftColor: 'transparent', borderRightColor: 'transparent', borderWidth: 0.8, width: '100%' }}>
               <Left style={{ padding: 10, flex: 1 }}>
@@ -394,7 +383,7 @@ export default class CartShop extends ValidationComponent {
               </Body>
               <Right style={{ padding: 10 }}>
                 <Text style={[styles.text]}>${total.toFixed(2)}</Text>
-                <Text style={[styles.text]}>${envio.toFixed()}</Text>
+                <Text style={[styles.text]}>${envio.toFixed(2)}</Text>
               </Right>
             </View>
             <View style={{ flexDirection: 'row', borderBottomColor: 'white', borderTopColor: 'transparent', borderLeftColor: 'transparent', borderRightColor: 'transparent', borderWidth: 0.8, width: '100%' }}>
@@ -409,7 +398,7 @@ export default class CartShop extends ValidationComponent {
               </Right>
             </View>
             {this.renderPayment()}
-            <Mapa full={this.openMap.bind(this)} region={this.state.region} confirm={this.onRegionChange.bind(this)} />
+            <Mapa full={this.openMap.bind(this)} region={this.state.region} restaurant={this.state.restaurantCoords} confirm={this.onRegionChange.bind(this)} />
             {payments.length ?
               <View style={{ flexDirection: 'column', alignItems: 'center', marginTop: 15 }}>
                 <TouchableOpacity style={styles.confirm} onPress={this.accept.bind(this)}><Text style={styles.text}>ORDENAR</Text></TouchableOpacity>

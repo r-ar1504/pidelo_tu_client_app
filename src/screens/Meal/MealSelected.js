@@ -109,7 +109,7 @@ export default class MealSelected extends Component{
         this.setState({loading: false});
         Alert.alert("Error",error.message);
       }); 
-      Alert.alert("PídeloTú","No hay pedidos pendientes")
+      // Alert.alert("PídeloTú","No hay pedidos pendientes")
     }
     else {      
       if (parseInt(restaurant) == this.props.restaurant) {

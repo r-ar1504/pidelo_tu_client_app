@@ -69,10 +69,8 @@ export default class FoodFeed extends Component{
                   readonly
                   showReadOnlyText={false}
                   fractions={1}
-                  startingValue={3.6}                
-                  imageSize={20}
-                  onFinishRating={this.ratingCompleted}
-                  style={{ paddingVertical: 10 }}
+                  startingValue={restaurant_data.ranking}                
+                  imageSize={20}                            
                 />
                 {/*<Button transparent textStyle={{color: '#87838B'}} onPress={this.openRestaurant.bind(this,restaurant_data)}>
                   <Icon name="restaurant" style={{color: '#11c0f6' }}/>

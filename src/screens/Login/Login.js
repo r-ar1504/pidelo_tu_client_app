@@ -7,7 +7,6 @@ import Form from './Form';
 import Video from 'react-native-video';
 import styles from './LoginStyle';
 import firebase from 'react-native-firebase';
-import UserService from "../../services/user-service/user-services";
 import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import { URL} from "../../config/env";
  export default class Login extends React.Component {
@@ -25,6 +24,7 @@ import { URL} from "../../config/env";
     this.register = this.register.bind(this);    
     this.signIn = this.signIn.bind(this);
     this.fblogin = this.fblogin.bind(this);
+    this.passwordReset = this.passwordReset.bind(this);
     this.state = { email: "", password: "", loading:false, user: null };     
     YellowBox.ignoreWarnings([
      'Warning: isMounted(...) is deprecated', 'Module RCTImageLoader',         
@@ -117,6 +117,10 @@ import { URL} from "../../config/env";
   register(){
     this.props.navigation.navigate('Register')
   }
+
+  passwordReset(){
+    this.props.navigation.navigate('PasswordReset')
+  }
     
   render() {    
     let { loading } = this.state;        
@@ -125,7 +129,7 @@ import { URL} from "../../config/env";
         <Video source={require('src/video/video.mp4')} rate={1.0} resizeMode={"cover"} muted={true} repeat style={styles.video}/>
         <Logo/>                                           
         { loading ? <LoadingScreen/> : <Container>          
-          <Form signIn={this.signIn} register={this.register}  fblogin={this.fblogin}/> 
+          <Form signIn={this.signIn} register={this.register}  fblogin={this.fblogin} passwordReset={this.passwordReset}/> 
         </Container>                                   
         }
       </View>    
