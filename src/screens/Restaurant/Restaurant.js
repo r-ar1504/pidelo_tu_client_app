@@ -2,11 +2,8 @@ import React, { Component } from 'react';
 import { Container, Header, Content, Body, Right, Left, Tabs, Tab, List, ListItem, Thumbnail, Button, Card, CardItem, Icon, ScrollableTab } from 'native-base';
 // import { Rating } from 'react-native-elements';
 import StarRating from 'react-native-star-rating';
-import FontIcon from 'react-native-vector-icons/FontAwesome';
 import styles from './RestaurantStyle';
-import Swiper from 'react-native-swiper';
 import{ Alert, YellowBox, Text, View, TouchableWithoutFeedback, BackHandler, Image, ImageBackground, TouchableOpacity, RefreshControl, Dimensions } from 'react-native';
-import LoadingScreen from '../../components/LoadingScreen/LoadingScreen';
 import MealSelected from "../Meal/MealSelected";
 import moment from "moment";
 import firebase from "react-native-firebase";
@@ -125,7 +122,7 @@ export default class Search extends Component{
                     <Text note numberOfLines={1} style={{fontFamily:'Lato-Regular'}}>{item.description}</Text>
                   </Body>
                   <Right>                    
-                    <Text>${(item.price == null && item.has_subtype != 0) ? item.sub_type[0].price : item.price}</Text>                
+                    <Text>${(item.is_combo) ? item.price : (!item.price && item.has_subtype) ? item.sub_type[0].price : item.price }</Text>                
                   </Right>                  
                 </ListItem>     
                 )
@@ -138,11 +135,11 @@ export default class Search extends Component{
     })
   }//Render
 
-  renderImage(image,description){
-    if(image || image != 'null')      
+  renderImage(image){
+    if(image != 'null')      
       return <Thumbnail square source={{uri:URL+'/images/meals/'+image}}/>  
     else 
-      return <Thumbnail square source={require('src/assets/images/ic.png')}/>    
+      return <Thumbnail square source={require('../../assets/images/ic.png')}/>    
   }
 
   async getMeals(){
@@ -164,7 +161,7 @@ export default class Search extends Component{
         <ImageBackground resizeMode="cover" source={{uri:banner}}  style={{ width: "100%", height: 120, flexDirection:'row' }}>         
           <Header span={true} style={{ backgroundColor: 'transparent', elevation: 0, height: 120}}>    
             <TouchableOpacity onPress={() => { this.props.navigation.navigate('Home', { scrollY: this.state.scrollY}) }}>
-              <Left style={{flex: 1, alignItems:'flex-start', justifyContent:'flex-start'}}>              
+              <Left style={{flex: 1, alignItems:'flex-start', justifyContent:'flex-start', paddingTop:20, marginLeft:10}}>              
                 <Icon name="arrow-back" style={{color:'white', fontSize: 35, alignSelf:'center', }} />                                
               </Left>
             </TouchableOpacity>

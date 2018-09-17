@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Body, Left, Thumbnail, Card, CardItem, Button, Text, Icon, Right} from 'native-base';
 import{ Image, Dimensions, TouchableWithoutFeedback, Alert } from 'react-native';
-import { Rating } from 'react-native-elements';
+// import { Rating } from 'react-native-elements';
+import StarRating from 'react-native-star-rating';
 import moment from "moment";
 import { URL} from "../../config/env";
 import { FONT_NORMAL } from "../../assets/GlobalStyleSheet";
@@ -34,11 +35,7 @@ export default class FoodFeed extends Component{
   openRestaurant(restaurant){
     this.props.openRest(restaurant)
   }
-
-  ratingCompleted(rating) {
-    Alert.alert("Rating","Rating is: " + rating)
-  }
-
+  
   render(){
 		const { restaurant_data, info } = this.state
       return(
@@ -55,7 +52,7 @@ export default class FoodFeed extends Component{
             <TouchableWithoutFeedback onPress={this.openRestaurant.bind(this,restaurant_data)}>
               <CardItem>              
                 <Body>
-                  <Image resizeMode="contain" source={{uri: URL+'/images/restaurants/banners/'+restaurant_data.banner}} style={{height: 200, width: width * .90, flex: 1}}/>
+                  <Image resizeMode="cover" source={{uri: URL+'/images/restaurants/banners/'+restaurant_data.banner}} style={{height: 200, width: width * .90, flex: 1, alignSelf:'center'}}/>
                   {/*<Text style={{fontSize: 16, fontFamily: FONT_NORMAL}}>
                     {restaurant_data.details} - {restaurant_data.address}
                   </Text>*/}
@@ -64,13 +61,11 @@ export default class FoodFeed extends Component{
             </TouchableWithoutFeedback>
             <CardItem>              
               <Left>
-                <Rating                  
-                  type="star"
-                  readonly
-                  showReadOnlyText={false}
-                  fractions={1}
-                  startingValue={restaurant_data.ranking}                
-                  imageSize={20}                            
+                <StarRating                                    
+                  disabled      
+                  fullStarColor={'yellow'}                              
+                  rating={restaurant_data.ranking}                
+                  starSize={20}                            
                 />
                 {/*<Button transparent textStyle={{color: '#87838B'}} onPress={this.openRestaurant.bind(this,restaurant_data)}>
                   <Icon name="restaurant" style={{color: '#11c0f6' }}/>

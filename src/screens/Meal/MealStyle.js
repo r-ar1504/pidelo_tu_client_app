@@ -41,23 +41,19 @@ export default StyleSheet.create({
     height: 45,    
     marginLeft: 4,    
     borderRadius: 45,
-    borderWidth: 2.5,
+    borderWidth: .5,
     borderColor: '#fff',
     backgroundColor:'transparent',
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent:'center'
   },  
-  radioGroup: {
-    alignSelf: 'center',
+  radioGroup: {    
     width: width,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 50,    
+    flexDirection: 'column',
   },
   radioCont: {
-    width: 100,
+    width: width * .15,
     height: 70, 
     justifyContent: 'center',
     alignItems: 'center',  
@@ -79,11 +75,6 @@ export default StyleSheet.create({
     fontFamily: FONT_NORMAL, 
     alignSelf: 'center'
   },       
-  confirm: {
-    width:300,
-    backgroundColor:COLOR_PRIMARY,           
-    paddingVertical: 13,
-    marginTop: 8,    
-    borderRadius:20, 
-  }
+  footer: { backgroundColor: 'transparent', alignItems:'center', justifyContent:'center' },
+  confirm: { width:width * .70, backgroundColor:COLOR_PRIMARY, justifyContent:'center' }
 })

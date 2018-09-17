@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, Image, YellowBox, BackHandler, View } from 'react-native';
+import { StyleSheet, Image, YellowBox, BackHandler, View, Dimensions } from 'react-native';
 import firebase from 'react-native-firebase';
-
+const { width, height } = Dimensions.get('window')
 
 export default class Splash extends Component {
   static navigationOptions = {
@@ -44,8 +44,8 @@ export default class Splash extends Component {
 	render(){    
 		return(
       <View style={styles.container} >
-          <Image source={require('src/assets/images/bg.png')} style={styles.image} />
-				  <Image style={styles.logo} source={require('src/assets/images/ic.png')} style={{width: 105, height: 105}}/>          
+        <Image resizeMode="cover" source={require('src/assets/images/bg.png')} style={styles.image} />
+				<Image style={styles.logo} source={require('src/assets/images/ic.png')} style={{width: 105, height: 105}}/>          
   		</View>	
 		)
 	}
@@ -58,10 +58,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image:{
-    flex:1,
-    resizeMode:'cover',
+    flex:1,    
     position: 'absolute',
-    ...StyleSheet.absoluteFillObject,
+    width:    width,
+    height: height,
     justifyContent: 'center',
   },
   logo: {
